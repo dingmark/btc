@@ -1,6 +1,5 @@
-package com.example.btc.services.http.mocha;
+package com.example.btc.services.http.bian;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +15,8 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class mocha {
-    public float getMcPrice(URL url) throws IOException {
+public class biAn {
+    public float getBiAnPrice(URL url) throws IOException {
         float price=0;
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
@@ -32,15 +31,14 @@ public class mocha {
 
             charinfo.add(line);
         }
-        System.out.println(charinfo.toString());
-        //第一组数据为最新交易数据
-        JSONObject js = JSON.parseObject(charinfo.get(0));
-        String data=js.getString("data");
-        data=data.replaceAll("},","}#");
-        List<String>datalist= Arrays.asList(data.split("#"));
-        //此处头有一个[
-        JSONObject datajs=JSONObject.parseObject(datalist.get(0).substring(1));
-        price=datajs.getFloat("trade_price");
+        //System.out.println(charinfo.toString());
+        String tmp=charinfo.toString().substring(2,charinfo.toString().length()-2);
+        tmp=tmp.replaceAll("},","}#");
+        List<String> listdata=new ArrayList<String>();
+        listdata= Arrays.asList(tmp.split("#"));
+        //取第一个数据为最近交易数据
+        JSONObject js=JSONObject.parseObject(listdata.get(0));
+        price=js.getFloatValue("price");
         return price;
     }
 }

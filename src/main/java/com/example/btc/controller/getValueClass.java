@@ -1,6 +1,7 @@
 package com.example.btc.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
@@ -22,6 +23,7 @@ public class getValueClass {
     @Autowired OkPrice okprice;
     @Autowired bter btr;
     @Autowired mocha mc;
+    @Autowired biAn bn;
     @RequestMapping("/getvalue.do")
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {
         JSONObject rejs=new JSONObject();
@@ -41,10 +43,20 @@ public class getValueClass {
         float btrprice=btr.getbteprice(new URL(bteurl));
         rejs.put("btr",btrprice);
         //抹茶
-        String mcurl="https://www.mxc.me/open/api/v1/data/history?market=BTC_USDT";
+        /*access key
+        mx0zDODNj1zO5qTeeb
+        secret key
+        3c770adeab3243cea4c2b46b2de54a0a
+        */
+        String mckey="mx0zDODNj1zO5qTeeb";
+        //String mcurl="https://www.mxc.me/open/api/v1/data/history?api_key="+mckey+"market=BTC_USDT";
+        String mcurl="https://www.mxc.me/open/api/v2/market/deals?api_key="+mckey+"&symbol=BTC_USDT&limit=10";
         float mcprice=mc.getMcPrice(new URL(mcurl));
         rejs.put("mc",mcprice);
-
+        //币安交易
+        String banurl="https://api.binancezh.cc/api/v3/trades?symbol=BTCUSDT&limit=5";
+        float bnprice=bn.getBiAnPrice(new URL(banurl));
+        rejs.put("bnprice",bnprice);
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
         return  rejs.toString();
