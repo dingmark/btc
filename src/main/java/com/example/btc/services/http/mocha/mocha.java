@@ -2,6 +2,8 @@ package com.example.btc.services.http.mocha;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -17,7 +19,9 @@ import java.util.zip.GZIPInputStream;
 
 @Service
 public class mocha {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     public float getMcPrice(URL url) throws IOException {
+        long startTime=System.currentTimeMillis();
         float price=0;
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
@@ -32,7 +36,9 @@ public class mocha {
 
             charinfo.add(line);
         }
-        System.out.println(charinfo.toString());
+        //System.out.println(charinfo.toString());
+        long endTime=System.currentTimeMillis();
+        logger.info("抹茶数据加载完成用时{}----------->",(endTime-startTime)+"ms");
         //第一组数据为最新交易数据
         JSONObject js = JSON.parseObject(charinfo.get(0));
         String data=js.getString("data");
