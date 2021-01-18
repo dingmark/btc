@@ -1,5 +1,6 @@
 package com.example.btc;
 
+import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -83,6 +84,17 @@ public class WssMCMarketTest {
         InputStream inputStream = urlConnection.getInputStream();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
+    @Test
+    public void testthread()
+    {
+
+        CustomMultiThreadingService cs=new CustomMultiThreadingService();
+        for (int i=0;i<10;i++){
+            cs.executeAysncTask1(i);
+            cs.executeAsyncTask2(i);
+        }
+
     }
 
 }
