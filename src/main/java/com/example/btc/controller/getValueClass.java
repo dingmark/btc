@@ -2,6 +2,7 @@ package com.example.btc.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.baseDao.UrlPara;
+import com.example.btc.services.baseDaoService.UrlParaService;
 import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
@@ -25,7 +26,7 @@ public class getValueClass {
     @Autowired bter btr;
     @Autowired mocha mc;
     @Autowired biAn bn;
-
+    @Autowired UrlParaService us;
     @RequestMapping("/getvalue.do")
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {
         JSONObject rejs=new JSONObject();
@@ -64,11 +65,11 @@ public class getValueClass {
         return  rejs.toString();
 
     }
-    @RequestMapping("/test.do")
-    public String test()
-    {
-        String str = new String();
-
-        return str;
-    }
+//    @RequestMapping("/test.do")
+//    public String test()
+//    {
+//        String str = new String();
+//        us.getUrlPara();
+//        return us.getUrlPara().toString();
+//    }
 }

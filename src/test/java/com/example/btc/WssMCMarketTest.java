@@ -12,6 +12,8 @@ import io.socket.client.Socket;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -86,14 +88,15 @@ public class WssMCMarketTest {
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
     @Test
-    public void testthread()
-    {
+    public void testthread() throws InterruptedException, MalformedURLException, URISyntaxException {
 
         CustomMultiThreadingService cs=new CustomMultiThreadingService();
-        for (int i=0;i<10;i++){
-            cs.executeAysncTask1(i);
-            cs.executeAsyncTask2(i);
-        }
+//        for (int i=0;i<10;i++){
+//            cs.executeAysncTask1(i);
+//            cs.executeAsyncTask2(i);
+//        }
+        //cs.excuteAsyncHbThead();
+        //Thread.sleep(Integer.MAX_VALUE);
 
     }
 

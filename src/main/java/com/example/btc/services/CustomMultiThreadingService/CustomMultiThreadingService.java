@@ -1,19 +1,27 @@
 package com.example.btc.services.CustomMultiThreadingService;
 
+import com.example.btc.services.baseDaoService.UrlParaService;
 import com.example.btc.services.ws.hb.Hbprice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @Service
+//@EnableScheduling   // 1.开启定时任务
+//@EnableAsync        // 2.开启多线程
 public class CustomMultiThreadingService {
     private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
     @Autowired Hbprice hb;
+    @Autowired UrlParaService urlParaService;
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
      * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor
@@ -42,11 +50,19 @@ public class CustomMultiThreadingService {
         logger.info("CustomMultiThreadingService ==> executeAsyncTask2 method: 执行异步任务{} ", i);
     }
     @Async
-    public  String excuteAsyncHbThead() throws InterruptedException, URISyntaxException, MalformedURLException {
-        String param="market.btcusdt.trade.detail";
-        float hbprice=hb.getHbprice(param);
-        String hbpricestr=String.valueOf(hbprice);
-        return  hbpricestr;
+   // @Scheduled(fixedDelay = 1000)
+    public  void excuteAsyncHbThead() throws InterruptedException, URISyntaxException, MalformedURLException {
+       //List<String> hbpara=urlParaService.getUrlPara();
+      // String hbpricestr ="11111";
+//       for(String para : hbpara)
+//       {
+//           String param="market."+para+"usdt.trade.detail";
+//           float hbprice=hb.getHbprice(param);
+//            hbpricestr=String.valueOf(hbprice);
+//        //这地方加输出要页面的参数
+//       }
+       // return  hbpricestr;
+        logger.info("111111111");
 
     }
 }
