@@ -42,10 +42,11 @@ public class CustomMultiThreadingService {
         logger.info("CustomMultiThreadingService ==> executeAsyncTask2 method: 执行异步任务{} ", i);
     }
     @Async
-    public void excuteAsyncHbThead() throws InterruptedException, URISyntaxException, MalformedURLException {
+    public  String excuteAsyncHbThead() throws InterruptedException, URISyntaxException, MalformedURLException {
         String param="market.btcusdt.trade.detail";
         float hbprice=hb.getHbprice(param);
         String hbpricestr=String.valueOf(hbprice);
+        return  hbpricestr;
 
     }
 }
