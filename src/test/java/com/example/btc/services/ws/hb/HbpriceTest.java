@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.event.MarketKLineReqResponse;
 import com.example.btc.services.ws.handler.WssMarketReqHandle;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
 import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Test;
+//import static org.junit.jupiter.api.Assertions.*;
 
 class HbpriceTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());

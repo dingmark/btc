@@ -1,13 +1,15 @@
 package com.example.btc;
 
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BtcApplicationTests {
+public  class  BtcApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public  void contextLoads() {
+		System.out.print("1111");
 	}
 
 }

@@ -2,7 +2,7 @@ package com.example.btc.services.http.mocha;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.junit.jupiter.api.Test;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class mochaTest {
 
