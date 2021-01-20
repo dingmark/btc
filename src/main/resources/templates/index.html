@@ -3,6 +3,8 @@
 <head>
     <title>My WebSocket</title>
 </head>
+<script src="/vue/vue.min.js"></script>
+<script src="/vue/vue-resource.min.js"></script>
 
 <body>
 <input id="text" type="text" />
@@ -10,7 +12,26 @@
 <button onclick="closeWebSocket()">Close</button>
 <div id="message"></div>
 </body>
-
+<script type = "text/javascript">
+    window.onload = function(){
+        var vm = new Vue({
+            el:'#box',
+            data:{
+                msg:'Hello World!',
+            },
+            methods:{
+                get:function(){
+                    //发送get请求
+                    this.$http.get('/try/ajax/ajax_info.txt').then(function(res){
+                        document.write(res.body);
+                    },function(){
+                        console.log('请求失败处理');
+                    });
+                }
+            }
+        });
+    }
+</script>
 <script type="text/javascript">
     var websocket = null;
 
