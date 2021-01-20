@@ -16,7 +16,7 @@
 
     //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/test/one");
+        websocket = new WebSocket("ws://localhost:8080/test/hb");
     } else {
         alert('Not support websocket')
     }
@@ -34,6 +34,7 @@
     //接收到消息的回调方法
     websocket.onmessage = function(event) {
         setMessageInnerHTML(event.data);
+        send();
     }
 
     //连接关闭的回调方法
@@ -49,6 +50,7 @@
     //将消息显示在网页上
     function setMessageInnerHTML(innerHTML) {
         document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        document.getElementById('text').value=innerHTML;
     }
 
     //关闭连接
