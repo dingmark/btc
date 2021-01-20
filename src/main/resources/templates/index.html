@@ -1,12 +1,12 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.springframework.org/schema/mvc">
 <head>
     <title>My WebSocket</title>
 </head>
-<script src="/vue/vue.min.js"></script>
-<script src="/vue/vue-resource.min.js"></script>
-
+<script src="vue/vue.min.js"></script>
+<script src="vue/vue-resource.min.js"></script>
 <body>
+<input type="button" @click="get()" value="点我异步获取数据(Get)">
 <input id="text" type="text" />
 <button onclick="send()">Send</button>
 <button onclick="closeWebSocket()">Close</button>
@@ -22,7 +22,7 @@
             methods:{
                 get:function(){
                     //发送get请求
-                    this.$http.get('/try/ajax/ajax_info.txt').then(function(res){
+                    this.$http.get('/test.do').then(function(res){
                         document.write(res.body);
                     },function(){
                         console.log('请求失败处理');
