@@ -19,7 +19,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 @Controller
-@ResponseBody
 public class getValueClass {
     @Autowired Hbprice hb;
     @Autowired OkPrice okprice;
@@ -28,6 +27,7 @@ public class getValueClass {
     @Autowired biAn bn;
     @Autowired UrlParaService us;
     @RequestMapping("/getvalue.do")
+    @ResponseBody
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {
         JSONObject rejs=new JSONObject();
         long startTime=System.currentTimeMillis();   //获取开始时间
@@ -65,11 +65,12 @@ public class getValueClass {
         return  rejs.toString();
 
     }
-//    @RequestMapping("/test.do")
-//    public String test()
-//    {
+    @RequestMapping("/test.do")
+    public String test()
+    {
 //        String str = new String();
 //        us.getUrlPara();
 //        return us.getUrlPara().toString();
-//    }
+        return "index2";
+    }
 }
