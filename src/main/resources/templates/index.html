@@ -49,7 +49,7 @@
 
     //将消息显示在网页上
     function setMessageInnerHTML(innerHTML) {
-        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        document.getElementById('message').innerHTML = innerHTML ;
         document.getElementById('text').value=innerHTML;
     }
 
