@@ -6,7 +6,9 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import java.util.List;
 
 /**
- * Created by Administrator on 2021-01-19.
+ *
+ * @author Administrator
+ * @date 2021-01-19
  */
 @Mapper
 public interface UrlPara {

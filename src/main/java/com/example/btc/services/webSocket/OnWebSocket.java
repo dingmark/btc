@@ -53,7 +53,15 @@ public class OnWebSocket {
     @OnMessage
     public void OnMessage(String message){
         log.info("[WebSocket] 收到消息：{}",message);
+        String channeltype=name.substring(0,1);
+        switch (channeltype)
+        {
+            case "hb":
 
+                break;
+            default:
+                break;
+        }
         //判断是否需要指定发送，具体规则自定义
         int i=Integer.valueOf(message);
         i++;

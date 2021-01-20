@@ -1,6 +1,4 @@
 package com.example.btc.services.CustomMultiThreadingService;
-
-import com.example.btc.services.webSocket.WebSocket;
 import com.example.btc.services.ws.hb.Hbprice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +16,7 @@ import java.net.URISyntaxException;
 public class CustomMultiThreadingService {
     private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
     @Autowired Hbprice hb;
-    @Autowired
-    WebSocket ws;
+
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
      * 如果注解在类级别上，则表明该类所有的方法都是异步方法，而这里的方法自动被注入使用ThreadPoolTaskExecutor作为TaskExecutor

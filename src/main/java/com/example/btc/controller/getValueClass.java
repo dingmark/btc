@@ -1,6 +1,7 @@
 package com.example.btc.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.baseDaoService.UrlParaService;
 import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
@@ -15,16 +16,20 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 
 @Controller
-@ResponseBody
+
 public class getValueClass {
     @Autowired Hbprice hb;
     @Autowired OkPrice okprice;
     @Autowired bter btr;
     @Autowired mocha mc;
     @Autowired biAn bn;
+    @Autowired
+    UrlParaService urlParaService;
     @RequestMapping("/getvalue.do")
+    @ResponseBody
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {
         JSONObject rejs=new JSONObject();
         long startTime=System.currentTimeMillis();   //获取开始时间
@@ -61,5 +66,17 @@ public class getValueClass {
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
         return  rejs.toString();
 
+    }
+    @RequestMapping("/test.do")
+    @ResponseBody
+    public String test()
+    {
+        List<String> list= urlParaService.getUrlPara();
+        return list.toString();
+    }
+    @RequestMapping("/test1.do")
+    public  String test1()
+    {
+        return "hello";
     }
 }
