@@ -9,6 +9,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -35,9 +36,10 @@ public class OnWebSocket {
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name){
         this.session = session;
-        this.name = name;
+        UUID uuid = UUID.randomUUID();
+        this.name = name+uuid;
         // name是用来表示唯一客户端，如果需要指定发送，需要指定发送通过name来区分
-        webSocketSet.put(name,this);
+        webSocketSet.put(this.name,this);
         log.info("[WebSocket] 连接成功，当前连接人数为：={}",webSocketSet.size());
     }
 
@@ -51,16 +53,18 @@ public class OnWebSocket {
     @OnMessage
     public void OnMessage(String message){
         log.info("[WebSocket] 收到消息：{}",message);
+
         //判断是否需要指定发送，具体规则自定义
         int i=Integer.valueOf(message);
         i++;
-        if(message.indexOf("TOUSER") == 0){
-            String name = message.substring(message.indexOf("TOUSER")+6,message.indexOf(";"));
-            AppointSending(name,message.substring(message.indexOf(";")+1,message.length()));
-        }else{
-            //GroupSending(message);
-            GroupSending(String.valueOf(i));
-        }
+        AppointSending(name,String.valueOf(i));
+//        if(message.indexOf("TOUSER") == 0){
+//            String name = message.substring(message.indexOf("TOUSER")+6,message.indexOf(";"));
+//            AppointSending(name,message.substring(message.indexOf(";")+1,message.length()));
+//        }else{
+//            //GroupSending(message);
+//            GroupSending(String.valueOf(i));
+//        }
 
 
     }
