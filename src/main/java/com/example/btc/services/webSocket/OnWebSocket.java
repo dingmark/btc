@@ -23,20 +23,24 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Slf4j
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
     private static Hbprice hb;
-
+    private  static UrlPara urlPara;
     @Autowired
     public void setRepository(Hbprice hb) {
         OnWebSocket.hb = hb;
     }
+    @Autowired
+    public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;}
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
@@ -56,13 +60,14 @@ public class OnWebSocket {
 
 
     @OnOpen
-    public void OnOpen(Session session, @PathParam(value = "name") String name){
+    public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
         this.session = session;
         UUID uuid = UUID.randomUUID();
         this.name = name+uuid;
         // name是用来表示唯一客户端，如果需要指定发送，需要指定发送通过name来区分
         webSocketSet.put(this.name,this);
         log.info("[WebSocket] 连接成功，当前连接人数为：={}",webSocketSet.size());
+
     }
 
 
@@ -76,20 +81,21 @@ public class OnWebSocket {
     public void OnMessage(String message)  {
         log.info("[WebSocket] 收到消息：{}",message);
         String channeltype=name.substring(0,2);
+        JSONObject jspara=JSONObject.parseObject(message);
         try
         {
             switch (channeltype)
             {
                 case "hb":
-                    JSONObject js=JSONObject.parseObject(message);
-                    JSONObject jr=new JSONObject();
-                    String param="market."+js.getString("hb")+"usdt.trade.detail";
-
-                    float hbprice=hb.getHbprice(param);
-                    String hbpricestr=String.valueOf(hbprice);
-                    jr.put(js.getString("hb"),hbprice);
-                    AppointSending(name,jr.toString());
+                        JSONObject jr=new JSONObject();
+                        String param="market."+jspara.getString("hb")+"usdt.trade.detail";
+                        float hbprice=hb.getHbprice(param);
+                        String hbpricestr=String.valueOf(hbprice);
+                        jr.put(jspara.getString("hb"),hbprice);
+                        AppointSending(name,jr.toString());
                     logger.info("接收火币参数执行火币获取最近火币价格");
+                    break;
+                case "ok":
                     break;
                 default:
                     break;

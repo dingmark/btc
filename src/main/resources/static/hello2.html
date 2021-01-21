@@ -16,6 +16,7 @@
 <button onclick="closeWebSocket()">Close</button>
 <div id="message"></div>
 -->
+<div id="message"></div>
 <table class="table table-striped">
     <caption>条纹表格布局</caption>
     <thead>
@@ -47,7 +48,7 @@
 
 <script type="text/javascript">
     var websocket = null;
-
+    var arr=null;
     //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/test/hb");
@@ -68,7 +69,7 @@
     //接收到消息的回调方法
     websocket.onmessage = function(event) {
         setMessageInnerHTML(event.data);
-        send();
+        listsend(arr);
     }
 
     //连接关闭的回调方法
@@ -96,6 +97,13 @@
         var message = document.getElementById('text').value;
         websocket.send(message);
     }
+    function listsend(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"hb":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocket.send(para);
+        }
+    }
 </script>
 <script type="text/javascript">
     window.onload = function(){ alert("welcome");
@@ -111,15 +119,11 @@
             },
             success:function(result){
               //  var obj = JSON.parse(result);
-                var temp =result['res'];
-                temp=temp.substring(1,temp.length-1);
-                var arr=temp.split(",");
+                 arr =result['res'];
+                //temp=temp.substring(1,temp.length-1);
+                //arr=temp.split(",");
                 // obj=result;
-                for(var i=0;i<arr.length;i++ )
-                {   var para='{"hb":"'+arr[i]+'"}';
-                    //JSON.stringify(para)
-                    websocket.send(para);
-                }
+                listsend(arr);
 
             },
             complete:function(){
