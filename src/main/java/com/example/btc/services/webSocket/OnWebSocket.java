@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -30,16 +31,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
+    private static Hbprice hb;
+
     @Autowired
-    Hbprice hb;
-    @Autowired
-    OkPrice okprice;
-    @Autowired
-    bter btr;
-    @Autowired
-    mocha mc;
-    @Autowired
-    biAn bn;
+    public void setRepository(Hbprice hb) {
+        OnWebSocket.hb = hb;
+    }
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
@@ -87,7 +84,7 @@ public class OnWebSocket {
                     JSONObject js=JSONObject.parseObject(message);
                     JSONObject jr=new JSONObject();
                     String param="market."+js.getString("hb")+"usdt.trade.detail";
-                    
+
                     float hbprice=hb.getHbprice(param);
                     String hbpricestr=String.valueOf(hbprice);
                     jr.put(js.getString("hb"),hbprice);
