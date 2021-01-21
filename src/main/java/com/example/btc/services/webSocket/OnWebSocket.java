@@ -1,6 +1,17 @@
 package com.example.btc.services.webSocket;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.btc.baseDao.UrlPara;
+import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
+import com.example.btc.services.http.bian.biAn;
+import com.example.btc.services.http.bter.bter;
+import com.example.btc.services.http.mocha.mocha;
+import com.example.btc.services.http.ok.OkPrice;
+import com.example.btc.services.ws.hb.Hbprice;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.OnClose;
@@ -9,14 +20,28 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 @Slf4j
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
+    @Autowired
+    Hbprice hb;
+    @Autowired
+    OkPrice okprice;
+    @Autowired
+    bter btr;
+    @Autowired
+    mocha mc;
+    @Autowired
+    biAn bn;
 
+    private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
      *  与某个客户端的连接对话，需要通过它来给客户端发送消息
      */
@@ -51,21 +76,37 @@ public class OnWebSocket {
     }
 
     @OnMessage
-    public void OnMessage(String message){
+    public void OnMessage(String message)  {
         log.info("[WebSocket] 收到消息：{}",message);
-        String channeltype=name.substring(0,1);
-        switch (channeltype)
+        String channeltype=name.substring(0,2);
+        try
         {
-            case "hb":
-
-                break;
-            default:
-                break;
+            switch (channeltype)
+            {
+                case "hb":
+                    JSONObject js=JSONObject.parseObject(message);
+                    JSONObject jr=new JSONObject();
+                    String param="market."+js.getString("hb")+"usdt.trade.detail";
+                    
+                    float hbprice=hb.getHbprice(param);
+                    String hbpricestr=String.valueOf(hbprice);
+                    jr.put(js.getString("hb"),hbprice);
+                    AppointSending(name,jr.toString());
+                    logger.info("接收火币参数执行火币获取最近火币价格");
+                    break;
+                default:
+                    break;
+            }
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            //报错之后重新连接websocket
+           // webSocketSet.put(this.name,this);
+        }
+
         //判断是否需要指定发送，具体规则自定义
-        int i=Integer.valueOf(message);
-        i++;
-        AppointSending(name,String.valueOf(i));
+
 //        if(message.indexOf("TOUSER") == 0){
 //            String name = message.substring(message.indexOf("TOUSER")+6,message.indexOf(";"));
 //            AppointSending(name,message.substring(message.indexOf(";")+1,message.length()));

@@ -72,7 +72,9 @@ public class getValueClass {
     public String test()
     {
         List<String> list= urlParaService.getUrlPara();
-        return list.toString();
+        JSONObject js =new JSONObject();
+        js.put("res",list.toString());
+        return js.toString();
     }
     @RequestMapping("/test1.do")
     public  String test1()

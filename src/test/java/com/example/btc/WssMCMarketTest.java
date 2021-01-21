@@ -1,13 +1,18 @@
 package com.example.btc;
 
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
+import com.example.btc.services.ws.hb.Hbprice;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -18,8 +23,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 
+
 public class WssMCMarketTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    Hbprice hb;
     //private String URL = "";
     public static final String ACCESS_KEY = "";
     public static final String SECRET_KEY = "";
@@ -90,13 +98,17 @@ public class WssMCMarketTest {
     @Test
     public void testthread() throws InterruptedException, MalformedURLException, URISyntaxException {
 
-        CustomMultiThreadingService cs=new CustomMultiThreadingService();
+       // CustomMultiThreadingService cs=new CustomMultiThreadingService();
 //        for (int i=0;i<10;i++){
 //            cs.executeAysncTask1(i);
 //            cs.executeAsyncTask2(i);
 //        }
         //cs.excuteAsyncHbThead();
         //Thread.sleep(Integer.MAX_VALUE);
+       // String message="{\"hb\":\"btc\"}";
+        //JSONObject js=JSONObject.parseObject(message);
+
+       float f= hb.getHbprice("market.btcusdt.trade.detail");
 
     }
 
