@@ -11,7 +11,9 @@ import com.alibaba.fastjson.JSONObject;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.BufferedReader;
@@ -23,7 +25,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 
-
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = RenjApplication.class)
 public class WssMCMarketTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
