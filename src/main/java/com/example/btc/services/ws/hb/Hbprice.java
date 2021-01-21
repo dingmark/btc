@@ -19,6 +19,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Hbprice {
     @Value("${hburl}")
     private String hburl;
+    @Value("${hbtime}")
+    private String hbtime;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public float getHbprice(String reqparam) throws MalformedURLException, URISyntaxException, InterruptedException {
@@ -46,7 +48,7 @@ public class Hbprice {
         Map<String, Object> param = new HashMap<>();
         param.put("req", reqparam);
         wssMarketReqHandle.doReq(JSON.toJSONString(param));
-        Thread.sleep(500);
+        Thread.sleep(Integer.parseInt(hbtime));
         return price.get();
     }
 }
