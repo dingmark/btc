@@ -46,7 +46,7 @@ public class Hbprice {
         Map<String, Object> param = new HashMap<>();
         param.put("req", reqparam);
         wssMarketReqHandle.doReq(JSON.toJSONString(param));
-        Thread.sleep(1000);
+        Thread.sleep(500);
         return price.get();
     }
 }
