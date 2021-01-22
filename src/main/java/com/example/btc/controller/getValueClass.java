@@ -76,9 +76,11 @@ public class getValueClass {
         js.put("res",list);
         return js.toString();
     }
-    @RequestMapping("/test1.do")
-    public  String test1()
-    {
+    @RequestMapping("/test3.do")
+    public  String test3() throws InterruptedException, URISyntaxException, MalformedURLException {
+        List<String> paras=
+        urlParaService.getUrlPara();
+        hb.getHbArrayPrice(paras);
         return "hello";
     }
 }

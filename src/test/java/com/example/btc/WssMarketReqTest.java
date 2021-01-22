@@ -83,6 +83,7 @@ public class WssMarketReqTest {
             try {
                 Map<String, Object> param = new HashMap<>();
                 param.put("req", "market.btcusdt.trade.detail");
+                param.put("req","market.ethusdt.trade.detail");
                 wssMarketReqHandle.doReq(JSON.toJSONString(param));
                 Thread.sleep(1000);
             } catch (Exception e) {

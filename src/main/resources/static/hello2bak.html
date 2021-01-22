@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My WebSocket</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+<!--
+<input id="text" type="text" />
+<button onclick="send()">Send</button>
+<button onclick="closeWebSocket()">Close</button>
+<div id="message"></div>
+-->
+<div id="message"></div>
+<table class="table table-striped">
+    <caption>条纹表格布局</caption>
+    <thead>
+    <tr>
+        <th>名称</th>
+        <th>城市</th>
+        <th>邮编</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Tanmay</td>
+        <td>Bangalore</td>
+        <td>560001</td>
+    </tr>
+    <tr>
+        <td>Sachin</td>
+        <td>Mumbai</td>
+        <td>400003</td>
+    </tr>
+    <tr>
+        <td>Uma</td>
+        <td>Pune</td>
+        <td>411027</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+
+<script type="text/javascript">
+    var websocket = null;
+    var arr=null;
+    var hbi=0;
+    hbi1=0;
+    hbi2=0;
+    hbi3=0;
+    //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
+    if ('WebSocket' in window) {
+        websocket = new WebSocket("ws://localhost:8080/test/hb");
+        websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
+        websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
+        websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
+    } else {
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function() {
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function(event) {
+        //setMessageInnerHTML("open");
+    }
+
+    //接收到消息的回调方法
+    websockethb1.onmessage=function (event) {
+        setMessageInnerHTML(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        hbi1++;
+        if(hbi1==arr.length)
+        {
+            hbi1=0;//一次循环完成之后重新置标志位
+            listsend1(arr);
+        }
+
+    }
+    websockethb2.onmessage=function (event) {
+        setMessageInnerHTML(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        hbi2++;
+        if(hbi2==arr.length)
+        {
+            hbi2=0;//一次循环完成之后重新置标志位
+            listsend2(arr);
+        }
+
+    }
+    websockethb3.onmessage=function(event)
+    {
+        setMessageInnerHTML(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        hbi3++;
+        if(hbi3==arr.length)
+        {
+            hbi3=0;//一次循环完成之后重新置标志位
+            listsend3(arr);
+        }
+    }
+    websocket.onmessage = function(event) {
+        setMessageInnerHTML(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+          hbi++;
+          if(hbi==arr.length)
+          {
+              hbi=0;//一次循环完成之后重新置标志位
+              listsend(arr);
+          }
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function() {
+        setMessageInnerHTML("close");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function() {
+        websocket.close();
+    }
+
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+
+    //关闭连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+
+    //发送消息
+    function send() {
+        var message = document.getElementById('text').value;
+        websocket.send(message);
+    }
+    function listsend(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"hb":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocket.send(para);//发送之后等待服务器响应
+        }
+    }
+    function listsend1(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"hb":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websockethb1.send(para);//发送之后等待服务器响应
+        }
+    }
+    function listsend2(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"hb":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websockethb2.send(para);//发送之后等待服务器响应
+        }
+    }
+    function listsend3(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"hb":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websockethb3.send(para);//发送之后等待服务器响应
+        }
+    }
+    function split_arry(arr,len) {
+        var a_len=arr.length;
+        var result=[];
+        for(var i=0;i<arr.length;i+len)
+        {
+            result.push(arr.slice(i,i+len))
+        }
+        return result;
+    }
+</script>
+<script type="text/javascript">
+    window.onload = function(){ alert("welcome");
+        $.ajax({
+            url:"/test.do",
+            //contentType:"application/json",
+            type:"GET",
+            cache:false,
+            async:true,
+            dataType:'json',
+            beforeSend:function(){
+                $('#queryForm').hide();
+            },
+            success:function(result){
+              //  var obj = JSON.parse(result);
+                 arr =result['res'];
+                //temp=temp.substring(1,temp.length-1);
+                //arr=temp.split(",");
+                // obj=result;
+                result=split_arry(arr,10)
+                listsend(result[0]);
+               // setTimeout(listsend(result[0]),1);
+                //setTimeout(listsend1(result[1]),1);
+               // setTimeout(listsend2(result[2]),1);
+                //setTimeout(listsend3(result[3]),1);
+
+            },
+            complete:function(){
+            }
+
+        });
+    }
+</script>
+</html>

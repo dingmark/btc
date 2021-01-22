@@ -49,6 +49,7 @@
 <script type="text/javascript">
     var websocket = null;
     var arr=null;
+    var hbi=0;
     //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/test/hb");
@@ -69,7 +70,14 @@
     //接收到消息的回调方法
     websocket.onmessage = function(event) {
         setMessageInnerHTML(event.data);
-        listsend(arr);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+          hbi++;
+          if(hbi==arr.length)
+          {
+              hbi=0;//一次循环完成之后重新置标志位
+              listsend(arr);
+          }
     }
 
     //连接关闭的回调方法
@@ -101,14 +109,14 @@
         for(var i=0;i<arr.length;i++ )
         {   var para='{"hb":"'+arr[i]+'"}';
             //JSON.stringify(para)
-            websocket.send(para);
+            websocket.send(para);//发送之后等待服务器响应
         }
     }
 </script>
 <script type="text/javascript">
     window.onload = function(){ alert("welcome");
         $.ajax({
-            url:"/test.do",
+            url:"/test3.do",
             //contentType:"application/json",
             type:"GET",
             cache:false,
@@ -118,12 +126,13 @@
                 $('#queryForm').hide();
             },
             success:function(result){
+                alert(result);
               //  var obj = JSON.parse(result);
-                 arr =result['res'];
+                 //arr =result['res'];
                 //temp=temp.substring(1,temp.length-1);
                 //arr=temp.split(",");
                 // obj=result;
-                listsend(arr);
+                //listsend(arr);
 
             },
             complete:function(){

@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+@SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiringInspection"})
 @Slf4j
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
@@ -51,7 +51,7 @@ public class OnWebSocket {
     /**
      * 标识当前连接客户端的用户名
      */
-    private String name;
+    public String name;
 
     /**
      *  用于存所有的连接服务的客户端，这个对象存储是安全的

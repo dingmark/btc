@@ -2,16 +2,22 @@ package com.example.btc.services.ws.hb;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.webSocket.OnWebSocket;
+import com.example.btc.services.ws.event.MarketDetailSubResponse;
+import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketReqHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.expression.Lists;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 @PropertySource("classpath:url.properties")
@@ -22,7 +28,8 @@ public class Hbprice {
     @Value("${hbtime}")
     private String hbtime;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
+    @Autowired
+    OnWebSocket ws;
     public float getHbprice(String reqparam) throws MalformedURLException, URISyntaxException, InterruptedException {
        long startTime=System.currentTimeMillis();
          AtomicReference<Float> price = new AtomicReference<>((float) 0);
@@ -50,5 +57,31 @@ public class Hbprice {
         wssMarketReqHandle.doReq(JSON.toJSONString(param));
         Thread.sleep(Integer.parseInt(hbtime));
         return price.get();
+    }
+    public void getHbArrayPrice(List<String> reqparams) throws MalformedURLException, URISyntaxException, InterruptedException {
+        long startTime=System.currentTimeMillis();
+        AtomicReference<Float> price = new AtomicReference<>((float) 0);
+        WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+        List<String> channels = new ArrayList<>();
+        //reqparam="market.btcusdt.trade.detail";
+        for(String para:reqparams)
+        {
+            String parado="market."+para+"usdt.trade.detail";
+            channels.add(parado);
+        }
+       // channels.add("market.btcusdt.trade.detail");
+        wssMarketHandle.sub(channels, response -> {
+            logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+            long endTime=System.currentTimeMillis();
+            logger.info("火币数据加载完成,用时{}",(endTime-startTime)+"ms");
+            MarketDetailSubResponse event = JSON.parseObject(response, MarketDetailSubResponse.class);
+            //logger.info("detailEvent的ts为：{},当前的时间戳为：{},时间间隔为：{}毫秒", event.getTs(), currentTimeMillis, currentTimeMillis - event.getTs());
+            //给前台发送数据
+            ws.AppointSending(ws.name,event.getCh());
+        });
+        //wssMarketHandle.
+        Thread.sleep(Integer.MAX_VALUE);
+        //Thread.sleep(Integer.parseInt(hbtime));
+      //  return price.get();
     }
 }
