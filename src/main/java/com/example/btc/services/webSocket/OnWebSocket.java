@@ -35,12 +35,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class OnWebSocket {
     private static Hbprice hb;
     private  static UrlPara urlPara;
+    private  static  OkPrice okPrice;
     @Autowired
     public void setRepository(Hbprice hb) {
         OnWebSocket.hb = hb;
     }
     @Autowired
     public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;}
+    @Autowired
+    public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
@@ -96,6 +99,11 @@ public class OnWebSocket {
                     logger.info("接收火币参数执行火币获取最近火币价格");
                     break;
                 case "ok":
+                        JSONObject jok=new JSONObject();
+                        String paraok=jspara.getString("ok");
+                        float okprice=okPrice.getOKprice(paraok);
+                        jok.put(paraok,okprice);
+                        AppointSending(name,jok.toString());
                     break;
                 default:
                     break;

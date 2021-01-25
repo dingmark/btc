@@ -16,7 +16,14 @@
 <button onclick="closeWebSocket()">Close</button>
 <div id="message"></div>
 -->
-<div id="message"></div>
+<div style="float: left" id="message"></div>
+<div style="float: left" id="message1"></div>
+<div style="float: left" id="message2"></div>
+<div style="float: left" id="message3"></div>
+<div style="float: left" id="messageok"></div>
+<div style="float: left" id="messageok1"></div>
+<div style="float: left" id="messageok2"></div>
+<div style="float: left" id="messageok3"></div>
 <table class="table table-striped">
     <caption>条纹表格布局</caption>
     <thead>
@@ -49,16 +56,27 @@
 <script type="text/javascript">
     var websocket = null;
     var arr=null;
+    arr1=null;
+    arr2=null;
+    arr3=null;
     var hbi=0;
     hbi1=0;
     hbi2=0;
     hbi3=0;
+    oki=0;
+    oki1=0;
+    oki2=0;
+    oki3=0;
     //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/test/hb");
         websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
         websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
         websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
+        websocketok = new WebSocket("ws://localhost:8080/test/ok");
+        websocketok1 = new WebSocket("ws://localhost:8080/test/ok");
+        websocketok2 = new WebSocket("ws://localhost:8080/test/ok");
+        websocketok3 = new WebSocket("ws://localhost:8080/test/ok");
     } else {
         alert('Not support websocket')
     }
@@ -75,39 +93,39 @@
 
     //接收到消息的回调方法
     websockethb1.onmessage=function (event) {
-        setMessageInnerHTML(event.data);
+        setMessageInnerHTML1(event.data);
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
         hbi1++;
-        if(hbi1==arr.length)
+        if(hbi1==arr1.length)
         {
             hbi1=0;//一次循环完成之后重新置标志位
-            listsend1(arr);
+            listsend1(arr1);
         }
 
     }
     websockethb2.onmessage=function (event) {
-        setMessageInnerHTML(event.data);
+        setMessageInnerHTML2(event.data);
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
         hbi2++;
-        if(hbi2==arr.length)
+        if(hbi2==arr2.length)
         {
             hbi2=0;//一次循环完成之后重新置标志位
-            listsend2(arr);
+            listsend2(arr2);
         }
 
     }
     websockethb3.onmessage=function(event)
     {
-        setMessageInnerHTML(event.data);
+        setMessageInnerHTML3(event.data);
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
         hbi3++;
-        if(hbi3==arr.length)
+        if(hbi3==arr3.length)
         {
             hbi3=0;//一次循环完成之后重新置标志位
-            listsend3(arr);
+            listsend3(arr3);
         }
     }
     websocket.onmessage = function(event) {
@@ -121,7 +139,50 @@
               listsend(arr);
           }
     }
-
+    websocketok.onmessage = function(event) {
+        setMessageInnerHTMLok(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        oki++;
+        if(oki==arr.length)
+        {
+            oki=0;//一次循环完成之后重新置标志位
+            listsendok(arr);
+        }
+    }
+    websocketok1.onmessage = function(event) {
+        setMessageInnerHTMLok1(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        oki1++;
+        if(oki1==arr1.length)
+        {
+            oki1=0;//一次循环完成之后重新置标志位
+            listsendok1(arr1);
+        }
+    }
+    websocketok2.onmessage = function(event) {
+        setMessageInnerHTMLok2(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        oki2++;
+        if(oki2==arr2.length)
+        {
+            oki2=0;//一次循环完成之后重新置标志位
+            listsendok2(arr2);
+        }
+    }
+    websocketok3.onmessage = function(event) {
+        setMessageInnerHTMLok3(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+        oki3++;
+        if(oki3==arr3.length)
+        {
+            oki3=0;//一次循环完成之后重新置标志位
+            listsendok3(arr3);
+        }
+    }
     //连接关闭的回调方法
     websocket.onclose = function() {
         setMessageInnerHTML("close");
@@ -136,7 +197,27 @@
     function setMessageInnerHTML(innerHTML) {
         document.getElementById('message').innerHTML += innerHTML + '<br/>';
     }
-
+    function setMessageInnerHTML1(innerHTML) {
+        document.getElementById('message1').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTML2(innerHTML) {
+        document.getElementById('message2').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTML3(innerHTML) {
+        document.getElementById('message3').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTMLok(innerHTML) {
+        document.getElementById('messageok').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTMLok1(innerHTML) {
+        document.getElementById('messageok1').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTMLok2(innerHTML) {
+        document.getElementById('messageok2').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTMLok3(innerHTML) {
+        document.getElementById('messageok3').innerHTML += innerHTML + '<br/>';
+    }
     //关闭连接
     function closeWebSocket() {
         websocket.close();
@@ -154,11 +235,25 @@
             websocket.send(para);//发送之后等待服务器响应
         }
     }
+    function listsendok(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"ok":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocketok.send(para);//发送之后等待服务器响应
+        }
+    }
     function listsend1(arr) {
         for(var i=0;i<arr.length;i++ )
         {   var para='{"hb":"'+arr[i]+'"}';
             //JSON.stringify(para)
             websockethb1.send(para);//发送之后等待服务器响应
+        }
+    }
+    function listsendok1(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"ok":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocketok1.send(para);//发送之后等待服务器响应
         }
     }
     function listsend2(arr) {
@@ -168,6 +263,13 @@
             websockethb2.send(para);//发送之后等待服务器响应
         }
     }
+    function listsendok2(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"ok":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocketok2.send(para);//发送之后等待服务器响应
+        }
+    }
     function listsend3(arr) {
         for(var i=0;i<arr.length;i++ )
         {   var para='{"hb":"'+arr[i]+'"}';
@@ -175,10 +277,17 @@
             websockethb3.send(para);//发送之后等待服务器响应
         }
     }
+    function listsendok3(arr) {
+        for(var i=0;i<arr.length;i++ )
+        {   var para='{"ok":"'+arr[i]+'"}';
+            //JSON.stringify(para)
+            websocketok3.send(para);//发送之后等待服务器响应
+        }
+    }
     function split_arry(arr,len) {
         var a_len=arr.length;
         var result=[];
-        for(var i=0;i<arr.length;i+len)
+        for(var i=0;i<arr.length;i+=len)
         {
             result.push(arr.slice(i,i+len))
         }
@@ -203,12 +312,19 @@
                 //temp=temp.substring(1,temp.length-1);
                 //arr=temp.split(",");
                 // obj=result;
-                result=split_arry(arr,10)
-                listsend(result[0]);
-               // setTimeout(listsend(result[0]),1);
-                //setTimeout(listsend1(result[1]),1);
-               // setTimeout(listsend2(result[2]),1);
-                //setTimeout(listsend3(result[3]),1);
+                splitarry=split_arry(arr,10)
+                arr=splitarry[0];
+                arr1=splitarry[1];
+                arr2=splitarry[2];
+                arr3=splitarry[3];
+                setTimeout(listsend(arr),1);
+                setTimeout(listsend1(arr1),1);
+                setTimeout(listsend2(arr2),1);
+                setTimeout(listsend3(arr3),1);
+                setTimeout(listsendok(arr),1);
+                setTimeout(listsendok1(arr1),1);
+                setTimeout(listsendok2(arr2),1);
+                setTimeout(listsendok3(arr3),1);
 
             },
             complete:function(){

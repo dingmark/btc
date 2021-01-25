@@ -40,8 +40,9 @@ public class getValueClass {
         String hbpricestr=String.valueOf(hbprice);
         rejs.put("hb",hbprice);
         //OK
-        String okurl="https://www.okexcn.com/api/spot/v3/instruments/BTC-USDT/ticker";
-        float okpircefloat=okprice.getOKprice(new URL(okurl));
+        //String okurl="https://www.okexcn.com/api/spot/v3/instruments/BTC-USDT/ticker";
+
+        float okpircefloat=okprice.getOKprice("BTC");
         rejs.put("ok",okpircefloat);
         //比特儿
         String bteurl="https://fx-api.gateio.ws/api/v4/futures/btc/contracts/BTC_USD";

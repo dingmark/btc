@@ -116,7 +116,7 @@
 <script type="text/javascript">
     window.onload = function(){ alert("welcome");
         $.ajax({
-            url:"/test3.do",
+            url:"/test.do",
             //contentType:"application/json",
             type:"GET",
             cache:false,
@@ -126,13 +126,13 @@
                 $('#queryForm').hide();
             },
             success:function(result){
-                alert(result);
+                arr =result['res'];
               //  var obj = JSON.parse(result);
                  //arr =result['res'];
                 //temp=temp.substring(1,temp.length-1);
                 //arr=temp.split(",");
                 // obj=result;
-                //listsend(arr);
+                listsend(arr);
 
             },
             complete:function(){
