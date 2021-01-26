@@ -94,6 +94,7 @@ public class OnWebSocket {
             switch (channeltype)
             {
                 case "hb":
+                        Thread.sleep(500);
                         JSONObject jr=new JSONObject();
                         String param="market."+jspara.getString("hb")+"usdt.trade.detail";
                         float hbprice=hb.getHbprice(param);
