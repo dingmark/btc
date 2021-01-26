@@ -21,6 +21,7 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -163,7 +164,7 @@ public class OnWebSocket {
     public void AppointSending(String name,String message){
         try {
             webSocketSet.get(name).session.getBasicRemote().sendText(message);
-        }catch (Exception e){
+        }catch (IOException e){
             //e.printStackTrace();
             logger.info(name+"退出通信");
             OnClose();
