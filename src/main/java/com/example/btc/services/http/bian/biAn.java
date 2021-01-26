@@ -23,29 +23,35 @@ public class biAn {
     public float getBiAnPrice(URL url) throws IOException {
         long startTime=System.currentTimeMillis();
         float price=0;
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
-        urlConnection.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-        InputStream in = urlConnection.getInputStream();
-        GZIPInputStream gZipS=new GZIPInputStream(in);
-        InputStreamReader res = new InputStreamReader(gZipS,"GBK");
-        BufferedReader reader=new BufferedReader(res);
-        String line;
-        List<String> charinfo=new ArrayList<String>();
-        while ((line = reader.readLine()) != null) {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            InputStream in = urlConnection.getInputStream();
+            GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            BufferedReader reader = new BufferedReader(res);
+            String line;
+            List<String> charinfo = new ArrayList<String>();
+            while ((line = reader.readLine()) != null) {
 
-            charinfo.add(line);
+                charinfo.add(line);
+            }
+            //System.out.println(charinfo.toString());
+            long endTime = System.currentTimeMillis();
+            logger.info("币安数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            String tmp = charinfo.toString().substring(2, charinfo.toString().length() - 2);
+            tmp = tmp.replaceAll("},", "}#");
+            List<String> listdata = new ArrayList<String>();
+            listdata = Arrays.asList(tmp.split("#"));
+            //取第一个数据为最近交易数据
+            JSONObject js = JSONObject.parseObject(listdata.get(0));
+            price = js.getFloatValue("price");
         }
-        //System.out.println(charinfo.toString());
-        long endTime=System.currentTimeMillis();
-        logger.info("币安数据加载完成用时{}----------->",(endTime-startTime)+"ms");
-        String tmp=charinfo.toString().substring(2,charinfo.toString().length()-2);
-        tmp=tmp.replaceAll("},","}#");
-        List<String> listdata=new ArrayList<String>();
-        listdata= Arrays.asList(tmp.split("#"));
-        //取第一个数据为最近交易数据
-        JSONObject js=JSONObject.parseObject(listdata.get(0));
-        price=js.getFloatValue("price");
+        catch (IOException e)
+        {
+            return 0;
+        }
         return price;
     }
 }

@@ -7,6 +7,7 @@ import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
 import com.example.btc.services.ws.hb.Hbprice;
+import org.apache.catalina.valves.rewrite.InternalRewriteMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +43,11 @@ public class getValueClass {
         //OK
         //String okurl="https://www.okexcn.com/api/spot/v3/instruments/BTC-USDT/ticker";
 
-        float okpircefloat=okprice.getOKprice("BTC");
+        float okpircefloat=okprice.getOKprice("HT");
         rejs.put("ok",okpircefloat);
         //比特儿
-        String bteurl="https://fx-api.gateio.ws/api/v4/futures/btc/contracts/BTC_USD";
-        float btrprice=btr.getbteprice(new URL(bteurl));
+       // String bteurl="https://fx-api.gateio.ws/api/v4/futures/btc/contracts/BTC_USD";
+        float btrprice=btr.getbteprice("btc".toUpperCase());
         rejs.put("btr",btrprice);
         //抹茶
         /*access key

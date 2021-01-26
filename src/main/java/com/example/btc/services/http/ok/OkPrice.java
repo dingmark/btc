@@ -23,30 +23,37 @@ public class OkPrice {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Value("${okurl}")
     private String okurl;
-    public float getOKprice(String para) throws IOException {
-        URL url =new URL(okurl+para+"-USDT/ticker");
-        long startTime=System.currentTimeMillis();
-        float price=0;
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
-        urlConnection.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-        InputStream in = urlConnection.getInputStream();
-        GZIPInputStream gZipS=new GZIPInputStream(in);
-        InputStreamReader res = new InputStreamReader(gZipS,"GBK");
-        BufferedReader reader=new BufferedReader(res);
-        String line;
-        List<String> charinfo=new ArrayList<String>();
-        while ((line = reader.readLine()) != null) {
+    public float getOKprice(String para)  {
+        long startTime = System.currentTimeMillis();
+        float price = 0;
+        try {
+            URL url = new URL(okurl + para + "-USDT/ticker");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            InputStream in = urlConnection.getInputStream();
+            GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            BufferedReader reader = new BufferedReader(res);
+            String line;
+            List<String> charinfo = new ArrayList<String>();
+            while ((line = reader.readLine()) != null) {
 
-            charinfo.add(line);
-        }
+                charinfo.add(line);
+            }
+
        // System.out.println(charinfo.toString());
         long endTime=System.currentTimeMillis();
         logger.info("OK数据加载完成{}------->",(endTime-startTime)+"ms");
         //数据转JSON并取最新成交价格
         JSONObject js= JSON.parseObject(charinfo.toString().substring(1,charinfo.toString().length()-1));
         price=Float.parseFloat(js.get("last").toString());
-        System.out.println(price);
+        }
+        catch (IOException e)
+        {
+            return price=0;
+        }
+        //System.out.println(price);
         return price;
     }
 }

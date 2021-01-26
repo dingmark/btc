@@ -20,33 +20,39 @@ import java.util.zip.GZIPInputStream;
 @Service
 public class mocha {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    public float getMcPrice(URL url) throws IOException {
+    public float getMcPrice(URL url)  {
         long startTime=System.currentTimeMillis();
         float price=0;
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
-        urlConnection.setRequestProperty("Content-type","application/x-www-form-urlencoded");
-        InputStream in = urlConnection.getInputStream();
-        GZIPInputStream gZipS=new GZIPInputStream(in);
-        InputStreamReader res = new InputStreamReader(gZipS,"GBK");
-        BufferedReader reader=new BufferedReader(res);
-        String line;
-        List<String> charinfo=new ArrayList<String>();
-        while ((line = reader.readLine()) != null) {
+        try {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            InputStream in = urlConnection.getInputStream();
+            GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            BufferedReader reader = new BufferedReader(res);
+            String line;
+            List<String> charinfo = new ArrayList<String>();
+            while ((line = reader.readLine()) != null) {
 
-            charinfo.add(line);
+                charinfo.add(line);
+            }
+            //System.out.println(charinfo.toString());
+            long endTime = System.currentTimeMillis();
+            logger.info("抹茶数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            //第一组数据为最新交易数据
+            JSONObject js = JSON.parseObject(charinfo.get(0));
+            String data = js.getString("data");
+            data = data.replaceAll("},", "}#");
+            List<String> datalist = Arrays.asList(data.split("#"));
+            //此处头有一个[
+            JSONObject datajs = JSONObject.parseObject(datalist.get(0).substring(1));
+            price = datajs.getFloat("trade_price");
         }
-        //System.out.println(charinfo.toString());
-        long endTime=System.currentTimeMillis();
-        logger.info("抹茶数据加载完成用时{}----------->",(endTime-startTime)+"ms");
-        //第一组数据为最新交易数据
-        JSONObject js = JSON.parseObject(charinfo.get(0));
-        String data=js.getString("data");
-        data=data.replaceAll("},","}#");
-        List<String>datalist= Arrays.asList(data.split("#"));
-        //此处头有一个[
-        JSONObject datajs=JSONObject.parseObject(datalist.get(0).substring(1));
-        price=datajs.getFloat("trade_price");
+        catch (IOException e)
+        {
+            return 0;
+        }
         return price;
     }
 }

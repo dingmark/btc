@@ -6,7 +6,9 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <script src="js\hb.js"></script>
+    <script src="js\ok.js"></script>
+    <script src="js\bter.js"></script>
 </head>
 
 <body>
@@ -24,6 +26,13 @@
 <div style="float: left" id="messageok1"></div>
 <div style="float: left" id="messageok2"></div>
 <div style="float: left" id="messageok3"></div>
+
+<div style="float: left" id="messagebter"></div>
+<div style="float: left" id="messagebter1"></div>
+<div style="float: left" id="messagebter2"></div>
+<div style="float: left" id="messagebter3"></div>
+
+
 <table class="table table-striped">
     <caption>条纹表格布局</caption>
     <thead>
@@ -54,235 +63,14 @@
 </body>
 
 <script type="text/javascript">
-    var websocket = null;
     var arr=null;
     arr1=null;
     arr2=null;
     arr3=null;
-    var hbi=0;
-    hbi1=0;
-    hbi2=0;
-    hbi3=0;
-    oki=0;
-    oki1=0;
-    oki2=0;
-    oki3=0;
-    //判断当前浏览器是否支持WebSocket, 主要此处要更换为自己的地址
-    if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://localhost:8080/test/hb");
-        websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
-        websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
-        websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
-        websocketok = new WebSocket("ws://localhost:8080/test/ok");
-        websocketok1 = new WebSocket("ws://localhost:8080/test/ok");
-        websocketok2 = new WebSocket("ws://localhost:8080/test/ok");
-        websocketok3 = new WebSocket("ws://localhost:8080/test/ok");
-    } else {
-        alert('Not support websocket')
-    }
-
-    //连接发生错误的回调方法
-    websocket.onerror = function() {
-        setMessageInnerHTML("error");
-    };
-
-    //连接成功建立的回调方法
-    websocket.onopen = function(event) {
-        //setMessageInnerHTML("open");
-    }
-
-    //接收到消息的回调方法
-    websockethb1.onmessage=function (event) {
-        setMessageInnerHTML1(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        hbi1++;
-        if(hbi1==arr1.length)
-        {
-            hbi1=0;//一次循环完成之后重新置标志位
-            listsend1(arr1);
-        }
-
-    }
-    websockethb2.onmessage=function (event) {
-        setMessageInnerHTML2(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        hbi2++;
-        if(hbi2==arr2.length)
-        {
-            hbi2=0;//一次循环完成之后重新置标志位
-            listsend2(arr2);
-        }
-
-    }
-    websockethb3.onmessage=function(event)
-    {
-        setMessageInnerHTML3(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        hbi3++;
-        if(hbi3==arr3.length)
-        {
-            hbi3=0;//一次循环完成之后重新置标志位
-            listsend3(arr3);
-        }
-    }
-    websocket.onmessage = function(event) {
-        setMessageInnerHTML(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-          hbi++;
-          if(hbi==arr.length)
-          {
-              hbi=0;//一次循环完成之后重新置标志位
-              listsend(arr);
-          }
-    }
-    websocketok.onmessage = function(event) {
-        setMessageInnerHTMLok(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        oki++;
-        if(oki==arr.length)
-        {
-            oki=0;//一次循环完成之后重新置标志位
-            listsendok(arr);
-        }
-    }
-    websocketok1.onmessage = function(event) {
-        setMessageInnerHTMLok1(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        oki1++;
-        if(oki1==arr1.length)
-        {
-            oki1=0;//一次循环完成之后重新置标志位
-            listsendok1(arr1);
-        }
-    }
-    websocketok2.onmessage = function(event) {
-        setMessageInnerHTMLok2(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        oki2++;
-        if(oki2==arr2.length)
-        {
-            oki2=0;//一次循环完成之后重新置标志位
-            listsendok2(arr2);
-        }
-    }
-    websocketok3.onmessage = function(event) {
-        setMessageInnerHTMLok3(event.data);
-        //接收消息之后发送另外一个消息跟后台
-        //判断是否执行完毕火币列表
-        oki3++;
-        if(oki3==arr3.length)
-        {
-            oki3=0;//一次循环完成之后重新置标志位
-            listsendok3(arr3);
-        }
-    }
-    //连接关闭的回调方法
-    websocket.onclose = function() {
-        setMessageInnerHTML("close");
-    }
 
     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
     window.onbeforeunload = function() {
-        websocket.close();
-    }
-
-    //将消息显示在网页上
-    function setMessageInnerHTML(innerHTML) {
-        document.getElementById('message').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTML1(innerHTML) {
-        document.getElementById('message1').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTML2(innerHTML) {
-        document.getElementById('message2').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTML3(innerHTML) {
-        document.getElementById('message3').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTMLok(innerHTML) {
-        document.getElementById('messageok').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTMLok1(innerHTML) {
-        document.getElementById('messageok1').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTMLok2(innerHTML) {
-        document.getElementById('messageok2').innerHTML += innerHTML + '<br/>';
-    }
-    function setMessageInnerHTMLok3(innerHTML) {
-        document.getElementById('messageok3').innerHTML += innerHTML + '<br/>';
-    }
-    //关闭连接
-    function closeWebSocket() {
-        websocket.close();
-    }
-
-    //发送消息
-    function send() {
-        var message = document.getElementById('text').value;
-        websocket.send(message);
-    }
-    function listsend(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"hb":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websocket.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsendok(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"ok":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websocketok.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsend1(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"hb":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websockethb1.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsendok1(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"ok":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websocketok1.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsend2(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"hb":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websockethb2.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsendok2(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"ok":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websocketok2.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsend3(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"hb":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websockethb3.send(para);//发送之后等待服务器响应
-        }
-    }
-    function listsendok3(arr) {
-        for(var i=0;i<arr.length;i++ )
-        {   var para='{"ok":"'+arr[i]+'"}';
-            //JSON.stringify(para)
-            websocketok3.send(para);//发送之后等待服务器响应
-        }
+        //websocket.close();
     }
     function split_arry(arr,len) {
         var a_len=arr.length;
@@ -317,14 +105,19 @@
                 arr1=splitarry[1];
                 arr2=splitarry[2];
                 arr3=splitarry[3];
-                setTimeout(listsend(arr),1);
-                setTimeout(listsend1(arr1),1);
-                setTimeout(listsend2(arr2),1);
-                setTimeout(listsend3(arr3),1);
+                setTimeout(listsendhb(arr),1);
+                setTimeout(listsendhb1(arr1),1);
+                setTimeout(listsendhb2(arr2),1);
+                setTimeout(listsendhb3(arr3),1);
                 setTimeout(listsendok(arr),1);
                 setTimeout(listsendok1(arr1),1);
                 setTimeout(listsendok2(arr2),1);
                 setTimeout(listsendok3(arr3),1);
+
+                setTimeout(listsendbter(arr),1);
+                setTimeout(listsendbter1(arr1),1);
+                setTimeout(listsendbter2(arr2),1);
+                setTimeout(listsendbter3(arr3),1);
 
             },
             complete:function(){

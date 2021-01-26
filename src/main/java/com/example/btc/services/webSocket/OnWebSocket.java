@@ -36,6 +36,7 @@ public class OnWebSocket {
     private static Hbprice hb;
     private  static UrlPara urlPara;
     private  static  OkPrice okPrice;
+    private  static bter mbter;
     @Autowired
     public void setRepository(Hbprice hb) {
         OnWebSocket.hb = hb;
@@ -44,6 +45,8 @@ public class OnWebSocket {
     public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;}
     @Autowired
     public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
+    @Autowired
+    public  void  setBter(bter mbter){OnWebSocket.mbter=mbter;}
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
@@ -104,6 +107,15 @@ public class OnWebSocket {
                         float okprice=okPrice.getOKprice(paraok);
                         jok.put(paraok,okprice);
                         AppointSending(name,jok.toString());
+                        Thread.sleep(1000);
+                    break;
+                case "bt"://比特儿
+                    JSONObject jbter=new JSONObject();
+                    String parabter=jspara.getString("bt");
+                    float bterprice=okPrice.getOKprice(parabter.toUpperCase());//转大写
+                    jbter.put(parabter,bterprice);
+                    AppointSending(name,jbter.toString());
+                    Thread.sleep(1000);
                     break;
                 default:
                     break;
