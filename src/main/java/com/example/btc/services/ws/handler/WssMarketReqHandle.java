@@ -3,6 +3,7 @@ package com.example.btc.services.ws.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
@@ -76,9 +77,11 @@ public class WssMarketReqHandle {
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
+            @SneakyThrows
             @Override
             public void onError(Exception e) {
                 logger.error("onError:{}", e);
+                this.getSocket().close();
             }
         };
 
