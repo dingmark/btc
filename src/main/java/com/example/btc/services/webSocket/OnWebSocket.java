@@ -164,7 +164,9 @@ public class OnWebSocket {
         try {
             webSocketSet.get(name).session.getBasicRemote().sendText(message);
         }catch (Exception e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            logger.info(name+"退出通信");
+            OnClose();
         }
     }
 }
