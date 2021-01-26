@@ -26,11 +26,15 @@ public class OkPrice {
     public float getOKprice(String para)  {
         long startTime = System.currentTimeMillis();
         float price = 0;
+        HttpURLConnection urlConnection=null;
         try {
+            Thread.sleep(500);
             URL url = new URL(okurl + para + "-USDT/ticker");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setConnectTimeout(1000);
+            urlConnection.setReadTimeout(1000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
@@ -49,9 +53,14 @@ public class OkPrice {
         JSONObject js= JSON.parseObject(charinfo.toString().substring(1,charinfo.toString().length()-1));
         price=Float.parseFloat(js.get("last").toString());
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             return price=0;
+        }
+        finally {
+            if (urlConnection!=null) {
+                urlConnection.disconnect();
+            }
         }
         //System.out.println(price);
         return price;

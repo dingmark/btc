@@ -93,8 +93,25 @@
         }
         return result;
     }
+    function allsend()
+    {
+        setTimeout(listsendhb(arr),1);
+        setTimeout(listsendhb1(arr1),1);
+        setTimeout(listsendhb2(arr2),1);
+        setTimeout(listsendhb3(arr3),1);
+        setTimeout(listsendok(arr),1);
+        setTimeout(listsendok1(arr1),1);
+        setTimeout(listsendok2(arr2),1);
+        setTimeout(listsendok3(arr3),1);
+
+        setTimeout(listsendbter(arr),1);
+        setTimeout(listsendbter1(arr1),1);
+        setTimeout(listsendbter2(arr2),1);
+        setTimeout(listsendbter3(arr3),1);
+    }
 </script>
 <script type="text/javascript">
+    //setInterval(allsend, 300000);
     window.onload = function(){ alert("welcome");
         $.ajax({
             url:"/test.do",
@@ -117,19 +134,7 @@
                 arr1=splitarry[1];
                 arr2=splitarry[2];
                 arr3=splitarry[3];
-                setTimeout(listsendhb(arr),1);
-                setTimeout(listsendhb1(arr1),1);
-                setTimeout(listsendhb2(arr2),1);
-                setTimeout(listsendhb3(arr3),1);
-                setTimeout(listsendok(arr),1);
-                setTimeout(listsendok1(arr1),1);
-                setTimeout(listsendok2(arr2),1);
-                setTimeout(listsendok3(arr3),1);
-
-                setTimeout(listsendbter(arr),1);
-                setTimeout(listsendbter1(arr1),1);
-                setTimeout(listsendbter2(arr2),1);
-                setTimeout(listsendbter3(arr3),1);
+                allsend();
 
             },
             complete:function(){

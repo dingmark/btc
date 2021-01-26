@@ -23,10 +23,14 @@ public class biAn {
     public float getBiAnPrice(URL url) throws IOException {
         long startTime=System.currentTimeMillis();
         float price=0;
+        HttpURLConnection urlConnection=null;
         try {
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            Thread.sleep(500);
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setConnectTimeout(1000);
+            urlConnection.setReadTimeout(1000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
@@ -48,9 +52,14 @@ public class biAn {
             JSONObject js = JSONObject.parseObject(listdata.get(0));
             price = js.getFloatValue("price");
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             return 0;
+        }
+        finally {
+            if (urlConnection!=null) {
+                urlConnection.disconnect();
+            }
         }
         return price;
     }

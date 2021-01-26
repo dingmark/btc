@@ -23,10 +23,14 @@ public class mocha {
     public float getMcPrice(URL url)  {
         long startTime=System.currentTimeMillis();
         float price=0;
+        HttpURLConnection urlConnection=null;
         try {
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            Thread.sleep(500);
+             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setConnectTimeout(1000);
+            urlConnection.setReadTimeout(1000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
@@ -49,9 +53,14 @@ public class mocha {
             JSONObject datajs = JSONObject.parseObject(datalist.get(0).substring(1));
             price = datajs.getFloat("trade_price");
         }
-        catch (IOException e)
+        catch (IOException | InterruptedException e)
         {
             return 0;
+        }
+        finally {
+            if (urlConnection!=null) {
+                urlConnection.disconnect();
+            }
         }
         return price;
     }

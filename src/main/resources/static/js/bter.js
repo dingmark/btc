@@ -51,7 +51,7 @@ websocketbter.onmessage=function(event)
     if(bteri==arr.length)
     {
         bteri=0;//一次循环完成之后重新置标志位
-        listsendbter(arr3);
+        listsendbter(arr);
     }
 }
 
