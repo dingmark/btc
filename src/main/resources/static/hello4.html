@@ -80,7 +80,7 @@
 </script>
 <script type="text/javascript">
     //setInterval(allsend, 300000);
-    window.onload = function(){ alert("welcome");
+    $(document).ready(function(){//alert("welcome");
         $.ajax({
             url:"/test.do",
             //contentType:"application/json",
@@ -111,6 +111,6 @@
             }
 
         });
-    }
+    })
 </script>
 </html>

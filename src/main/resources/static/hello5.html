@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.get1 tr').each(function(){
+                alert($(this).find('td').eq(0).text());
+                alert($(this).find('td').eq(1).find('input').val());
+                alert($(this).find('td').eq(2).find('select').val());
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="apDiv1"></div>
+<table width="100%" class="get1">
+    <tr>
+        <td >1</td>
+        <td ><input type='text' value='v1'/></td>
+        <td ><select><option value='s1'>s1</option><option value='s2'>s2</option></select></td>
+    </tr>
+    <tr>
+        <td >2</td>
+        <td ><input type='text' value='v2' /></td>
+        <td ><select ><option value='ss1'>ss1</option><option value='ss2'>ss2</option></select></td>
+    </tr>
+</table>
+</body>
+</html>
