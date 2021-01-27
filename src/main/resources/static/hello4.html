@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>My WebSocket</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js\hb.js"></script>
+    <script src="js\ok.js"></script>
+    <script src="js\bter.js"></script>
+    <script src="js\mocha.js"></script>
+    <script src="js\bian.js"></script>
+</head>
+
+<body>
+<!--
+<input id="text" type="text" />
+<button onclick="send()">Send</button>
+<button onclick="closeWebSocket()">Close</button>
+<div id="message"></div>
+-->
+
+<table class="table table-striped" id="datas" >
+    <caption>条纹表格布局</caption>
+    <thead>
+    <tr>
+        <th>币种</th>
+        <th>火币交易</th>
+        <th>ok交易</th>
+        <th>比特儿交易</th>
+        <th>抹茶交易</th>
+        <th>币安交易</th>
+    </tr>
+    </thead>
+    <tbody >
+    <tr id="template">
+        <td id="bizhong"></td>
+        <td id="hb"></td>
+        <td id="ok"></td>
+        <td id="bter"></td>
+        <td id="mocha"></td>
+        <td id="bian"></td>
+    </tr>
+
+    </tbody>
+</table>
+</body>
+
+<script type="text/javascript">
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function() {
+
+    }
+    function split_arry(arr,len) {
+        var a_len=arr.length;
+        var result=[];
+        for(var i=0;i<arr.length;i+=len)
+        {
+            result.push(arr.slice(i,i+len))
+        }
+        return result;
+    }
+    function drawtable(arr) {
+        $.each(arr, function (i, n) {
+            var row = $("#template").clone();
+            row.find("#bizhong").text(n);
+            /*row.find("#ok").text(n.url);
+            row.find("#bter").text(n.title);*/
+            row.appendTo("#datas");//添加到模板的容器中
+        });
+        $("#hb")[0].innerText=111;
+        $("#hb")[1].innerText=111;
+        $("#ok")[0].innerText=222;
+        $("#ok")[1].innerText=222;
+    }
+    function locateposition(js) {
+
+    }
+</script>
+<script type="text/javascript">
+    //setInterval(allsend, 300000);
+    window.onload = function(){ alert("welcome");
+        $.ajax({
+            url:"/test.do",
+            //contentType:"application/json",
+            type:"GET",
+            cache:false,
+            async:true,
+            dataType:'json',
+            beforeSend:function(){
+                $('#queryForm').hide();
+            },
+            success:function(result){
+              //  var obj = JSON.parse(result);
+                 arr =result['res'];
+                //temp=temp.substring(1,temp.length-1);
+                //arr=temp.split(",");
+                // obj=result;
+                splitarry=split_arry(arr,10)
+                arr=splitarry[0];
+                arr1=splitarry[1];
+                arr2=splitarry[2];
+                arr3=splitarry[3];
+                //初始化全页面
+                drawtable(arr)
+                //allsend();
+
+            },
+            complete:function(){
+            }
+
+        });
+    }
+</script>
+</html>
