@@ -3,6 +3,7 @@ package com.example.btc.services.http.bian;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,10 +21,12 @@ import java.util.zip.GZIPInputStream;
 @Service
 public class biAn {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    public float getBiAnPrice(URL url) throws IOException {
+    @Value("${bianurl}")
+    private String bianurl;
+    public float getBiAnPrice(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         float price=0;
+        URL url=new URL(bianurl+para+"USDT&limit=5");
         HttpURLConnection urlConnection=null;
         try {
             Thread.sleep(500);

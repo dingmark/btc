@@ -38,6 +38,7 @@ public class OnWebSocket {
     private  static UrlPara urlPara;
     private  static  OkPrice okPrice;
     private  static bter mbter;
+    private static mocha mmocha;
     @Autowired
     public void setRepository(Hbprice hb) {
         OnWebSocket.hb = hb;
@@ -48,6 +49,8 @@ public class OnWebSocket {
     public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
     @Autowired
     public  void  setBter(bter mbter){OnWebSocket.mbter=mbter;}
+    @Autowired
+    public void setMocha(mocha mmocha){OnWebSocket.mmocha=mmocha;}
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     /**
@@ -117,6 +120,22 @@ public class OnWebSocket {
                     float bterprice=okPrice.getOKprice(parabter.toUpperCase());//转大写
                     jbter.put(parabter,bterprice);
                     AppointSending(name,jbter.toString());
+                    Thread.sleep(1000);
+                    break;
+                case "mo":
+                    JSONObject jmocha=new JSONObject();
+                    String paramocha=jspara.getString("mocha");
+                    float mochaprice=mmocha.getMcPrice(paramocha.toUpperCase());//转大写
+                    jmocha.put(paramocha,mochaprice);
+                    AppointSending(name,jmocha.toString());
+                    Thread.sleep(1000);
+                    break;
+                case "bi":
+                    JSONObject jbian=new JSONObject();
+                    String parabian=jspara.getString("bian");
+                    float bianprice=mmocha.getMcPrice(parabian.toUpperCase());//转大写
+                    jbian.put(parabian,bianprice);
+                    AppointSending(name,jbian.toString());
                     Thread.sleep(1000);
                     break;
                 default:

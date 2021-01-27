@@ -55,14 +55,14 @@ public class getValueClass {
         secret key
         3c770adeab3243cea4c2b46b2de54a0a
         */
-        String mckey="mx0zDODNj1zO5qTeeb";
+        //String mckey="mx0zDODNj1zO5qTeeb";
         //String mcurl="https://www.mxc.me/open/api/v1/data/history?api_key="+mckey+"market=BTC_USDT";
-        String mcurl="https://www.mxc.me/open/api/v2/market/deals?api_key="+mckey+"&symbol=BTC_USDT&limit=10";
-        float mcprice=mc.getMcPrice(new URL(mcurl));
+       // String mcurl="https://www.mxc.me/open/api/v2/market/deals?api_key="+mckey+"&symbol=BTC_USDT&limit=10";
+        float mcprice=mc.getMcPrice("btc".toUpperCase());
         rejs.put("mc",mcprice);
         //币安交易
         String banurl="https://api.binancezh.cc/api/v3/trades?symbol=BTCUSDT&limit=5";
-        float bnprice=bn.getBiAnPrice(new URL(banurl));
+        float bnprice=bn.getBiAnPrice("btc".toUpperCase());
         rejs.put("bnprice",bnprice);
         long endTime=System.currentTimeMillis(); //获取结束时间
         System.out.println("程序运行时间： "+(endTime-startTime)+"ms");

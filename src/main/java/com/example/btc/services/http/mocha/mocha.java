@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,9 +22,15 @@ import java.util.zip.GZIPInputStream;
 @Service
 public class mocha {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    public float getMcPrice(URL url)  {
+    @Value("${mourl}")
+    private String mourl;
+    @Value("${mckey}")
+    private String mckey;
+    public float getMcPrice(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         float price=0;
+        String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
+        URL url=new URL(mcurl);
         HttpURLConnection urlConnection=null;
         try {
             Thread.sleep(500);

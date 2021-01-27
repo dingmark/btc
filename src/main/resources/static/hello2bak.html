@@ -9,6 +9,8 @@
     <script src="js\hb.js"></script>
     <script src="js\ok.js"></script>
     <script src="js\bter.js"></script>
+    <script src="js\mocha.js"></script>
+    <script src="js\bian.js"></script>
 </head>
 
 <body>
@@ -18,6 +20,7 @@
 <button onclick="closeWebSocket()">Close</button>
 <div id="message"></div>
 -->
+<div id="1">
 <div style="float: left" id="messagehb"></div>
 <div style="float: left" id="messagehb1"></div>
 <div style="float: left" id="messagehb2"></div>
@@ -32,8 +35,19 @@
 <div style="float: left" id="messagebter1"></div>
 <div style="float: left" id="messagebter2"></div>
 <div style="float: left" id="messagebter3"></div>
+</div>
+<div id="2">
+<div style="float: left" id="messagemocha"></div>
+<div style="float: left" id="messagemocha1"></div>
+<div style="float: left" id="messagemocha2"></div>
+<div style="float: left" id="messagemocha3"></div>
 
 
+<div style="float: left" id="messagebian"></div>
+<div style="float: left" id="messagebian1"></div>
+<div style="float: left" id="messagebian2"></div>
+<div style="float: left" id="messagebian3"></div>
+</div>
 <table class="table table-striped">
     <caption>条纹表格布局</caption>
     <thead>
@@ -83,6 +97,16 @@
         websocketbter1.close();
         websocketbter2.close();
         websocketbter3.close();
+
+        websocketmocha.close();
+        websocketmocha1.close();
+        websocketmocha2.close();
+        websocketmocha3.close();
+
+        websocketbian.close();
+        websocketbian1.close();
+        websocketbian2.close();
+        websocketbian3.close();
     }
     function split_arry(arr,len) {
         var a_len=arr.length;
@@ -99,6 +123,7 @@
         setTimeout(listsendhb1(arr1),1);
         setTimeout(listsendhb2(arr2),1);
         setTimeout(listsendhb3(arr3),1);
+
         setTimeout(listsendok(arr),1);
         setTimeout(listsendok1(arr1),1);
         setTimeout(listsendok2(arr2),1);
@@ -108,6 +133,16 @@
         setTimeout(listsendbter1(arr1),1);
         setTimeout(listsendbter2(arr2),1);
         setTimeout(listsendbter3(arr3),1);
+
+        setTimeout(listsendmocha(arr),1);
+        setTimeout(listsendmocha1(arr1),1);
+        setTimeout(listsendmocha2(arr2),1);
+        setTimeout(listsendmocha3(arr3),1);
+
+        setTimeout(listsendbian(arr),1);
+        setTimeout(listsendbian1(arr1),1);
+        setTimeout(listsendbian2(arr2),1);
+        setTimeout(listsendbian3(arr3),1);
     }
 </script>
 <script type="text/javascript">
