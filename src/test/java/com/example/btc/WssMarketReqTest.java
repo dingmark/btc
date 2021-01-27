@@ -1,6 +1,7 @@
 package com.example.btc;
 
 import com.alibaba.fastjson.JSON;
+import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.event.MarketKLineReqResponse;
 import com.example.btc.services.ws.event.MarketTradeDetailReqResponse;
 import com.example.btc.services.ws.handler.WssMarketReqHandle;
@@ -91,6 +92,23 @@ public class WssMarketReqTest {
             }
 
         }
+    }
+    @Test
+    public void test3() throws URISyntaxException, InterruptedException {
+        SubscriptionListener response2 = new SubscriptionListener() {
+            @Override
+            public void onReceive(Object data) throws InterruptedException {
+                logger.info(data.toString());
+            }
+        };
+        WssMarketReqHandle wssMarketReqHandle2 = new WssMarketReqHandle(URL,response2);
+        Map<String, Object> param = new HashMap<>();
+        param.put("req", "market.btcusdt.trade.detail");
+        wssMarketReqHandle2.doReq(JSON.toJSONString(param));
+        Thread.sleep(1000);
+
+
+
     }
 
 

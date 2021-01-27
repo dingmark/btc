@@ -3,6 +3,7 @@ package com.example.btc.services.ws.hb;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.webSocket.OnWebSocket;
+import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.event.MarketDetailSubResponse;
 import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketReqHandle;
@@ -30,11 +31,13 @@ public class Hbprice {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     OnWebSocket ws;
-    public float getHbprice(String reqparam)  {
+    public float getHbprice(String reqparam) throws URISyntaxException, InterruptedException {
         //throws  URISyntaxException, InterruptedException
         long startTime=System.currentTimeMillis();
         AtomicReference<Float> price = new AtomicReference<>((float) 0);
         //reqparam="market.btcusdt.trade.detail";
+        //SubscriptionListener response2 = null;
+        //WssMarketReqHandle wssMarketReqHandle2 = new WssMarketReqHandle(hburl,response2);
         try {
             WssMarketReqHandle wssMarketReqHandle = new WssMarketReqHandle(hburl, response -> {
                 //logger.info("火币接收原始数据{}",response);
@@ -48,19 +51,25 @@ public class Hbprice {
                 listdata = Arrays.asList(temp.substring(1, temp.length() - 1).split("#"));
                 JSONObject jsdata = JSONObject.parseObject(listdata.get(0));
                 price.set(jsdata.getFloatValue("price"));
+
                 //logger.info(String.valueOf(price.get()));
 
                 // logger.info("请求 KLine 数据用户收到的原始数据:{}", response);
                 /// MarketKLineReqResponse marketKLineReqResponse = JSON.parseObject(response, MarketKLineReqResponse.class);
                 // logger.info("请求 KLine 数据解析之后的数据为:{}", JSON.toJSON(marketKLineReqResponse));
             });
+
             Map<String, Object> param = new HashMap<>();
             param.put("req", reqparam);
             wssMarketReqHandle.doReq(JSON.toJSONString(param));
             Thread.sleep(Integer.parseInt(hbtime));
-        }catch (InterruptedException | URISyntaxException e)
+            wssMarketReqHandle.webSocketClient.close();
+        }catch (InterruptedException  e)
         {
             return 0;
+        }
+        finally {
+
         }
         return price.get();
     }

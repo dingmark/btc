@@ -23,7 +23,7 @@ public class WssMarketReqHandle {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-    private WebSocketClient webSocketClient;
+    public WebSocketClient webSocketClient;
     private String pushUrl;//合约站行情请求地址
     private Long lastPingTime = System.currentTimeMillis();
 
