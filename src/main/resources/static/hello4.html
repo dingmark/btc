@@ -33,18 +33,18 @@
         <th>币安交易</th>
     </tr>
     </thead>
-    <tbody >
-    <tr id="template">
-        <td id="bizhong"></td>
-        <td id="hb"></td>
-        <td id="ok"></td>
-        <td id="bter"></td>
-        <td id="mocha"></td>
-        <td id="bian"></td>
-    </tr>
-
+    <tbody id="tbodys">
+<!--    <tr id="template">-->
+<!--        <td id="bizhong"></td>-->
+<!--        <td id="hb"></td>-->
+<!--        <td id="ok"></td>-->
+<!--        <td id="bter"></td>-->
+<!--        <td id="mocha"></td>-->
+<!--        <td id="bian"></td>-->
+<!--    </tr>-->
     </tbody>
 </table>
+<button onclick="locateposition('hb','{&quot;btc&quot;:29843.34}')"></button>
 </body>
 
 <script type="text/javascript">
@@ -62,20 +62,59 @@
         return result;
     }
     function drawtable(arr) {
+        //inhtml=$("#tbodys").innerHTML;
+         var inhtml="";
         $.each(arr, function (i, n) {
-            var row = $("#template").clone();
-            row.find("#bizhong").text(n);
-            /*row.find("#ok").text(n.url);
-            row.find("#bter").text(n.title);*/
-            row.appendTo("#datas");//添加到模板的容器中
-        });
-        $("#hb")[0].innerText=111;
-        $("#hb")[1].innerText=111;
-        $("#ok")[0].innerText=222;
-        $("#ok")[1].innerText=222;
+            inhtml+="<tr><td>"+n+"</td><td></td><td></td><td></td><td></td><td></td></tr>";
+        })
+        $("#tbodys")[0].innerHTML=inhtml;
     }
-    function locateposition(js) {
+    function locateposition(type,jsdata) {
+        alert(type);
+        alert(jsdata);
+        var tmp=$.parseJSON(jsdata);
+        var bizhong="";
+        for (var key in tmp)
+        {
+            alert(key); 	//Type, Height
+            bizhong=key;
+            alert(tmp[key]);	//Coding, 100
+        }
 
+        $('#tbodys tr').each(function(){
+            // alert($(this).find('td').eq(0).text());
+            // alert($(this).find('td').eq(1).text());
+            // alert($(this).find('td').eq(2).text());
+            switch (type) {
+                case 'hb':
+                    //遍历第一列td找到对应的币种
+                    if($(this).find('td').eq(0).text()==bizhong)
+                    {
+                        $(this).find('td').eq(1)[0].innerText=eval('tmp.'+bizhong);
+                    }
+                    break;
+                case 'ok':
+                    if($(this).find('td').eq(0).text()==bizhong)
+                    {
+                        $(this).find('td').eq(2)[0].innerText=eval('tmp.'+bizhong);
+                    }
+                    break;
+                case 'bter':
+                    if($(this).find('td').eq(0).text()==bizhong)
+                    {
+                        $(this).find('td').eq(3)[0].innerText=eval('tmp.'+bizhong);
+                    }
+                    break;
+                case '':
+                    break;
+                default:
+                    break;
+
+            }
+
+            //alert($(this).find('td').eq(1).find('input').val());
+            //alert($(this).find('td').eq(2).find('select').val());
+        });
     }
 </script>
 <script type="text/javascript">
@@ -97,7 +136,7 @@
                 //temp=temp.substring(1,temp.length-1);
                 //arr=temp.split(",");
                 // obj=result;
-                splitarry=split_arry(arr,10)
+                var splitarry=split_arry(arr,10)
                 arr=splitarry[0];
                 arr1=splitarry[1];
                 arr2=splitarry[2];

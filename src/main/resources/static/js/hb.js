@@ -128,3 +128,6 @@ function setMessageInnerHTMLhb2(innerHTML) {
 function setMessageInnerHTMLhb3(innerHTML) {
     document.getElementById('messagehb3').innerHTML += innerHTML + '<br/>';
 }
+function setMessageInnerHTML(innerHTML) {
+    document.getElementById('message').innerHTML += innerHTML + '<br/>';
+}
