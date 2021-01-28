@@ -44,7 +44,8 @@ function listsendbter3(arr) {
 bteri=0;bteri1=0;bteri2=0;bteri3=0;
 websocketbter.onmessage=function(event)
 {
-    setMessageInnerHTMLbter(event.data);
+    locateposition('bter',event.data);
+    //setMessageInnerHTMLbter(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     bteri++;
@@ -57,7 +58,8 @@ websocketbter.onmessage=function(event)
 
 websocketbter1.onmessage=function(event)
 {
-    setMessageInnerHTMLbter1(event.data);
+    locateposition('bter',event.data);
+    //setMessageInnerHTMLbter1(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     bteri1++;
@@ -70,7 +72,8 @@ websocketbter1.onmessage=function(event)
 
 websocketbter2.onmessage=function(event)
 {
-    setMessageInnerHTMLbter2(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLbter2(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     bteri2++;
@@ -83,7 +86,8 @@ websocketbter2.onmessage=function(event)
 
 websocketbter3.onmessage=function(event)
 {
-    setMessageInnerHTMLbter3(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLbter3(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     bteri3++;

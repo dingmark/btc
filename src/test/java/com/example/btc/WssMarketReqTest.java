@@ -95,17 +95,24 @@ public class WssMarketReqTest {
     }
     @Test
     public void test3() throws URISyntaxException, InterruptedException {
-        SubscriptionListener response2 = new SubscriptionListener() {
-            @Override
-            public void onReceive(Object data) throws InterruptedException {
-                logger.info(data.toString());
-            }
-        };
-        WssMarketReqHandle wssMarketReqHandle2 = new WssMarketReqHandle(URL,response2);
+
+//        SubscriptionListener response2 = new SubscriptionListener() {
+//
+//            @Override
+//            public void onReceive(Object data) throws InterruptedException {
+//                logger.info(data.toString());
+//
+//            }
+//        };
+        WssMarketReqHandle wssMarketReqHandle2 = new WssMarketReqHandle(URL,response2->{
+            logger.info("请求 Trade Detail 数据用户收到的原始数据:{}", response2);
+
+        });
         Map<String, Object> param = new HashMap<>();
-        param.put("req", "market.btcusdt.trade.detail");
+       // param.put("req", "market.btcusdt.depth.step0");
+        param.put("req","market.symbols");
         wssMarketReqHandle2.doReq(JSON.toJSONString(param));
-        Thread.sleep(1000);
+        Thread.sleep(Integer.MAX_VALUE);
 
 
 

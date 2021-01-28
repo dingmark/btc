@@ -66,7 +66,8 @@ function listsendhb3(arr) {
 hbi=0;hbi1=0;hbi2=0;hbi3=0;
 websockethb.onmessage=function(event)
 {
-    setMessageInnerHTMLhb(event.data);
+    locateposition('hb',event.data);
+    //setMessageInnerHTMLhb(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     hbi++;
@@ -79,7 +80,8 @@ websockethb.onmessage=function(event)
 
 websockethb1.onmessage=function(event)
 {
-    setMessageInnerHTMLhb1(event.data);
+    locateposition('hb',event.data);
+    //setMessageInnerHTMLhb1(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     hbi1++;
@@ -92,7 +94,8 @@ websockethb1.onmessage=function(event)
 
 websockethb2.onmessage=function(event)
 {
-    setMessageInnerHTMLhb2(event.data);
+    locateposition('hb',event.data);
+    //setMessageInnerHTMLhb2(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     hbi2++;
@@ -105,7 +108,8 @@ websockethb2.onmessage=function(event)
 
 websockethb3.onmessage=function(event)
 {
-    setMessageInnerHTMLhb3(event.data);
+    locateposition('hb',event.data);
+    //setMessageInnerHTMLhb3(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     hbi3++;

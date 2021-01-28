@@ -70,8 +70,6 @@
         $("#tbodys")[0].innerHTML=inhtml;
     }
     function locateposition(type,jsdata) {
-        alert(type);
-        alert(jsdata);
         var tmp=$.parseJSON(jsdata);
         var bizhong="";
         for (var key in tmp)
@@ -82,30 +80,42 @@
         }
 
         $('#tbodys tr').each(function(){
-            // alert($(this).find('td').eq(0).text());
-            // alert($(this).find('td').eq(1).text());
-            // alert($(this).find('td').eq(2).text());
             switch (type) {
                 case 'hb':
                     //遍历第一列td找到对应的币种
                     if($(this).find('td').eq(0).text()==bizhong)
                     {
                         $(this).find('td').eq(1)[0].innerText=eval('tmp.'+bizhong);
+                        return false;
                     }
                     break;
                 case 'ok':
                     if($(this).find('td').eq(0).text()==bizhong)
                     {
                         $(this).find('td').eq(2)[0].innerText=eval('tmp.'+bizhong);
+                        return false;
                     }
                     break;
                 case 'bter':
                     if($(this).find('td').eq(0).text()==bizhong)
                     {
                         $(this).find('td').eq(3)[0].innerText=eval('tmp.'+bizhong);
+                        return false;
                     }
                     break;
-                case '':
+                case 'mocha':
+                    if($(this).find('td').eq(0).text()==bizhong)
+                    {
+                        $(this).find('td').eq(4)[0].innerText=eval('tmp.'+bizhong);
+                        return false;
+                    }
+                    break;
+                case 'bian':
+                    if($(this).find('td').eq(0).text()==bizhong)
+                    {
+                        $(this).find('td').eq(5)[0].innerText=eval('tmp.'+bizhong);
+                        return false;
+                    }
                     break;
                 default:
                     break;

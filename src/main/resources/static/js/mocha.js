@@ -44,7 +44,8 @@ function listsendmocha3(arr) {
 mochai=0;mochai1=0;mochai2=0;mochai3=0;
 websocketmocha.onmessage=function(event)
 {
-    setMessageInnerHTMLmocha(event.data);
+    locateposition('mocha',event.data);
+    //setMessageInnerHTMLmocha(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     mochai++;
@@ -57,7 +58,8 @@ websocketmocha.onmessage=function(event)
 
 websocketmocha1.onmessage=function(event)
 {
-    setMessageInnerHTMLmocha1(event.data);
+    locateposition('mocha',event.data);
+    //setMessageInnerHTMLmocha1(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     mochai1++;
@@ -70,7 +72,8 @@ websocketmocha1.onmessage=function(event)
 
 websocketmocha2.onmessage=function(event)
 {
-    setMessageInnerHTMLmocha2(event.data);
+    locateposition('mocha',event.data);
+    //setMessageInnerHTMLmocha2(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     mochai2++;
@@ -83,7 +86,8 @@ websocketmocha2.onmessage=function(event)
 
 websocketmocha3.onmessage=function(event)
 {
-    setMessageInnerHTMLmocha3(event.data);
+    locateposition('mocha',event.data);
+    //setMessageInnerHTMLmocha3(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     mochai3++;

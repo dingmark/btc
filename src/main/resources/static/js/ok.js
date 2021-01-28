@@ -44,7 +44,8 @@ function listsendok3(arr) {
 oki=0;oki1=0;oki2=0;oki3=0;
 websocketok.onmessage=function(event)
 {
-    setMessageInnerHTMLok(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLok(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     oki++;
@@ -57,7 +58,8 @@ websocketok.onmessage=function(event)
 
 websocketok1.onmessage=function(event)
 {
-    setMessageInnerHTMLok1(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLok1(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     oki1++;
@@ -70,7 +72,8 @@ websocketok1.onmessage=function(event)
 
 websocketok2.onmessage=function(event)
 {
-    setMessageInnerHTMLok2(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLok2(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     oki2++;
@@ -83,7 +86,8 @@ websocketok2.onmessage=function(event)
 
 websocketok3.onmessage=function(event)
 {
-    setMessageInnerHTMLok3(event.data);
+    locateposition('ok',event.data);
+    //setMessageInnerHTMLok3(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     oki3++;

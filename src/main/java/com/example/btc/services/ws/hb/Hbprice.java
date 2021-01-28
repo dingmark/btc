@@ -7,6 +7,7 @@ import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.event.MarketDetailSubResponse;
 import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketReqHandle;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class Hbprice {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     OnWebSocket ws;
-    public float getHbprice(String reqparam) throws URISyntaxException, InterruptedException {
+    public float getHbprice(String reqparam) throws URISyntaxException {
         //throws  URISyntaxException, InterruptedException
         long startTime=System.currentTimeMillis();
         AtomicReference<Float> price = new AtomicReference<>((float) 0);
@@ -64,7 +65,7 @@ public class Hbprice {
             wssMarketReqHandle.doReq(JSON.toJSONString(param));
             Thread.sleep(Integer.parseInt(hbtime));
             wssMarketReqHandle.webSocketClient.close();
-        }catch (InterruptedException  e)
+        }catch (InterruptedException|WebsocketNotConnectedException e)
         {
             return 0;
         }

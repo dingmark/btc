@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js\tableAction.js"></script>
     <script src="js\hb.js"></script>
     <script src="js\ok.js"></script>
     <script src="js\bter.js"></script>
+    <script src="js\mocha.js"></script>
+    <script src="js\bian.js"></script>
 </head>
 
 <body>
@@ -38,14 +41,17 @@
     <caption>条纹表格布局</caption>
     <thead>
     <tr>
-        <th>名称</th>
-        <th>城市</th>
-        <th>邮编</th>
+        <th>币种</th>
+        <th>火币交易</th>
+        <th>ok交易</th>
+        <th>比特儿交易</th>
+        <th>抹茶交易</th>
+        <th>币安交易</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="tbodys">
     <tr>
-        <td>Tanmay</td>
+        <td style="">Tanmay</td>
         <td>Bangalore</td>
         <td>560001</td>
     </tr>
@@ -71,18 +77,11 @@
 
     //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
     window.onbeforeunload = function() {
-        websockethb.close();
-        websockethb1.close();
-        websockethb2.close();
-        websockethb3.close();
-        websocketok.close();
-        websocketok1.close();
-        websocketok2.close();
-        websocketok3.close();
-        websocketbter.close();
-        websocketbter1.close();
-        websocketbter2.close();
-        websocketbter3.close();
+        closeallsocket();
+
+    }
+    window.close=function () {
+        closeallsocket();
     }
     function split_arry(arr,len) {
         var a_len=arr.length;
@@ -96,23 +95,25 @@
     function allsend()
     {
         setTimeout(listsendhb(arr),1);
-        setTimeout(listsendhb1(arr1),1);
-        setTimeout(listsendhb2(arr2),1);
-        setTimeout(listsendhb3(arr3),1);
+//        setTimeout(listsendhb1(arr1),1);
+//        setTimeout(listsendhb2(arr2),1);
+//        setTimeout(listsendhb3(arr3),1);
         setTimeout(listsendok(arr),1);
-        setTimeout(listsendok1(arr1),1);
-        setTimeout(listsendok2(arr2),1);
-        setTimeout(listsendok3(arr3),1);
+//        setTimeout(listsendok1(arr1),1);
+//        setTimeout(listsendok2(arr2),1);
+//        setTimeout(listsendok3(arr3),1);
 
         setTimeout(listsendbter(arr),1);
-        setTimeout(listsendbter1(arr1),1);
-        setTimeout(listsendbter2(arr2),1);
-        setTimeout(listsendbter3(arr3),1);
+//        setTimeout(listsendbter1(arr1),1);
+//        setTimeout(listsendbter2(arr2),1);
+//        setTimeout(listsendbter3(arr3),1);
+        setTimeout(listsendmocha(arr),1);
+        setTimeout(listsendbian(arr),1);
     }
 </script>
 <script type="text/javascript">
     //setInterval(allsend, 300000);
-    window.onload = function(){ alert("welcome");
+    $(document).ready ( function(){ alert("welcome");
         $.ajax({
             url:"/test.do",
             //contentType:"application/json",
@@ -131,9 +132,13 @@
                 // obj=result;
                 splitarry=split_arry(arr,10)
                 arr=splitarry[0];
-                arr1=splitarry[1];
-                arr2=splitarry[2];
-                arr3=splitarry[3];
+                //画表格
+                drawtable(arr);
+                //给服务器传参数
+                //setTimeout(listsendhb(arr),1);
+                //arr1=splitarry[1];
+                //arr2=splitarry[2];
+                //arr3=splitarry[3];
                 allsend();
 
             },
@@ -141,6 +146,14 @@
             }
 
         });
-    }
+        $('#tbodys tr td')[0].change(function() {
+            console.log("call");
+        });
+        $('#tbodys tr td').on("change",function () {
+            console.log("call")
+        });
+
+        });
 </script>
+
 </html>

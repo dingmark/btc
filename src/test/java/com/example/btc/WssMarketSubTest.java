@@ -99,8 +99,10 @@ public class WssMarketSubTest {
     @Test
     public void test3() throws URISyntaxException, InterruptedException {
         List<String> channels = Lists.newArrayList();
-        channels.add("market.btcusdt.trade.detail");
-        channels.add("market.ethusdt.trade.detail");
+       // channels.add("market.btcusdt.trade.detail");
+        channels.add("market.symbols");
+       // market.btcusdt.depth.step0
+        //market.symbols
         //channels.add("market.BTC_CW.detail");
         //channels.add("market.BTC_NW.detail");
         wssMarketHandle.sub(channels, response -> {

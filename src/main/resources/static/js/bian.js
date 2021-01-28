@@ -44,7 +44,8 @@ function listsendbian3(arr) {
 biani=0;biani1=0;biani2=0;biani3=0;
 websocketbian.onmessage=function(event)
 {
-    setMessageInnerHTMLbian(event.data);
+    locateposition('bian',event.data);
+    //setMessageInnerHTMLbian(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     biani++;
@@ -57,7 +58,8 @@ websocketbian.onmessage=function(event)
 
 websocketbian1.onmessage=function(event)
 {
-    setMessageInnerHTMLbian1(event.data);
+    locateposition('bian',event.data);
+    //setMessageInnerHTMLbian1(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     biani1++;
@@ -70,7 +72,8 @@ websocketbian1.onmessage=function(event)
 
 websocketbian2.onmessage=function(event)
 {
-    setMessageInnerHTMLbian2(event.data);
+    locateposition('bian',event.data);
+    //setMessageInnerHTMLbian2(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     biani2++;
@@ -83,7 +86,8 @@ websocketbian2.onmessage=function(event)
 
 websocketbian3.onmessage=function(event)
 {
-    setMessageInnerHTMLbian3(event.data);
+    locateposition('bian',event.data);
+    //setMessageInnerHTMLbian3(event.data);
     //接收消息之后发送另外一个消息跟后台
     //判断是否执行完毕火币列表
     biani3++;
