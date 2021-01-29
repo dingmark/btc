@@ -11,15 +11,19 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 
 
-class bterTest {
+public  class bterTest {
 
     @Test
-    void getbteprice() throws IOException {
+   public void getbteprice() throws IOException {
         float price=0;
-        URL url=new URL("https://fx-api.gateio.ws/api/v4/futures/btc/contracts/BTC_USD");
+        URL url=new URL("https://data.gateapi.io/api2/1/orderBook/btc_usdt?depth=0.1");
+               // "https://fx-api.gateio.ws/api/v4/futures/btc/contracts/BTC_USD");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
         urlConnection.setRequestProperty("Content-type","application/x-www-form-urlencoded");
@@ -34,5 +38,19 @@ class bterTest {
             charinfo.add(line);
         }
         System.out.println(charinfo.toString());
+        JSONObject jsOKresult=new JSONObject();
+        JSONObject js=JSONObject.parseObject(charinfo.get(0));
+        Object bids=js.get("bids");
+        Object bid=((JSONArray)bids).get(0);
+        jsOKresult.put("name","bter");
+        jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
+        jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
+
+        Object asks=js.get("asks");
+        Object ask=((JSONArray) asks).get(49);
+        jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
+        jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
+        System.out.print("11111");
+
     }
 }

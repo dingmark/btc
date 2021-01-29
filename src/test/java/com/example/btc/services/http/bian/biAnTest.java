@@ -11,13 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import netscape.javascript.JSObject;
 import org.junit.Test;
-class biAnTest {
+public  class biAnTest {
 
     @Test
-    void getBiAnPrice() throws IOException {
+    public  void getBiAnPrice() throws IOException {
         float price=0;
-        URL url=new URL("https://api.binancezh.cc/api/v3/trades?symbol=BTCUSDT&limit=5");
+        URL url=new URL("https://api.yshyqxx.com/api/v3/depth?symbol=BTCUSDT&limit=5");
+                //"https://api.binancezh.cc/api/v3/trades?symbol=BTCUSDT&limit=5");
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestProperty("Accept-Encoding","gzip, deflate");
         urlConnection.setRequestProperty("Content-type","application/x-www-form-urlencoded");
@@ -31,6 +35,17 @@ class biAnTest {
 
             charinfo.add(line);
         }
+        JSONObject jsbianlist=JSONObject.parseObject(charinfo.get(0));
+        Object bids=jsbianlist.get("bids");
+        Object bid=((JSONArray)bids).get(0);
+        Object asks=jsbianlist.get("asks");
+        Object ask=((JSONArray)asks).get(0);
+        JSONObject jsbianresult=new JSONObject();
+        jsbianresult.put("name","bian");
+        jsbianresult.put("bianbidprice",((JSONArray)bid).get(0));
+        jsbianresult.put("bianbidmount",((JSONArray)bid).get(1));
+        jsbianresult.put("bianaskprice",((JSONArray)ask).get(0));
+        jsbianresult.put("bianaskmount",((JSONArray)ask).get(1));
         System.out.println(charinfo.toString());
     }
 }

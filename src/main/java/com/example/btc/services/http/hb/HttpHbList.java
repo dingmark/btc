@@ -1,6 +1,7 @@
 package com.example.btc.services.http.hb;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,20 +25,21 @@ public class HttpHbList {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Value("${hblisturl}")
     private String hblisturl;
-    public float gethblist(String para) throws MalformedURLException {
+    public JSONObject gethblist(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
-        float price=0;
+        JSONObject jshbresutl=new JSONObject();
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
         String hblist=hblisturl+"symbol="+para+"usdt&type=step0&depth=5";
         URL url=new URL(hblist);
         HttpURLConnection urlConnection=null;
         try {
-            Thread.sleep(500);
+            //Thread.sleep(500);
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setConnectTimeout(1000);
-            urlConnection.setReadTimeout(1000);
+            urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(3000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
@@ -51,24 +53,36 @@ public class HttpHbList {
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
             logger.info("火币List数据加载完成用时{}----------->", (endTime - startTime) + "ms");
-            //第一组数据为最新交易数据
-            JSONObject js = JSON.parseObject(charinfo.get(0));
-            String data = js.getString("data");
-            data = data.replaceAll("},", "}#");
-            List<String> datalist = Arrays.asList(data.split("#"));
-            //此处头有一个[
-            JSONObject datajs = JSONObject.parseObject(datalist.get(0).substring(1));
-            price = datajs.getFloat("trade_price");
+            JSONObject js =JSONObject.parseObject(charinfo.get(0));
+
+
+            String tick=js.getString("tick");
+            JSONObject jstick=JSONObject.parseObject(tick);
+            //买一
+            Object bids=jstick.get("bids");
+            jshbresutl.put("name","hb");
+            jshbresutl.put("bidprice",((JSONArray) bids).get(0));
+            jshbresutl.put("bidmount",((JSONArray) bids).get(1));
+            //卖一
+            Object asks=jstick.get("asks");
+            jshbresutl.put("askprice",((JSONArray) asks).get(0));
+            jshbresutl.put("askmount",((JSONArray) asks).get(1));
+
         }
-        catch (IOException | InterruptedException e)
+        catch (IOException  e)
         {
-            return 0;
+            jshbresutl.put("name","hb");
+            jshbresutl.put("bidprice",0);
+            jshbresutl.put("bidmount",0);
+            jshbresutl.put("askprice",0);
+            jshbresutl.put("askmount",0);
+            return jshbresutl;
         }
         finally {
             if (urlConnection!=null) {
                 urlConnection.disconnect();
             }
         }
-        return price;
+        return jshbresutl;
     }
 }
