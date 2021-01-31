@@ -3,6 +3,7 @@ package com.example.btc.services.http.hb;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import com.fasterxml.jackson.databind.type.TypeBase;
 import com.fasterxml.jackson.databind.type.TypeBindings;
 import org.assertj.core.util.diff.Delta;
@@ -68,12 +69,15 @@ public  class HttpHbListTest {
             Object bids=jstick.get("bids");
             JSONObject jshbresutl=new JSONObject();
             jshbresutl.put("name","hb");
-            jshbresutl.put("bidprice",((JSONArray) bids).get(0));
-            jshbresutl.put("bidmount",((JSONArray) bids).get(1));
+            //jshbresutl.put("bidprice",((JSONArray) bids).get(0));
+            //jshbresutl.put("bidmount",((JSONArray) bids).get(1));
             Object asks=jstick.get("asks");
-
-            jshbresutl.put("askprice",((JSONArray) asks).get(0));
-            jshbresutl.put("askmount",((JSONArray) asks).get(1));
+            JSONObject jsbid= JsToNew.jstojs("hb",(JSONArray) bids,"","","bid",1);
+            JSONObject jsask= JsToNew.jstojs("hb",(JSONArray) asks,"","","ask",1);
+            jshbresutl.putAll(jsbid);
+            jshbresutl.putAll(jsask);
+            //jshbresutl.put("askprice",((JSONArray) asks).get(0));
+            //jshbresutl.put("askmount",((JSONArray) asks).get(1));
             System.out.print("11111");
 
           /*  String bids=jstick.getString("bids");

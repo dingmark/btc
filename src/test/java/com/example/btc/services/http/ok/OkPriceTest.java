@@ -49,8 +49,8 @@ public class OkPriceTest {
 //        jsokresult.put("okbaskprice",((JSONArray)bid).get(0));
 //        jsokresult.put("okaskmount",((JSONArray)bid).get(1));
         jsokresult.put("name","ok");
-        JSONObject jsbids= JsToNew.jstojs("ok",(JSONArray)bids,"price","quantity","bid",0);
-        JSONObject jsasks=JsToNew.jstojs("ok",(JSONArray)asks,"price","quantity","ask",0);
+        JSONObject jsbids= JsToNew.jstojs("ok",(JSONArray)bids,"","","bid",1);
+        JSONObject jsasks=JsToNew.jstojs("ok",(JSONArray)asks,"","","ask",1);
         jsokresult.putAll(jsbids);
         jsokresult.putAll(jsasks);
 

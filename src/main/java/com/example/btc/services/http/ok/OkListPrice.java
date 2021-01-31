@@ -64,19 +64,21 @@ public class OkListPrice {
             //Object ask=((JSONArray)bids).get(0);
             //jsokresult.put("okbaskprice",((JSONArray)bid).get(0));
             //jsokresult.put("okaskmount",((JSONArray)bid).get(1));
-            jsokresult.put("name","ok");
-            JSONObject jsbids= JsToNew.jstojs("ok",(JSONArray)bids,"price","quantity","bid",0);
-            JSONObject jsasks=JsToNew.jstojs("ok",(JSONArray)asks,"price","quantity","ask",0);
-            jsokresult.putAll(jsbids);
-            jsokresult.putAll(jsasks);
+            JSONObject jsbids= JsToNew.jstojs("ok",(JSONArray)bids,"","","bid",0);
+            JSONObject jsasks=JsToNew.jstojs("ok",(JSONArray)asks,"","","ask",0);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbids);
+            jstmp.putAll(jsasks);
+            jsokresult.put("ok",jstmp);
         }
         catch (IOException | InterruptedException e)
         {
-            jsokresult.put("name","ok");
-            jsokresult.put("okbidprice",0);
-            jsokresult.put("okbidmount",0);
-            jsokresult.put("okbaskprice",0);
-            jsokresult.put("okaskmount",0);
+            JSONObject jsbids= JsToNew.jstojs("ok",null,"","","bid",1);
+            JSONObject jsasks=JsToNew.jstojs("ok",null,"","","ask",1);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbids);
+            jstmp.putAll(jsasks);
+            jsokresult.put("ok",jstmp);
             return jsokresult;
         }
         finally {

@@ -2,6 +2,7 @@ package com.example.btc.services.http.bian;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,24 +52,25 @@ public class biAnListprice {
             logger.info("币安数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject jsbianlist=JSONObject.parseObject(charinfo.get(0));
             Object bids=jsbianlist.get("bids");
-            Object bid=((JSONArray)bids).get(0);
+           // Object bid=((JSONArray)bids).get(0);
             Object asks=jsbianlist.get("asks");
-            Object ask=((JSONArray)asks).get(0);
-
-            jsbianresult.put("name","bian");
-            jsbianresult.put("bianbidprice",((JSONArray)bid).get(0));
-            jsbianresult.put("bianbidmount",((JSONArray)bid).get(1));
-            jsbianresult.put("bianaskprice",((JSONArray)ask).get(0));
-            jsbianresult.put("bianaskmount",((JSONArray)ask).get(1));
+            //Object ask=((JSONArray)asks).get(0);
+            JSONObject jsbid= JsToNew.jstojs("bian",(JSONArray) bids,"","","bid",0);
+            JSONObject jsask= JsToNew.jstojs("bian",(JSONArray) asks,"","","ask",0);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jsbianresult.put("bian",jstmp);
             //price = js.getFloatValue("price");
         }
         catch (IOException  e)
         {
-            jsbianresult.put("name","bian");
-            jsbianresult.put("bianbidprice",0);
-            jsbianresult.put("bianbidmount",0);
-            jsbianresult.put("bianaskprice",0);
-            jsbianresult.put("bianaskmount",0);
+            JSONObject jsbid= JsToNew.jstojs("bian",null,"","","bid",0);
+            JSONObject jsask= JsToNew.jstojs("bian",null,"","","ask",0);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jsbianresult.put("bian",jstmp);
             return jsbianresult;
         }
         finally {

@@ -2,6 +2,8 @@ package com.example.btc.services.http.bter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
+import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +27,7 @@ public class bterListprice {
     private String berlisturl;
     public JSONObject getbteListprice(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
-        JSONObject jsOKresult=new JSONObject();
+        JSONObject jsBteresult=new JSONObject();
         HttpURLConnection urlConnection=null;
         try {
             Thread.sleep(500);
@@ -50,30 +52,41 @@ public class bterListprice {
             logger.info("比特儿加载完成{}-------->", (endTime - startTime) + "ms");
             JSONObject js=JSONObject.parseObject(charinfo.get(0));
             Object bids=js.get("bids");
-            Object bid=((JSONArray)bids).get(0);
-            jsOKresult.put("name","bter");
-            jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
-            jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
+            //Object bid=((JSONArray)bids).get(0);
+
+            //jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
+            //jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
 
             Object asks=js.get("asks");
-            Object ask=((JSONArray) asks).get(49);
-            jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
-            jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
+            //Object ask=((JSONArray) asks).get(49);
+            //jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
+            //jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
+           // jsBteresult.put("name","bter");
+            JSONObject jsbid= JsToNew.jstojs("bter",(JSONArray) bids,"","","bid",0);
+            JSONObject jsask= JsToNew.jstojs("bter",(JSONArray) asks,"","","ask",0);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jsBteresult.put("bter",jstmp);
+
+
         }
         catch (IOException | InterruptedException e)
         {
-            jsOKresult.put("name","bter");
-            jsOKresult.put("bterbidprice",0);
-            jsOKresult.put("bterbidmount",0);
-            jsOKresult.put("bteraskprice",0);
-            jsOKresult.put("bteraskmount",0);
-            return jsOKresult;
+            JSONObject jsbid= JsToNew.jstojs("bter",null,"","","bid",1);
+            JSONObject jsask= JsToNew.jstojs("bter",null,"","","ask",1);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jsBteresult.put("bter",jstmp);
+
+            return jsBteresult;
         }
         finally {
             if (urlConnection!=null) {
                 urlConnection.disconnect();
             }
         }
-        return jsOKresult;
+        return jsBteresult;
     }
 }

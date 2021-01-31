@@ -58,20 +58,24 @@ public class mochaList {
             JSONObject jsmclist=JSONObject.parseObject(charinfo.get(0));
             Object bids=jsmclist.getJSONObject("data").getJSONArray("bids");
             Object asks=jsmclist.getJSONObject("data").getJSONArray("asks");
-            jsmcresult.put("name","mocha");
+            //jsmcresult.put("name","mocha");
             //gate 成功0 失败1
             JSONObject jsbids= JsToNew.jstojs("mocha",(JSONArray)bids,"price","quantity","bid",0);
             JSONObject jsasks=JsToNew.jstojs("mocha",(JSONArray)asks,"price","quantity","ask",0);
-            jsmcresult.putAll(jsbids);
-            jsmcresult.putAll(jsasks);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbids);
+            jstmp.putAll(jsasks);
+            jsmcresult.put("mocha",jstmp);
         }
         catch (IOException | InterruptedException e)
         {
-            jsmcresult.put("name","mocha");
+            //jsmcresult.put("name","mocha");
             JSONObject jsbids= JsToNew.jstojs("mocha",null,"price","quantity","bid",1);
             JSONObject jsasks=JsToNew.jstojs("mocha",null,"price","quantity","ask",1);
-            jsmcresult.putAll(jsbids);
-            jsmcresult.putAll(jsasks);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbids);
+            jstmp.putAll(jsasks);
+            jsmcresult.put("mocha",jstmp);
             return jsmcresult;
         }
         finally {

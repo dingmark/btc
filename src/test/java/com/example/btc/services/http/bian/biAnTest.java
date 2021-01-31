@@ -13,6 +13,7 @@ import java.util.zip.GZIPInputStream;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import netscape.javascript.JSObject;
 import org.junit.Test;
 public  class biAnTest {
@@ -41,11 +42,17 @@ public  class biAnTest {
         Object asks=jsbianlist.get("asks");
         Object ask=((JSONArray)asks).get(0);
         JSONObject jsbianresult=new JSONObject();
-        jsbianresult.put("name","bian");
-        jsbianresult.put("bianbidprice",((JSONArray)bid).get(0));
-        jsbianresult.put("bianbidmount",((JSONArray)bid).get(1));
-        jsbianresult.put("bianaskprice",((JSONArray)ask).get(0));
-        jsbianresult.put("bianaskmount",((JSONArray)ask).get(1));
+//        jsbianresult.put("name","bian");
+//        jsbianresult.put("bianbidprice",((JSONArray)bid).get(0));
+//        jsbianresult.put("bianbidmount",((JSONArray)bid).get(1));
+//        jsbianresult.put("bianaskprice",((JSONArray)ask).get(0));
+//        jsbianresult.put("bianaskmount",((JSONArray)ask).get(1));
+        JSONObject jsbid= JsToNew.jstojs("bian",(JSONArray) bids,"","","bid",1);
+        JSONObject jsask= JsToNew.jstojs("bian",(JSONArray) asks,"","","ask",1);
+        JSONObject jstmp=new JSONObject();
+        jstmp.putAll(jsbid);
+        jstmp.putAll(jsask);
+        jsbianresult.put("bian",jstmp);
         System.out.println(charinfo.toString());
     }
 }

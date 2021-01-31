@@ -3,6 +3,7 @@ package com.example.btc.services.http.hb;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,22 +61,32 @@ public class HttpHbList {
             JSONObject jstick=JSONObject.parseObject(tick);
             //买一
             Object bids=jstick.get("bids");
-            jshbresutl.put("name","hb");
-            jshbresutl.put("bidprice",((JSONArray) bids).get(0));
-            jshbresutl.put("bidmount",((JSONArray) bids).get(1));
+
+           // jshbresutl.put("bidprice",((JSONArray) bids).get(0));
+           // jshbresutl.put("bidmount",((JSONArray) bids).get(1));
             //卖一
             Object asks=jstick.get("asks");
-            jshbresutl.put("askprice",((JSONArray) asks).get(0));
-            jshbresutl.put("askmount",((JSONArray) asks).get(1));
+           // jshbresutl.put("askprice",((JSONArray) asks).get(0));
+           // jshbresutl.put("askmount",((JSONArray) asks).get(1));
+            //jshbresutl.put("name","hb");
+            JSONObject jsbid= JsToNew.jstojs("hb",(JSONArray) bids,"","","bid",0);
+            JSONObject jsask= JsToNew.jstojs("hb",(JSONArray) asks,"","","ask",0);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jshbresutl.put("hb",jstmp);
 
         }
         catch (IOException  e)
         {
-            jshbresutl.put("name","hb");
-            jshbresutl.put("bidprice",0);
-            jshbresutl.put("bidmount",0);
-            jshbresutl.put("askprice",0);
-            jshbresutl.put("askmount",0);
+            //jshbresutl.put("name","hb");
+            JSONObject jsbid= JsToNew.jstojs("hb",null,"","","bid",1);
+            JSONObject jsask= JsToNew.jstojs("hb",null,"","","ask",1);
+            JSONObject jstmp=new JSONObject();
+            jstmp.putAll(jsbid);
+            jstmp.putAll(jsask);
+            jshbresutl.put("hb",jstmp);
+
             return jshbresutl;
         }
         finally {

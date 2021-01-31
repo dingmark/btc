@@ -11,27 +11,69 @@ public class JsToNew {
         int i=0;
         JSONObject jsreuslt=new JSONObject();
        // jsreuslt.put("name",name);
-        switch (gate)
-        {
-            case 0:
-                for (Object jstmp:js)
-                {
-                    jsreuslt.put(type+"price"+String.valueOf(i),((JSONObject)jstmp).get(pricename));
-                    jsreuslt.put(type+"mount"+String.valueOf(i),((JSONObject)jstmp).get(mountname));
+        if (gate==0) {
+            switch (name) {
+                case "mocha":
+                for (Object jstmp : js) {
+                    jsreuslt.put(type + "price" + String.valueOf(i), ((JSONObject) jstmp).get(pricename));
+                    jsreuslt.put(type + "mount" + String.valueOf(i), ((JSONObject) jstmp).get(mountname));
                     i++;
                 }
-                break;
-            case 1:
-                for(;i<5;i++)
-                {
-                    jsreuslt.put(type+"price"+String.valueOf(i),0);
-                    jsreuslt.put(type+"mount"+String.valueOf(i),0);
-                }
-                break;
-            default:
-                break;
-        }
+                    break;
+                case "bian":
+                case "ok":
+                case "hb":
+                    for (Object jstmp : js) {
+                        jsreuslt.put(type + "price" + String.valueOf(i), ((JSONArray) jstmp).get(0));
+                        jsreuslt.put(type + "mount" + String.valueOf(i), ((JSONArray) jstmp).get(1));
+                        i++;
+                    }
+                    break;
+                case "bter":
+                    if(type.equals("bid"))
+                    {
+                        for(Object jstmp : js)
+                        {
 
+                            jsreuslt.put(type + "price" + String.valueOf(i), ((JSONArray) jstmp).get(0));
+                            jsreuslt.put(type + "mount" + String.valueOf(i), ((JSONArray) jstmp).get(1));
+                            i++;
+                            if(i==5) {
+                                break;
+                            }
+                        }
+                    }
+                    if(type.equals("ask"))
+                    {
+                        for(int k=49;k>44;k--)
+                        {
+                            Object jstmp=((JSONArray) js).get(k);
+                            jsreuslt.put(type + "price" + String.valueOf(i), ((JSONArray)jstmp).get(0));
+                            jsreuslt.put(type + "mount" + String.valueOf(i), ((JSONArray) jstmp).get(1));
+                            i++;
+                            if(k==44) {
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+        }
+        else {
+            for (; i < 5; i++) {
+                jsreuslt.put(type + "price" + String.valueOf(i), 0);
+                jsreuslt.put(type + "mount" + String.valueOf(i), 0);
+            }
+        }
         return jsreuslt;
+    }
+    public static JSONObject jstojs(JSONArray js)
+    {
+        JSONObject jsresult=new JSONObject();
+
+        return jsresult;
     }
 }

@@ -11,9 +11,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import org.junit.Test;
 
 
@@ -38,19 +38,27 @@ public  class bterTest {
             charinfo.add(line);
         }
         System.out.println(charinfo.toString());
-        JSONObject jsOKresult=new JSONObject();
+        JSONObject jsBteresult=new JSONObject();
         JSONObject js=JSONObject.parseObject(charinfo.get(0));
         Object bids=js.get("bids");
-        Object bid=((JSONArray)bids).get(0);
-        jsOKresult.put("name","bter");
-        jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
-        jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
+        //Object bid=((JSONArray)bids).get(0);
+
+        //jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
+        //jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
 
         Object asks=js.get("asks");
-        Object ask=((JSONArray) asks).get(49);
-        jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
-        jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
-        System.out.print("11111");
+        //Object ask=((JSONArray) asks).get(49);
+        //jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
+        //jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
+         //jsBteresult.put("name","bter");
+         JSONObject jsbid= JsToNew.jstojs("bter",(JSONArray) bids,"","","bid",0);
+         JSONObject jsask= JsToNew.jstojs("bter",(JSONArray) asks,"","","ask",0);
+         JSONObject jstmp=new JSONObject();
+         jstmp.putAll(jsbid);
+         jstmp.putAll(jsask);
+         jsBteresult.put("bter",jstmp);
+
+         System.out.print("11111");
 
     }
 }
