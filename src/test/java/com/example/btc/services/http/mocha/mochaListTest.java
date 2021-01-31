@@ -1,13 +1,12 @@
 package com.example.btc.services.http.mocha;
 
-import com.alibaba.fastjson.JSON;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,26 +16,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+import org.junit.Test;
+import org.springframework.messaging.converter.JsonbMessageConverter;
 
-@Service
-public class mochaList {
+public class mochaListTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${molisturl}")
-    private String molisturl;
-    @Value("${mckey}")
-    private String mckey;
-    public JSONObject getMcListPrice(String para) throws MalformedURLException {
-        long startTime=System.currentTimeMillis();
+
+    private String molisturl="https://www.mxc.me/open/api/v2/market/depth?symbol=";
+    @Test
+    public void getMcListPrice() throws MalformedURLException {
+        long startTime = System.currentTimeMillis();
+        float price = 0;
+        String mcurl = molisturl + "BTC" + "_USDT&depth=5";
+        URL url = new URL(mcurl);
         JSONObject jsmcresult=new JSONObject();
-        String mcurl=molisturl+para+"_USDT&depth=5";
-        URL url=new URL(mcurl);
-        HttpURLConnection urlConnection=null;
+        HttpURLConnection urlConnection = null;
         try {
-            Thread.sleep(500);
-             urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
             urlConnection.setConnectTimeout(1000);
@@ -59,26 +57,26 @@ public class mochaList {
             Object bids=jsmclist.getJSONObject("data").getJSONArray("bids");
             Object asks=jsmclist.getJSONObject("data").getJSONArray("asks");
             jsmcresult.put("name","mocha");
-            //gate 成功0 失败1
-            JSONObject jsbids= JsToNew.jstojs("mocha",(JSONArray)bids,"price","quantity","bid",0);
+            JSONObject jsbids=JsToNew.jstojs("mocha",(JSONArray)bids,"price","quantity","bid",0);
             JSONObject jsasks=JsToNew.jstojs("mocha",(JSONArray)asks,"price","quantity","ask",0);
             jsmcresult.putAll(jsbids);
             jsmcresult.putAll(jsasks);
-        }
-        catch (IOException | InterruptedException e)
-        {
-            jsmcresult.put("name","mocha");
-            JSONObject jsbids= JsToNew.jstojs("mocha",null,"price","quantity","bid",1);
-            JSONObject jsasks=JsToNew.jstojs("mocha",null,"price","quantity","ask",1);
-            jsmcresult.putAll(jsbids);
-            jsmcresult.putAll(jsasks);
-            return jsmcresult;
-        }
-        finally {
-            if (urlConnection!=null) {
-                urlConnection.disconnect();
+
+        }//第一组数据为最新交易数据
+            catch(IOException  e)
+            {
+                jsmcresult.put("name","mocha");
+                JSONObject jsbids=JsToNew.jstojs("mocha",null,"price","quantity","bid",1);
+                JSONObject jsasks=JsToNew.jstojs("mocha",null,"price","quantity","ask",1);
+                jsmcresult.putAll(jsbids);
+                jsmcresult.putAll(jsasks);
+                System.out.println(jsmcresult.toJSONString());
             }
-        }
-        return jsmcresult;
+            finally{
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+
     }
 }

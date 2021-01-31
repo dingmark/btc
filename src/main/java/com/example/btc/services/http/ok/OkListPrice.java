@@ -3,6 +3,7 @@ package com.example.btc.services.http.ok;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,16 +56,19 @@ public class OkListPrice {
         //数据转JSON并取最新成交价格
             JSONObject js= JSON.parseObject(charinfo.get(0));
             Object bids=js.get("bids");
-            Object bid=((JSONArray)bids).get(0);
-
-            jsokresult.put("name","ok");
-            jsokresult.put("okbidprice",((JSONArray)bid).get(0));
-            jsokresult.put("okbidmount",((JSONArray)bid).get(1));
+            //Object bid=((JSONArray)bids).get(0);
+            //jsokresult.put("okbidprice",((JSONArray)bid).get(0));
+            //jsokresult.put("okbidmount",((JSONArray)bid).get(1));
 
             Object asks=js.get("asks");
-            Object ask=((JSONArray)bids).get(0);
-            jsokresult.put("okbaskprice",((JSONArray)bid).get(0));
-            jsokresult.put("okaskmount",((JSONArray)bid).get(1));
+            //Object ask=((JSONArray)bids).get(0);
+            //jsokresult.put("okbaskprice",((JSONArray)bid).get(0));
+            //jsokresult.put("okaskmount",((JSONArray)bid).get(1));
+            jsokresult.put("name","ok");
+            JSONObject jsbids= JsToNew.jstojs("ok",(JSONArray)bids,"price","quantity","bid",0);
+            JSONObject jsasks=JsToNew.jstojs("ok",(JSONArray)asks,"price","quantity","ask",0);
+            jsokresult.putAll(jsbids);
+            jsokresult.putAll(jsasks);
         }
         catch (IOException | InterruptedException e)
         {
