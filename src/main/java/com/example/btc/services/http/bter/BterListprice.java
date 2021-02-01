@@ -1,8 +1,9 @@
-package com.example.btc.services.http.bian;
+package com.example.btc.services.http.bter;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.util.JsToNew;
+import netscape.javascript.JSObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,22 +17,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class biAnListprice {
+public class BterListprice {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${bianlisturl}")
-    private String bianlisturl;
-    public JSONObject getBiAnListPrice(String para) throws MalformedURLException {
+    @Value("${berlisturl}")
+    private String berlisturl;
+    public JSONObject getbteListprice(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
-        JSONObject jsbianresult=new JSONObject();
-        URL url=new URL(bianlisturl+para+"USDT&limit=5");
+        JSONObject jsBteresult=new JSONObject();
         HttpURLConnection urlConnection=null;
         try {
-            //Thread.sleep(500);
+            Thread.sleep(500);
+            URL url=new URL(berlisturl+para+"_usdt?depth=0.1");
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
@@ -49,35 +49,44 @@ public class biAnListprice {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("币安数据加载完成用时{}----------->", (endTime - startTime) + "ms");
-            JSONObject jsbianlist=JSONObject.parseObject(charinfo.get(0));
-            Object bids=jsbianlist.get("bids");
-           // Object bid=((JSONArray)bids).get(0);
-            Object asks=jsbianlist.get("asks");
-            //Object ask=((JSONArray)asks).get(0);
-            JSONObject jsbid= JsToNew.jstojs("bian",(JSONArray) bids,"","","bid",0);
-            JSONObject jsask= JsToNew.jstojs("bian",(JSONArray) asks,"","","ask",0);
+            logger.info("比特儿加载完成{}-------->", (endTime - startTime) + "ms");
+            JSONObject js=JSONObject.parseObject(charinfo.get(0));
+            Object bids=js.get("bids");
+            //Object bid=((JSONArray)bids).get(0);
+
+            //jsOKresult.put("bterbidprice",((JSONArray) bid).get(0));
+            //jsOKresult.put("bterbidmount",((JSONArray) bid).get(1));
+
+            Object asks=js.get("asks");
+            //Object ask=((JSONArray) asks).get(49);
+            //jsOKresult.put("bteraskprice",((JSONArray) ask).get(0));
+            //jsOKresult.put("bteraskmount",((JSONArray) ask).get(1));
+           // jsBteresult.put("name","bter");
+            JSONObject jsbid= JsToNew.jstojs("bter",(JSONArray) bids,"","","bid",0);
+            JSONObject jsask= JsToNew.jstojs("bter",(JSONArray) asks,"","","ask",0);
             JSONObject jstmp=new JSONObject();
             jstmp.putAll(jsbid);
             jstmp.putAll(jsask);
-            jsbianresult.put("bian",jstmp);
-            //price = js.getFloatValue("price");
+            jsBteresult.put("bter",jstmp);
+
+
         }
-        catch (IOException  e)
+        catch (IOException | InterruptedException e)
         {
-            JSONObject jsbid= JsToNew.jstojs("bian",null,"","","bid",0);
-            JSONObject jsask= JsToNew.jstojs("bian",null,"","","ask",0);
+            JSONObject jsbid= JsToNew.jstojs("bter",null,"","","bid",1);
+            JSONObject jsask= JsToNew.jstojs("bter",null,"","","ask",1);
             JSONObject jstmp=new JSONObject();
             jstmp.putAll(jsbid);
             jstmp.putAll(jsask);
-            jsbianresult.put("bian",jstmp);
-            return jsbianresult;
+            jsBteresult.put("bter",jstmp);
+
+            return jsBteresult;
         }
         finally {
             if (urlConnection!=null) {
                 urlConnection.disconnect();
             }
         }
-        return jsbianresult;
+        return jsBteresult;
     }
 }

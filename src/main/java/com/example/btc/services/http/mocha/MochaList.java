@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class mochaList {
+public class MochaList {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Value("${molisturl}")
     private String molisturl;

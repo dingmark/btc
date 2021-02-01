@@ -1,13 +1,18 @@
 package com.example.btc.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.baseDaoService.UrlParaService;
 import com.example.btc.services.http.bian.biAn;
+import com.example.btc.services.http.bian.BiAnListprice;
+import com.example.btc.services.http.bter.BterListprice;
 import com.example.btc.services.http.bter.bter;
+import com.example.btc.services.http.hb.HttpHbList;
+import com.example.btc.services.http.mocha.MochaList;
 import com.example.btc.services.http.mocha.mocha;
+import com.example.btc.services.http.ok.OkListPrice;
 import com.example.btc.services.http.ok.OkPrice;
 import com.example.btc.services.ws.hb.Hbprice;
-import org.apache.catalina.valves.rewrite.InternalRewriteMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 @Controller
@@ -27,8 +31,14 @@ public class getValueClass {
     @Autowired bter btr;
     @Autowired mocha mc;
     @Autowired biAn bn;
-    @Autowired
-    UrlParaService urlParaService;
+    @Autowired UrlParaService urlParaService;
+
+    @Autowired HttpHbList hblist;
+    @Autowired OkListPrice okListPrice;
+    @Autowired BiAnListprice biAnListprice;
+    @Autowired BterListprice bterListprice;
+    @Autowired MochaList mochaList;
+
     @RequestMapping("/getvalue.do")
     @ResponseBody
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {
@@ -84,5 +94,26 @@ public class getValueClass {
         urlParaService.getUrlPara();
         hb.getHbArrayPrice(paras);
         return "hello";
+    }
+    @RequestMapping("/testlist.do")
+    @ResponseBody
+    public String testlist() throws MalformedURLException {
+        String str="";
+        String para="btc";
+        JSONObject jsresutl=new JSONObject();
+        JSONObject jstmp=new JSONObject();
+        jstmp= biAnListprice.getBiAnListPrice(para.toUpperCase());
+        jsresutl.putAll(jstmp);
+        jstmp=bterListprice.getbteListprice(para);
+        jsresutl.putAll(jstmp);
+        jstmp=hblist.gethblist(para);
+        jsresutl.putAll(jstmp);
+        jstmp=mochaList.getMcListPrice(para.toUpperCase());
+        jsresutl.putAll(jstmp);
+        jstmp=okListPrice.getOKListprice(para.toUpperCase());
+        jsresutl.putAll(jstmp);
+        //JSON js=jsresutl;
+        jsresutl.put("type",para.toUpperCase());
+       return  jsresutl.toJSONString();
     }
 }

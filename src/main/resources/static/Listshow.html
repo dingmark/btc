@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    function getmaxmin(arr) {
+        arr.sort(function (a, b) {
+            return a[1]-b[1];
+        });
+        var max = Math.max.apply(null, arr);
+        var min = Math.min.apply(null, arr);
+        return arr;
+
+    }
+</script>
+<script type="text/javascript">
+     var jiaoyii=['bian','bter','mocha','hb','ok']
+    $(document).ready ( function(){// alert("welcome");
+        $.ajax({
+            url:"/testlist.do",
+            //contentType:"application/json",
+            type:"GET",
+            cache:false,
+            async:true,
+            dataType:'json',
+            beforeSend:function(){
+                $('#queryForm').hide();
+            },
+            success:function(result){
+                arr =result['type'];
+                //把各个交易所的买一放进数组
+                var buy1=[];
+                for(i=0;i<jiaoyii.length;i++)
+                {
+                    var buy=[,];
+                    if(result[jiaoyii[i]].bidprice0==0) break;
+                    //buy1.push(result[jiaoyii[i]].bidprice0);
+                   // buy1.push(result[jiaoyii[i]].bidmount0,result[jiaoyii[i]].bidprice0);
+                    buy[0]=jiaoyii[i];
+                    buy[1]=result[jiaoyii[i]].bidprice0;
+                    buy1.push(buy);
+
+                }
+                //取买1最小值
+                buy1=getmaxmin(buy1);
+                minname=buy1[0][0];
+                minprice=buy1[0][1];
+                var sell1=[];
+                for(i=0;i<jiaoyii.length;i++)
+                {
+                    var sell=[,]
+                    if(result[jiaoyii[i]].askprice0==0) break;
+                    //sell1.push(result[jiaoyii[i]].askmount0,result[jiaoyii[i]].askprice0)
+                    sell[0]=jiaoyii[i];
+                    sell[1]=result[jiaoyii[i]].askprice0;
+                    sell1.push(sell);
+
+                }
+                //卖一最大值
+                sell1=getmaxmin(sell1);
+                maxnam=sell1[sell1.length-1][0];
+                maxprice=sell1[sell1.length-1][1];
+
+            },
+            complete:function(){
+            }
+
+        });
+    })
+</script>
+
+</body>
+</html>
