@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    if ('WebSocket' in window) {
+        websockethb = new WebSocket("wss://api.huobiasia.vip/ws");
+        //websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
+       // websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
+       // websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
+    }
+    else
+    {
+        alert('Not support websocket');
+    }
+    websockethb.onerror = function() {
+        setMessageInnerHTML("error");
+    };
+
+    //连接成功建立的回调方法
+    websockethb.onopen = function(event) {
+        //setMessageInnerHTML("open");
+    }
+    //连接关闭的回调方法
+    websockethb.onclose = function() {
+        setMessageInnerHTML("close");
+    }
+    //关闭连接
+    function closeWebSocket() {
+        websockethb.close();
+    }
+
+    //发送消息
+    function send() {
+       // var message = document.getElementById('text').value;
+        websockethb.send("market.btcustd.depth.sep0");
+    }
+    websockethb.onmessage=function(event)
+    {
+        //locateposition('hb',event.data);
+        setMessageInnerHTML(event.data);
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+    }
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready ( function(){
+        send();
+    });
+</script>
+<div style="float: left" id="message"></div>
+</body>
+</html>
