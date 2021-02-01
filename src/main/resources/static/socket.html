@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="js/create.js"></script>
+    <script src="js/wood.js"></script>
+</head>
+<body>
+<div style="float: left" id="message"></div>
+<script type="text/javascript">
+    if ('WebSocket' in window) {
+        websocketmocha = new WebSocket("wss://api.huobiasia.vip/ws");
+    }
+    else
+    {
+        alert('Not support websocket')
+    }
+    websocketmocha.onopen=function (ev) {
+        send();
+    }
+    websocketmocha.onmessage=function(event)
+    {
+        //var msg = JSON.parse(event.data);
+        var tmp=JSON.stringify(event.data);
+        var msg=parseBlob(event.data);
+        console.log(msg);
+        setMessageInnerHTML(event.data);
+    }
+    websocketmocha.onclose=function (ev) {
+        setMessageInnerHTML('close');
+    };
+    function send()
+    {
+        websocketmocha.send('{"sub":"market.btcusdt.depth.step0","symbol":"btcusdt","pick":["bids.29","asks.29"],"step":"step0"}');
+    }
+    $(document).ready(function () {
+
+    });
+</script>
+<script type="text/javascript">
+    function setMessageInnerHTML(innerHTML) {
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+    var reader = {
+        readAs: function(type,blob,cb){
+            var r = new FileReader();
+            r.onloadend = function(){
+                if(typeof(cb) === 'function') {
+                    cb.call(r,r.result);
+                }
+            }
+            try{
+                r['readAs'+type](blob);
+            }catch(e){}
+        }
+    }
+    function parseBlob(blob){
+        var shortVar, intVar, stringVar;
+        reader.readAs('ArrayBuffer',blob.slice(0,2),function(arr){
+            shortVar = (new Int16Array(arr))[0];
+            console.log(shortVar);
+        });
+        reader.readAs('ArrayBuffer',blob.slice(2,6),function(arr){
+            intVar = (new Int32Array(arr))[0];
+            console.log(intVar);
+        });
+        reader.readAs('Text',blob.slice(6,blob.size,'text/plain;charset=UTF-8'),function(result){
+            stringVar = result;
+            console.log(stringVar);
+        });
+    }
+
+</script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>
