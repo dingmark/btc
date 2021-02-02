@@ -77,6 +77,7 @@ public class Hbprice {
     public void getHbArrayPrice(List<String> reqparams) throws MalformedURLException, URISyntaxException, InterruptedException {
         long startTime=System.currentTimeMillis();
         AtomicReference<Float> price = new AtomicReference<>((float) 0);
+
         WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
         List<String> channels = new ArrayList<>();
         //reqparam="market.btcusdt.trade.detail";
@@ -88,12 +89,13 @@ public class Hbprice {
        // channels.add("market.btcusdt.trade.detail");
         wssMarketHandle.sub(channels, response -> {
             logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+            JSONObject jsresult = JSONObject.parseObject(response.toString()); //JSON.toJSON(response)
             long endTime=System.currentTimeMillis();
             logger.info("火币数据加载完成,用时{}",(endTime-startTime)+"ms");
             MarketDetailSubResponse event = JSON.parseObject(response, MarketDetailSubResponse.class);
             //logger.info("detailEvent的ts为：{},当前的时间戳为：{},时间间隔为：{}毫秒", event.getTs(), currentTimeMillis, currentTimeMillis - event.getTs());
             //给前台发送数据
-            ws.AppointSending(ws.name,event.getCh());
+            ws.AppointSending(ws.name,response.toString());
         });
         //wssMarketHandle.
         Thread.sleep(Integer.MAX_VALUE);

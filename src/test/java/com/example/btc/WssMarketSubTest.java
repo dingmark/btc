@@ -17,7 +17,10 @@ public class WssMarketSubTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String URL = "wss://api.huobiasia.vip/ws";//"wss://www.btcgateway.pro/ws";//合约站行情请求以及订阅地址
+    private  String OKURL="wss://real.coinall.ltd:8443/ws/v3";
     WssMarketHandle wssMarketHandle = new WssMarketHandle(URL);
+
+    WssMarketHandle OkwssMarketHandle = new WssMarketHandle(OKURL);
 
 
     /**
@@ -100,7 +103,9 @@ public class WssMarketSubTest {
     public void test3() throws URISyntaxException, InterruptedException {
         List<String> channels = Lists.newArrayList();
        // channels.add("market.btcusdt.trade.detail");
-        channels.add("market.symbols");
+        channels.add("market.btcusdt.depth.step0");
+        channels.add("market.ethusdt.depth.step0");
+        channels.add("market.ltcusdt.depth.step0");
        // market.btcusdt.depth.step0
         //market.symbols
         //channels.add("market.BTC_CW.detail");
@@ -136,6 +141,16 @@ public class WssMarketSubTest {
             logger.info("tradeDetailEvent的ts为：{},当前的时间戳为：{},时间间隔为：{}毫秒", event.getTs(), currentTimeMillis, currentTimeMillis - event.getTs());
         });
         Thread.sleep(Integer.MAX_VALUE);
+    }
+    @Test
+    public void testok() throws URISyntaxException, InterruptedException {
+        List<String> channels = Lists.newArrayList();
+        channels.add("{\"op\": \"subscribe\", \"args\": [\"spot/trade:ETH-USDT\"]}");
+        OkwssMarketHandle.sub(channels,response->{
+            logger.info("订阅TradeDetail数据用户收到的数据===============:{}", response.toString());
+        });
+        Thread.sleep(Integer.MAX_VALUE);
+
     }
 
 }

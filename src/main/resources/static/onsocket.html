@@ -10,7 +10,7 @@
 <body>
 <script type="text/javascript">
     if ('WebSocket' in window) {
-        websockethb = new WebSocket("wss://api.huobiasia.vip/ws");
+        websockethb = new WebSocket("ws://localhost:8080/test/hb");
         //websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
@@ -39,7 +39,7 @@
     //发送消息
     function send() {
        // var message = document.getElementById('text').value;
-        websockethb.send("market.btcustd.depth.sep0");
+        websockethb.send('{"sub":"market.btcustd.depth.sep0"}');
     }
     websockethb.onmessage=function(event)
     {

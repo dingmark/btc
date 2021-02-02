@@ -1,5 +1,6 @@
 package com.example.btc.services.webSocket;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.baseDao.UrlPara;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
@@ -7,6 +8,7 @@ import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
+import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.hb.Hbprice;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +56,7 @@ public class OnWebSocket {
     public void setMocha(mocha mmocha){OnWebSocket.mmocha=mmocha;}
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
+    String hburl="wss://api.huobiasia.vip/ws";
     /**
      *  与某个客户端的连接对话，需要通过它来给客户端发送消息
      */
@@ -97,6 +101,24 @@ public class OnWebSocket {
             switch (channeltype)
             {
                 case "hb":
+                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+
+                    List<String> channels = new ArrayList<>();
+                    //reqparam="market.btcusdt.trade.detail";
+                    List<String> reqparams=urlPara.getHbpara();
+                    for(String para:reqparams)
+                    {
+                        String parado="market."+para+"usdt.depth.sep0";
+                        channels.add(parado);
+                    }
+                    wssMarketHandle.sub(channels, response -> {
+                                logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                               // JSONObject jsresult = JSONObject.parseObject(response.toString()); //JSON.toJSON(response)
+                                long endTime = System.currentTimeMillis();
+                                AppointSending(name,response.toString());
+                            });
+                    Thread.sleep(Integer.MAX_VALUE);
+                    /*
                         Thread.sleep(500);
                         JSONObject jr=new JSONObject();
                         String param="market."+jspara.getString("hb")+"usdt.trade.detail";
@@ -104,7 +126,7 @@ public class OnWebSocket {
                         String hbpricestr=String.valueOf(hbprice);
                         jr.put(jspara.getString("hb"),hbprice);
                         AppointSending(name,jr.toString());
-                    logger.info("接收火币参数执行火币获取最近火币价格");
+                    logger.info("接收火币参数执行火币获取最近火币价格");*/
                     break;
                 case "ok":
                         JSONObject jok=new JSONObject();

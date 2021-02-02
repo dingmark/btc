@@ -25,6 +25,17 @@
     websocketmocha.onmessage=function(event)
     {
         //var msg = JSON.parse(event.data);
+        var blob = new Blob(["Hello World!"],{type:"text/plain"});
+        //var text = await (new Response(event.data)).text();
+
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function() {
+            // reader.result 包含被转化为类型数组 typed array 的 blob
+            console.log("11111");
+        });
+        reader.readAsArrayBuffer(blob);
+
+        var result = new Int16Array(event.data);
         var tmp=JSON.stringify(event.data);
         var msg=parseBlob(event.data);
         console.log(msg);
@@ -72,6 +83,13 @@
             stringVar = result;
             console.log(stringVar);
         });
+
+        reader.readAs('Text',blob.slice(6,blob.size,'text/plain;charset=GBK'),function(result){
+            stringVar = result;
+            console.log(stringVar);
+        });
+        reader.re
+
     }
 
 </script>
