@@ -5,6 +5,7 @@ import com.example.btc.services.ws.event.MarketDepthSubResponse;
 import com.example.btc.services.ws.event.MarketDetailSubResponse;
 import com.example.btc.services.ws.event.MarketKLineSubResponse;
 import com.example.btc.services.ws.event.MarketTradeDetailSubResponse;
+import com.example.btc.services.ws.handler.OkWssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketHandle;
 import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ public class WssMarketSubTest {
     private  String OKURL="wss://real.coinall.ltd:8443/ws/v3";
     WssMarketHandle wssMarketHandle = new WssMarketHandle(URL);
 
-    WssMarketHandle OkwssMarketHandle = new WssMarketHandle(OKURL);
+    OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(OKURL);
 
 
     /**
@@ -111,6 +112,7 @@ public class WssMarketSubTest {
         //channels.add("market.BTC_CW.detail");
         //channels.add("market.BTC_NW.detail");
         wssMarketHandle.sub(channels, response -> {
+
             logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
             Long currentTimeMillis = System.currentTimeMillis();
             MarketDetailSubResponse event = JSON.parseObject(response, MarketDetailSubResponse.class);
@@ -133,7 +135,7 @@ public class WssMarketSubTest {
     public void test4() throws URISyntaxException, InterruptedException {
         List<String> channels = Lists.newArrayList();
         channels.add("market.BTC_CW.trade.detail");
-        channels.add("market.BTC_NW.trade.detail");
+        //channels.add("market.BTC_NW.trade.detail");
         wssMarketHandle.sub(channels, response -> {
             logger.info("订阅TradeDetail数据用户收到的数据===============:{}", JSON.toJSON(response));
             Long currentTimeMillis = System.currentTimeMillis();
@@ -145,7 +147,8 @@ public class WssMarketSubTest {
     @Test
     public void testok() throws URISyntaxException, InterruptedException {
         List<String> channels = Lists.newArrayList();
-        channels.add("{\"op\": \"subscribe\", \"args\": [\"spot/trade:ETH-USDT\"]}");
+
+        channels.add("spot/depth5:ETH-USDT");
         OkwssMarketHandle.sub(channels,response->{
             logger.info("订阅TradeDetail数据用户收到的数据===============:{}", response.toString());
         });

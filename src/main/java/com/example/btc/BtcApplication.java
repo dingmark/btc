@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //@SpringBootApplication
 @SpringBootApplication(scanBasePackages={"com.example.btc"})
 public class BtcApplication {
-
 	public static void main(String[] args) {
 
 		SpringApplication.run(BtcApplication.class, args);

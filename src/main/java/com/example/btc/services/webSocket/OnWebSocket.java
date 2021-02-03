@@ -8,6 +8,7 @@ import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
+import com.example.btc.services.ws.handler.OkWssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.hb.Hbprice;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,10 @@ public class OnWebSocket {
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
+    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+    private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
+    OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(okurl);
+   // List<String> reqparams=urlPara.getHbpara();
     /**
      *  与某个客户端的连接对话，需要通过它来给客户端发送消息
      */
@@ -88,6 +93,19 @@ public class OnWebSocket {
     @OnClose
     public void OnClose(){
         webSocketSet.remove(this.name);
+        String type=name.substring(0,2);
+        switch (type)
+        {
+            case"hb":
+                wssMarketHandle.close();
+                break;
+            case "ok":
+                OkwssMarketHandle.close();
+                break;
+
+        }
+
+
         log.info("[WebSocket] 退出成功，当前连接人数为：={}",webSocketSet.size());
     }
 
@@ -95,20 +113,20 @@ public class OnWebSocket {
     public void OnMessage(String message)  {
         log.info("[WebSocket] 收到消息：{}",message);
         String channeltype=name.substring(0,2);
-        JSONObject jspara=JSONObject.parseObject(message);
+        //JSONObject jspara=JSONObject.parseObject(message);
         try
         {
             switch (channeltype)
             {
                 case "hb":
-                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
 
+                    List<String> reqparams=urlPara.getHbpara();
                     List<String> channels = new ArrayList<>();
                     //reqparam="market.btcusdt.trade.detail";
-                    List<String> reqparams=urlPara.getHbpara();
+                    //market.btcusdt.depth.step0
                     for(String para:reqparams)
                     {
-                        String parado="market."+para+"usdt.depth.sep0";
+                        String parado="market."+para+"usdt.depth.step0";
                         channels.add(parado);
                     }
                     wssMarketHandle.sub(channels, response -> {
@@ -129,36 +147,59 @@ public class OnWebSocket {
                     logger.info("接收火币参数执行火币获取最近火币价格");*/
                     break;
                 case "ok":
-                        JSONObject jok=new JSONObject();
+                    List<String> reqparamok=urlPara.getHbpara();
+
+                    List<String> channelok = new ArrayList<>();
+                    for(String para:reqparamok)
+                    {
+                        //channels.add("spot/depth5:ETH-USDT");
+                        String parado="spot/depth5:"+para.toUpperCase()+"-USDT";
+                        channelok.add(parado);
+                    }
+                    OkwssMarketHandle.sub(channelok, response -> {
+                        logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                        // JSONObject jsresult = JSONObject.parseObject(response.toString()); //JSON.toJSON(response)
+                        long endTime = System.currentTimeMillis();
+                        AppointSending(name,response.toString());
+                    });
+                    Thread.sleep(Integer.MAX_VALUE);
+//                    OkwebSocketClient.connect();
+//                    final ArrayList<String> list = new ArrayList<>();
+//                    OkwebSocketClient.subscribe(list);
+//                    Thread.sleep(Integer.MAX_VALUE);
+                       /* JSONObject jok=new JSONObject();
                         String paraok=jspara.getString("ok");
                         float okprice=okPrice.getOKprice(paraok);
                         jok.put(paraok,okprice);
                         AppointSending(name,jok.toString());
-                        Thread.sleep(1000);
+                        Thread.sleep(1000);*/
+
                     break;
                 case "bt"://比特儿
-                    JSONObject jbter=new JSONObject();
+                    /*JSONObject jbter=new JSONObject();
                     String parabter=jspara.getString("bt");
                     float bterprice=okPrice.getOKprice(parabter.toUpperCase());//转大写
                     jbter.put(parabter,bterprice);
                     AppointSending(name,jbter.toString());
-                    Thread.sleep(1000);
+                    Thread.sleep(1000);*/
                     break;
                 case "mo":
+                    /*
                     JSONObject jmocha=new JSONObject();
                     String paramocha=jspara.getString("mocha");
                     float mochaprice=mmocha.getMcPrice(paramocha.toUpperCase());//转大写
                     jmocha.put(paramocha,mochaprice);
                     AppointSending(name,jmocha.toString());
-                    Thread.sleep(1000);
+                    Thread.sleep(1000);*/
                     break;
                 case "bi":
+                    /*
                     JSONObject jbian=new JSONObject();
                     String parabian=jspara.getString("bian");
                     float bianprice=mmocha.getMcPrice(parabian.toUpperCase());//转大写
                     jbian.put(parabian,bianprice);
                     AppointSending(name,jbian.toString());
-                    Thread.sleep(1000);
+                    Thread.sleep(1000);*/
                     break;
                 default:
                     break;

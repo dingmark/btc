@@ -11,6 +11,7 @@
 <script type="text/javascript">
     if ('WebSocket' in window) {
         websockethb = new WebSocket("ws://localhost:8080/test/hb");
+        websocketok = new WebSocket("ws://localhost:8080/test/ok");
         //websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
@@ -34,22 +35,38 @@
     //关闭连接
     function closeWebSocket() {
         websockethb.close();
+        websocketok.close();
+    }
+    window.onbeforeunload = function() {
+        closeallsocket();
+
     }
 
     //发送消息
     function send() {
        // var message = document.getElementById('text').value;
-        websockethb.send('{"sub":"market.btcustd.depth.sep0"}');
+        setTimeout(websockethb.send('{sub:hbstart}'),1);
+        setTimeout(websocketok.send('{op:okstart}'),1);
     }
     websockethb.onmessage=function(event)
     {
         //locateposition('hb',event.data);
-        setMessageInnerHTML(event.data);
+        setMessageInnerHTML("hb");
+        //接收消息之后发送另外一个消息跟后台
+        //判断是否执行完毕火币列表
+    }
+    websocketok.onmessage=function(event)
+    {
+        //locateposition('hb',event.data);
+        setMessageInnerHTMLok("ok");
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
     }
     function setMessageInnerHTML(innerHTML) {
         document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    }
+    function setMessageInnerHTMLok(innerHTML) {
+        document.getElementById('messageok').innerHTML += innerHTML + '<br/>';
     }
 </script>
 <script type="text/javascript">
@@ -57,6 +74,7 @@
         send();
     });
 </script>
-<div style="float: left" id="message"></div>
+<div style="float: left ;width: 100px" id="message"></div>
+<div style="float: left ;width: 100px" id="messageok" ></div>
 </body>
 </html>

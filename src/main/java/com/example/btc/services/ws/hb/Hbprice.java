@@ -30,8 +30,7 @@ public class Hbprice {
     @Value("${hbtime}")
     private String hbtime;
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    OnWebSocket ws;
+
     public float getHbprice(String reqparam) throws URISyntaxException {
         //throws  URISyntaxException, InterruptedException
         long startTime=System.currentTimeMillis();
@@ -95,7 +94,7 @@ public class Hbprice {
             MarketDetailSubResponse event = JSON.parseObject(response, MarketDetailSubResponse.class);
             //logger.info("detailEvent的ts为：{},当前的时间戳为：{},时间间隔为：{}毫秒", event.getTs(), currentTimeMillis, currentTimeMillis - event.getTs());
             //给前台发送数据
-            ws.AppointSending(ws.name,response.toString());
+            //ws.AppointSending(ws.name,response.toString());
         });
         //wssMarketHandle.
         Thread.sleep(Integer.MAX_VALUE);

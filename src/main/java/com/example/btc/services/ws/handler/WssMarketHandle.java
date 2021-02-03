@@ -3,11 +3,15 @@ package com.example.btc.services.ws.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -70,14 +74,12 @@ public class WssMarketHandle implements Cloneable{
                         JSONObject JSONMessage = JSONObject.parseObject(message);
                         Object ch = JSONMessage.get("ch");
                         Object ping = JSONMessage.get("ping");
-
                         if (ch != null) {
                             callback.onReceive(message);
                         }
                         if (ping != null) {
                             dealPing();
                         }
-
                     } catch (Throwable e) {
                         logger.error("onMessage异常", e);
                     }
@@ -101,7 +103,8 @@ public class WssMarketHandle implements Cloneable{
 
 
     public void close() {
-        webSocketClient.connect();
+        //webSocketClient.connect();
+        webSocketClient.close();
     }
 
 
@@ -109,7 +112,7 @@ public class WssMarketHandle implements Cloneable{
         channels.stream().forEach(e -> {
             JSONObject sub = new JSONObject();
             sub.put("sub", e);
-            sub.put("id","id7");
+            //sub.put("id","id7");
             webSocketClient.send(sub.toString());
         });
     }
@@ -155,4 +158,6 @@ public class WssMarketHandle implements Cloneable{
         }
 
     }
+
+
 }

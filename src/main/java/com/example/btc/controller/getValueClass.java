@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @Controller
-
 public class getValueClass {
     @Autowired Hbprice hb;
     @Autowired OkPrice okprice;

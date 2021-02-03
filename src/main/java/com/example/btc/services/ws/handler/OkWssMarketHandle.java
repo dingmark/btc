@@ -1,16 +1,22 @@
 package com.example.btc.services.ws.handler;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,12 +58,26 @@ public class OkWssMarketHandle implements Cloneable{
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
-                dealReconnect();
+                //dealReconnect();
+                //连接成功后，设置定时器，每隔25，自动向服务器发送心跳，保持与服务器连接
+                final Runnable runnable = new Runnable() {
+                    String time = new Date().toString();
+                    @Override
+                    public void run() {
+                        // task to run goes here
+                        sub("ping");
+                    }
+                };
+                final ScheduledExecutorService service = Executors
+                        .newSingleThreadScheduledExecutor();
+                // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+                service.scheduleAtFixedRate(runnable, 25, 25, TimeUnit.SECONDS);
             }
 
 
             @Override
             public void onMessage(String s) {
+
                 logger.debug("onMessage:{}", s);
             }
 
@@ -66,17 +86,10 @@ public class OkWssMarketHandle implements Cloneable{
                 fixedThreadPool.execute(() -> {
                     try {
                         lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
+                        final String s = uncompress(bytes.array());
+                        logger.info(s);
+                        //回调
+                        if(!s.equals("pong")) callback.onReceive(s);
 
                     } catch (Throwable e) {
                         logger.error("onMessage异常", e);
@@ -101,17 +114,21 @@ public class OkWssMarketHandle implements Cloneable{
 
 
     public void close() {
-        webSocketClient.connect();
+        //webSocketClient.connect();
+        webSocketClient.close();
     }
 
 
     private void doSub(List<String> channels) {
-        channels.stream().forEach(e -> {
-            JSONObject sub = new JSONObject();
-            sub.put("sub", e);
-            sub.put("id","id7");
-            webSocketClient.send(sub.toString());
-        });
+
+        final String s = listToJson(channels);
+        final String str = "{\"op\": \"subscribe\", \"args\":" + s + "}";
+        //  sub.put("id","id7");
+        webSocketClient.send(str);
+    }
+    private void sub(String message)
+    {
+        webSocketClient.send(message);
     }
 
 
@@ -154,5 +171,27 @@ public class OkWssMarketHandle implements Cloneable{
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
 
+    }
+    //ok解压函数
+    private static String uncompress(final byte[] bytes) {
+        try (final ByteArrayOutputStream out = new ByteArrayOutputStream();
+             final ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+             final Deflate64CompressorInputStream zin = new Deflate64CompressorInputStream(in)) {
+            final byte[] buffer = new byte[1024];
+            int offset;
+            while (-1 != (offset = zin.read(buffer))) {
+                out.write(buffer, 0, offset);
+            }
+            return out.toString();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //参数转化
+    private String listToJson(final List<String> list) {
+        final JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll(list);
+        return jsonArray.toJSONString();
     }
 }
