@@ -86,12 +86,47 @@ public class OnWebSocket {
         // name是用来表示唯一客户端，如果需要指定发送，需要指定发送通过name来区分
         webSocketSet.put(this.name,this);
         log.info("[WebSocket] 连接成功，当前连接人数为：={}",webSocketSet.size());
-
+        String type=name.substring(0,2);
+        socketdo(type);
     }
 
-
+    void socketdo(String type) throws InterruptedException, URISyntaxException {
+        switch (type)
+        {
+            case "hb":
+                List<String> reqparams=urlPara.getHbpara();
+                List<String> channels = new ArrayList<>();
+                for(String para:reqparams)
+                {
+                    String parado="market."+para+"usdt.depth.step0";
+                    channels.add(parado);
+                }
+                wssMarketHandle.sub(channels, response -> {
+                    logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                    long endTime = System.currentTimeMillis();
+                    AppointSending(name,response.toString());
+                });
+                Thread.sleep(Integer.MAX_VALUE);
+                break;
+            case "ok":
+                List<String> reqparamok=urlPara.getHbpara();
+                List<String> channelok = new ArrayList<>();
+                for(String para:reqparamok)
+                {
+                    String parado="spot/depth5:"+para.toUpperCase()+"-USDT";
+                    channelok.add(parado);
+                }
+                OkwssMarketHandle.sub(channelok, response -> {
+                    logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                    long endTime = System.currentTimeMillis();
+                    AppointSending(name,response.toString());
+                });
+                Thread.sleep(Integer.MAX_VALUE);
+                break;
+        }
+    }
     @OnClose
-    public void OnClose(){
+    public void OnClose() throws InterruptedException, URISyntaxException {
         webSocketSet.remove(this.name);
         String type=name.substring(0,2);
         switch (type)
@@ -148,7 +183,6 @@ public class OnWebSocket {
                     break;
                 case "ok":
                     List<String> reqparamok=urlPara.getHbpara();
-
                     List<String> channelok = new ArrayList<>();
                     for(String para:reqparamok)
                     {
@@ -250,7 +284,7 @@ public class OnWebSocket {
         }catch (IOException e){
             //e.printStackTrace();
             logger.info(name+"退出通信");
-            OnClose();
+
         }
     }
 }
