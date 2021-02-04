@@ -61,6 +61,7 @@ public class BtWssMarketHandle implements Cloneable{
             @Override
             public void onMessage(String s) {
                 callback.onReceive(s);
+                webSocketClient.close();
                 logger.debug("onMessage:{}", s);
             }
             @Override

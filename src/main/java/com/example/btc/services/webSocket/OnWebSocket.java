@@ -133,25 +133,29 @@ public class OnWebSocket {
                     Thread.sleep(Integer.MAX_VALUE);
                     break;
                 case "bt":
-                  // Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+                    List<String> reqparambt = urlPara.getHbpara();
+                    Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+                    reqparambt.stream().forEach(e ->
+                    {
+                        channelbt[0]=e.toUpperCase()+"_USDT";
+                    });
 
-                    //{"id":6689915,"method":"depth.query","params":["BTC_USDT",5,"0.0001"]}
-                    final Runnable runnable = new Runnable() {
+                    final Runnable runnable = new Runnable( ) {
                         //String time = new Date().toString();
                         Object[] channelbt = {"BTC_USDT",5,"0.0001"};
                         @SneakyThrows
                         @Override
                         public void run() {;
-                            btWssMarketHandle.sub(channelbt,respone ->
+                            btWssMarketHandle.sub(channelbt,response ->
                             {
-                                logger.info(respone.toString());
+                                AppointSending(name, response.toString());
                             });
                         }
                     };
                     final ScheduledExecutorService service = Executors
                             .newSingleThreadScheduledExecutor();
                     // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
-                     service.scheduleAtFixedRate(runnable, 1, 5, TimeUnit.MILLISECONDS);
+                     service.scheduleAtFixedRate(runnable, 1, 5000, TimeUnit.MILLISECONDS);
                     break;
             }
         }
