@@ -3,16 +3,12 @@ package com.example.btc.services.ws.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
-import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
+import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -23,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class WssMarketHandle implements Cloneable{
+public class BtWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
@@ -35,38 +31,38 @@ public class WssMarketHandle implements Cloneable{
     private Long lastPingTime = System.currentTimeMillis();
 
 
-    public WssMarketHandle() {
+    public BtWssMarketHandle() {
 
     }
 
-    public WssMarketHandle(String pushUrl) {
+    public BtWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
-    public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
-        doConnect(channels, callback);
+    public void sub(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
+        doConnect(channel, callback);
     }
 
 
-    private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
+    private void doConnect(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
 
 
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
-
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
-                doSub(channels);
+                doSub(channel);
                // dealReconnect();
 
             }
 
 
+            @SneakyThrows
             @Override
             public void onMessage(String s) {
+                callback.onReceive(s);
                 logger.debug("onMessage:{}", s);
             }
-
             @Override
             public void onMessage(ByteBuffer bytes) {
                 fixedThreadPool.execute(() -> {
@@ -113,13 +109,12 @@ public class WssMarketHandle implements Cloneable{
     {
       return    webSocketClient.getSocket().isConnected();
     }
-    private void doSub(List<String> channels) {
-        channels.stream().forEach(e -> {
+    private void doSub(Object[] channel) {
             JSONObject sub = new JSONObject();
-            sub.put("sub", e);
-            //sub.put("id","id7");
+            sub.put("id",6689915);
+            sub.put("method","depth.query");
+            sub.put("params",channel);
             webSocketClient.send(sub.toString());
-        });
     }
 
 

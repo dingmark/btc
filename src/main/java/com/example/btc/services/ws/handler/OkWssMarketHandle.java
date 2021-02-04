@@ -71,7 +71,7 @@ public class OkWssMarketHandle implements Cloneable{
                 final ScheduledExecutorService service = Executors
                         .newSingleThreadScheduledExecutor();
                 // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
-                service.scheduleAtFixedRate(runnable, 25, 25, TimeUnit.SECONDS);
+               // service.scheduleAtFixedRate(runnable, 25, 25, TimeUnit.SECONDS);
             }
 
 
@@ -92,7 +92,8 @@ public class OkWssMarketHandle implements Cloneable{
                         if(!s.equals("pong")) callback.onReceive(s);
 
                     } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
+                        logger.error("OK 接收onMessage异常", e);
+
                     }
                 });
             }
@@ -112,7 +113,10 @@ public class OkWssMarketHandle implements Cloneable{
 
     }
 
-
+    public  boolean isConnect()
+    {
+       return webSocketClient.getSocket().isConnected();
+    }
     public void close() {
         //webSocketClient.connect();
         webSocketClient.close();
@@ -162,7 +166,7 @@ public class OkWssMarketHandle implements Cloneable{
 
                         }
                     } catch (Throwable e) {
-                        logger.error("dealReconnect异常", e);
+                        logger.error("OK交易所dealReconnect异常", e);
                     }
 
                 }

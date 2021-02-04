@@ -8,9 +8,11 @@ import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
+import com.example.btc.services.ws.handler.BtWssMarketHandle;
 import com.example.btc.services.ws.handler.OkWssMarketHandle;
 import com.example.btc.services.ws.handler.WssMarketHandle;
 import com.example.btc.services.ws.hb.Hbprice;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +30,13 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiringInspection"})
@@ -61,6 +67,9 @@ public class OnWebSocket {
     WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
     OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(okurl);
+    private  String bturl="wss://webws.gateio.live/v3/?v=647320";
+    BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
+
    // List<String> reqparams=urlPara.getHbpara();
     /**
      *  与某个客户端的连接对话，需要通过它来给客户端发送消息
@@ -90,39 +99,65 @@ public class OnWebSocket {
         socketdo(type);
     }
 
-    void socketdo(String type) throws InterruptedException, URISyntaxException {
-        switch (type)
+    void socketdo(String type)  {
+        try {
+            switch (type) {
+                case "hb":
+                    List<String> reqparams = urlPara.getHbpara();
+                    List<String> channels = new ArrayList<>();
+                    for (String para : reqparams) {
+                        String parado = "market." + para + "usdt.depth.step0";
+                        channels.add(parado);
+                    }
+                    wssMarketHandle.sub(channels, response -> {
+                        logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                        long endTime = System.currentTimeMillis();
+                        if(this.session.isOpen())
+                        AppointSending(name, response.toString());
+                    });
+                    Thread.sleep(Integer.MAX_VALUE);
+                    break;
+                case "ok":
+                    List<String> reqparamok = urlPara.getHbpara();
+                    List<String> channelok = new ArrayList<>();
+                    for (String para : reqparamok) {
+                        String parado = "spot/depth5:" + para.toUpperCase() + "-USDT";
+                        channelok.add(parado);
+                    }
+                    OkwssMarketHandle.sub(channelok, response -> {
+                        logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
+                        long endTime = System.currentTimeMillis();
+                        if(this.session.isOpen())
+                        AppointSending(name, response.toString());
+                    });
+                    Thread.sleep(Integer.MAX_VALUE);
+                    break;
+                case "bt":
+                  // Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+
+                    //{"id":6689915,"method":"depth.query","params":["BTC_USDT",5,"0.0001"]}
+                    final Runnable runnable = new Runnable() {
+                        //String time = new Date().toString();
+                        Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+                        @SneakyThrows
+                        @Override
+                        public void run() {;
+                            btWssMarketHandle.sub(channelbt,respone ->
+                            {
+                                logger.info(respone.toString());
+                            });
+                        }
+                    };
+                    final ScheduledExecutorService service = Executors
+                            .newSingleThreadScheduledExecutor();
+                    // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
+                     service.scheduleAtFixedRate(runnable, 1, 5, TimeUnit.MILLISECONDS);
+                    break;
+            }
+        }
+        catch (InterruptedException| URISyntaxException e)
         {
-            case "hb":
-                List<String> reqparams=urlPara.getHbpara();
-                List<String> channels = new ArrayList<>();
-                for(String para:reqparams)
-                {
-                    String parado="market."+para+"usdt.depth.step0";
-                    channels.add(parado);
-                }
-                wssMarketHandle.sub(channels, response -> {
-                    logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                    long endTime = System.currentTimeMillis();
-                    AppointSending(name,response.toString());
-                });
-                Thread.sleep(Integer.MAX_VALUE);
-                break;
-            case "ok":
-                List<String> reqparamok=urlPara.getHbpara();
-                List<String> channelok = new ArrayList<>();
-                for(String para:reqparamok)
-                {
-                    String parado="spot/depth5:"+para.toUpperCase()+"-USDT";
-                    channelok.add(parado);
-                }
-                OkwssMarketHandle.sub(channelok, response -> {
-                    logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                    long endTime = System.currentTimeMillis();
-                    AppointSending(name,response.toString());
-                });
-                Thread.sleep(Integer.MAX_VALUE);
-                break;
+            logger.info("尝试给前端发送消息失败！！！{}",e);
         }
     }
     @OnClose
@@ -140,112 +175,30 @@ public class OnWebSocket {
 
         }
 
-
         log.info("[WebSocket] 退出成功，当前连接人数为：={}",webSocketSet.size());
     }
 
     @OnMessage
     public void OnMessage(String message)  {
         log.info("[WebSocket] 收到消息：{}",message);
-        String channeltype=name.substring(0,2);
+      //接收心跳
+        String type=name.substring(0,2);
+        switch (type)
+        {
+            case"hb":
+                AppointSending(name,"pong");
+                break;
+            case"ok":
+                AppointSending(name,"pong");
+                break;
+            case"bt":
+                AppointSending(name,"pong");
+                break;
+        }
+
+
+       // String channeltype=name.substring(0,2);
         //JSONObject jspara=JSONObject.parseObject(message);
-        try
-        {
-            switch (channeltype)
-            {
-                case "hb":
-
-                    List<String> reqparams=urlPara.getHbpara();
-                    List<String> channels = new ArrayList<>();
-                    //reqparam="market.btcusdt.trade.detail";
-                    //market.btcusdt.depth.step0
-                    for(String para:reqparams)
-                    {
-                        String parado="market."+para+"usdt.depth.step0";
-                        channels.add(parado);
-                    }
-                    wssMarketHandle.sub(channels, response -> {
-                                logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                               // JSONObject jsresult = JSONObject.parseObject(response.toString()); //JSON.toJSON(response)
-                                long endTime = System.currentTimeMillis();
-                                AppointSending(name,response.toString());
-                            });
-                    Thread.sleep(Integer.MAX_VALUE);
-                    /*
-                        Thread.sleep(500);
-                        JSONObject jr=new JSONObject();
-                        String param="market."+jspara.getString("hb")+"usdt.trade.detail";
-                        float hbprice=hb.getHbprice(param);
-                        String hbpricestr=String.valueOf(hbprice);
-                        jr.put(jspara.getString("hb"),hbprice);
-                        AppointSending(name,jr.toString());
-                    logger.info("接收火币参数执行火币获取最近火币价格");*/
-                    break;
-                case "ok":
-                    List<String> reqparamok=urlPara.getHbpara();
-                    List<String> channelok = new ArrayList<>();
-                    for(String para:reqparamok)
-                    {
-                        //channels.add("spot/depth5:ETH-USDT");
-                        String parado="spot/depth5:"+para.toUpperCase()+"-USDT";
-                        channelok.add(parado);
-                    }
-                    OkwssMarketHandle.sub(channelok, response -> {
-                        logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                        // JSONObject jsresult = JSONObject.parseObject(response.toString()); //JSON.toJSON(response)
-                        long endTime = System.currentTimeMillis();
-                        AppointSending(name,response.toString());
-                    });
-                    Thread.sleep(Integer.MAX_VALUE);
-//                    OkwebSocketClient.connect();
-//                    final ArrayList<String> list = new ArrayList<>();
-//                    OkwebSocketClient.subscribe(list);
-//                    Thread.sleep(Integer.MAX_VALUE);
-                       /* JSONObject jok=new JSONObject();
-                        String paraok=jspara.getString("ok");
-                        float okprice=okPrice.getOKprice(paraok);
-                        jok.put(paraok,okprice);
-                        AppointSending(name,jok.toString());
-                        Thread.sleep(1000);*/
-
-                    break;
-                case "bt"://比特儿
-                    /*JSONObject jbter=new JSONObject();
-                    String parabter=jspara.getString("bt");
-                    float bterprice=okPrice.getOKprice(parabter.toUpperCase());//转大写
-                    jbter.put(parabter,bterprice);
-                    AppointSending(name,jbter.toString());
-                    Thread.sleep(1000);*/
-                    break;
-                case "mo":
-                    /*
-                    JSONObject jmocha=new JSONObject();
-                    String paramocha=jspara.getString("mocha");
-                    float mochaprice=mmocha.getMcPrice(paramocha.toUpperCase());//转大写
-                    jmocha.put(paramocha,mochaprice);
-                    AppointSending(name,jmocha.toString());
-                    Thread.sleep(1000);*/
-                    break;
-                case "bi":
-                    /*
-                    JSONObject jbian=new JSONObject();
-                    String parabian=jspara.getString("bian");
-                    float bianprice=mmocha.getMcPrice(parabian.toUpperCase());//转大写
-                    jbian.put(parabian,bianprice);
-                    AppointSending(name,jbian.toString());
-                    Thread.sleep(1000);*/
-                    break;
-                default:
-                    break;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            //报错之后重新连接websocket
-           // webSocketSet.put(this.name,this);
-        }
-
         //判断是否需要指定发送，具体规则自定义
 
 //        if(message.indexOf("TOUSER") == 0){
@@ -280,10 +233,12 @@ public class OnWebSocket {
      */
     public void AppointSending(String name,String message){
         try {
+           // if (this.session.isOpen())
             webSocketSet.get(name).session.getBasicRemote().sendText(message);
         }catch (IOException e){
             //e.printStackTrace();
-            logger.info(name+"退出通信");
+            //webSocketSet.put(this.name,this);
+           // logger.info(name+"退出通信");
 
         }
     }

@@ -9,9 +9,23 @@
 </head>
 <body>
 <script type="text/javascript">
+    function socket_send_cmd(socket, cmd, params) {
+        if (!params)
+            params = [];
+        var msg = {
+            id:6689915,
+            method:cmd,
+            params:params
+        };
+        websocketbter.send(JSON.stringify(msg));
+    }
+</script>
+<script type="text/javascript">
     if ('WebSocket' in window) {
         websockethb = new WebSocket("ws://localhost:8080/test/hb");
         websocketok = new WebSocket("ws://localhost:8080/test/ok");
+        //websocketbt = new WebSocket("ws://localhost:8080/test/bt");
+        websocketbter = new WebSocket('wss://webws.gateio.live/v3/?v=411018');
         //websockethb1 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb2 = new WebSocket("ws://localhost:8080/test/hb");
        // websockethb3 = new WebSocket("ws://localhost:8080/test/hb");
@@ -24,7 +38,14 @@
         setMessageInnerHTML("error");
     };
 
+    websocketbter.onmessage=function (event) {
+        //console.log('Server: ' + event.data);
+    }
     //连接成功建立的回调方法
+    websocketbter.onopen=function (event) {
+        setInterval(socket_send_cmd(websocketbter, 'depth.query', ["EOS_USDT", 5, "0.0001"]),10*1000);
+
+    }
     websockethb.onopen = function(event) {
         //setMessageInnerHTML("open");
     }
@@ -36,30 +57,38 @@
     function closeWebSocket() {
         websockethb.close();
         websocketok.close();
+        websocketbter.close();
     }
     window.onbeforeunload = function() {
-        closeallsocket();
+        closeWebSocket();
 
     }
 
 
     //发送消息
+    function heartbeat() {
+        websockethb.send('ping');
+        websocketok.send('ping');
+       // websocketbt.send('ping');
+    }
     function send() {
        // var message = document.getElementById('text').value;
-        setTimeout(websockethb.send('{sub:hbstart}'),1);
-        setTimeout(websocketok.send('{op:okstart}'),1);
+       // setTimeout(websockethb.send('ping'),1000);
+       // setTimeout(websocketok.send('ping'),1000);
+        setInterval("heartbeat()",10*1000)
+        //setInterval('test()',1000)
     }
     websockethb.onmessage=function(event)
     {
         //locateposition('hb',event.data);
-        setMessageInnerHTML("hb");
+        //setMessageInnerHTML("hb");
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
     }
     websocketok.onmessage=function(event)
     {
         //locateposition('hb',event.data);
-        setMessageInnerHTMLok("ok");
+        //setMessageInnerHTMLok("ok");
         //接收消息之后发送另外一个消息跟后台
         //判断是否执行完毕火币列表
     }
@@ -72,7 +101,8 @@
 </script>
 <script type="text/javascript">
     $(document).ready ( function(){
-       // send();
+        //send();
+        //setInterval(socket_send_cmd(websocketbter,'depth.query',["BTC_USDT",5,"0.001"]),100)
     });
 </script>
 <div style="float: left ;width: 100px" id="message"></div>
