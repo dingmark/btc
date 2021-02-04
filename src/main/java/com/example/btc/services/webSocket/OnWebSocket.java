@@ -134,22 +134,29 @@ public class OnWebSocket {
                     break;
                 case "bt":
                     List<String> reqparambt = urlPara.getHbpara();
-                    Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+                    //Object[] channelbt = {"BTC_USDT",5,"0.0001"};
+                    List<Object> channelbts=new ArrayList<>();
                     reqparambt.stream().forEach(e ->
                     {
+                        Object[] channelbt=new Object[3];
                         channelbt[0]=e.toUpperCase()+"_USDT";
-                    });
+                        channelbt[1]=5;
+                        channelbt[2]="0";
 
+                        channelbts.add(channelbt);
+                    });
+                    btWssMarketHandle.sub(channelbts,response ->
+                    {
+                        AppointSending(name, response.toString());
+                    });
+                    Thread.sleep(Integer.MAX_VALUE);
                     final Runnable runnable = new Runnable( ) {
                         //String time = new Date().toString();
                         Object[] channelbt = {"BTC_USDT",5,"0.0001"};
                         @SneakyThrows
                         @Override
                         public void run() {;
-                            btWssMarketHandle.sub(channelbt,response ->
-                            {
-                                AppointSending(name, response.toString());
-                            });
+
                         }
                     };
                     final ScheduledExecutorService service = Executors
@@ -157,6 +164,8 @@ public class OnWebSocket {
                     // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
                      service.scheduleAtFixedRate(runnable, 1, 5000, TimeUnit.MILLISECONDS);
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + type);
             }
         }
         catch (InterruptedException| URISyntaxException e)

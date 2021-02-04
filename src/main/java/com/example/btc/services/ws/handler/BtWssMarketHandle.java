@@ -39,12 +39,12 @@ public class BtWssMarketHandle implements Cloneable{
         this.pushUrl = pushUrl;
     }
 
-    public void sub(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    public void sub(List<Object> channel, SubscriptionListener<String> callback) throws URISyntaxException {
         doConnect(channel, callback);
     }
 
 
-    private void doConnect(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    private void doConnect(List<Object> channel, SubscriptionListener<String> callback) throws URISyntaxException {
 
 
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
@@ -61,7 +61,7 @@ public class BtWssMarketHandle implements Cloneable{
             @Override
             public void onMessage(String s) {
                 callback.onReceive(s);
-                webSocketClient.close();
+                //webSocketClient.close();
                 logger.debug("onMessage:{}", s);
             }
             @Override
@@ -110,10 +110,10 @@ public class BtWssMarketHandle implements Cloneable{
     {
       return    webSocketClient.getSocket().isConnected();
     }
-    private void doSub(Object[] channel) {
+    private void doSub(List<Object> channel) {
             JSONObject sub = new JSONObject();
             sub.put("id",6689915);
-            sub.put("method","depth.query");
+            sub.put("method","depth.subscribe");
             sub.put("params",channel);
             webSocketClient.send(sub.toString());
     }

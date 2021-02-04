@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -57,8 +56,7 @@ public class WssMarketHandle implements Cloneable{
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
-               // dealReconnect();
-
+                dealReconnect();
             }
 
 
@@ -82,8 +80,8 @@ public class WssMarketHandle implements Cloneable{
                         if (ping != null) {
                             dealPing();
                         }
-                    } catch (Exception e ) {
-                        logger.error("火币交易onMessage异常", e);
+                    } catch (Throwable e) {
+                        logger.error("onMessage异常", e);
                     }
                 });
             }
@@ -109,10 +107,7 @@ public class WssMarketHandle implements Cloneable{
         webSocketClient.close();
     }
 
-    public boolean isConnect()
-    {
-      return    webSocketClient.getSocket().isConnected();
-    }
+
     private void doSub(List<String> channels) {
         channels.stream().forEach(e -> {
             JSONObject sub = new JSONObject();
@@ -145,7 +140,6 @@ public class WssMarketHandle implements Cloneable{
                         if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) || System.currentTimeMillis() - lastPingTime > 10 * 1000) {
                             logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
                             Boolean reconnectResult = webSocketClient.reconnectBlocking();
-
                             logger.error("重连的结果为：{}", reconnectResult);
                             if (!reconnectResult) {
                                 webSocketClient.closeBlocking();

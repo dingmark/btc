@@ -40,8 +40,8 @@ public class WssMarketReqHandle {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
-                //dealReconnect();
-                //dealPing();
+               // dealReconnect();
+               // dealPing();
             }
 
 
