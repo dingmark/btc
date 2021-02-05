@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,12 +40,12 @@ public class BtWssMarketHandle implements Cloneable{
         this.pushUrl = pushUrl;
     }
 
-    public void sub(List<Object> channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    public void sub(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
         doConnect(channel, callback);
     }
 
 
-    private void doConnect(List<Object> channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    private void doConnect(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
 
 
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
@@ -53,6 +54,21 @@ public class BtWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channel);
                // dealReconnect();
+                final Runnable runnable = new Runnable() {
+                    String time = new Date().toString();
+                    @Override
+                    public void run() {
+                        // task to run goes here
+                        JSONObject subjs = new JSONObject();
+                        subjs.put("id",5644440);
+                        subjs.put("method","server.ping");
+                        subjs.put("params",channel);
+                        webSocketClient.send(subjs.toString());
+                    }
+                };
+                final ScheduledExecutorService service = Executors
+                        .newSingleThreadScheduledExecutor();
+                service.scheduleAtFixedRate(runnable, 1, 10, TimeUnit.SECONDS);
 
             }
 
@@ -60,9 +76,12 @@ public class BtWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                callback.onReceive(s);
                 //webSocketClient.close();
-                logger.debug("onMessage:{}", s);
+                JSONObject js=JSONObject.parseObject(s);
+                if(s.indexOf("pong")==-1) {
+                    logger.info("onMessage:{}", s);
+                    callback.onReceive(s);
+                }
             }
             @Override
             public void onMessage(ByteBuffer bytes) {
@@ -80,19 +99,21 @@ public class BtWssMarketHandle implements Cloneable{
                             dealPing();
                         }
                     } catch (Exception e ) {
-                        logger.error("火币交易onMessage异常", e);
+                        logger.error("比特儿交易onMessage异常", e);
                     }
                 });
             }
 
             @Override
             public void onClose(int i, String s, boolean b) {
+
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
             @Override
             public void onError(Exception e) {
-                logger.error("onError:", e);
+
+               // logger.error("onError:", e);
             }
         };
 
@@ -110,12 +131,12 @@ public class BtWssMarketHandle implements Cloneable{
     {
       return    webSocketClient.getSocket().isConnected();
     }
-    private void doSub(List<Object> channel) {
-            JSONObject sub = new JSONObject();
-            sub.put("id",6689915);
-            sub.put("method","depth.subscribe");
-            sub.put("params",channel);
-            webSocketClient.send(sub.toString());
+    private void doSub(Object[] channel) {
+                JSONObject sub = new JSONObject();
+                sub.put("id",6689915);
+                sub.put("method","depth.subscribe");
+                sub.put("params",channel);
+                webSocketClient.send(sub.toString());
     }
 
 
@@ -136,7 +157,6 @@ public class BtWssMarketHandle implements Cloneable{
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) || System.currentTimeMillis() - lastPingTime > 10 * 1000) {
                             logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
