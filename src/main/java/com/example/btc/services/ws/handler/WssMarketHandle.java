@@ -3,6 +3,7 @@ package com.example.btc.services.ws.handler;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import lombok.SneakyThrows;
 import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -32,7 +33,7 @@ public class WssMarketHandle implements Cloneable{
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
-
+    private int trytime=0;
 
     public WssMarketHandle() {
 
@@ -56,6 +57,7 @@ public class WssMarketHandle implements Cloneable{
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
+                //禁止火币交易重连3次退出
                 dealReconnect();
             }
 
@@ -87,7 +89,8 @@ public class WssMarketHandle implements Cloneable{
             }
 
             @Override
-            public void onClose(int i, String s, boolean b) {
+            public void onClose(int i, String s, boolean b)
+            {
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -102,9 +105,14 @@ public class WssMarketHandle implements Cloneable{
     }
 
 
-    public void close() {
+    public void close() throws InterruptedException {
         //webSocketClient.connect();
         webSocketClient.close();
+        scheduledExecutorService.shutdown();
+        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
+            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
+            scheduledExecutorService.shutdownNow();
+        }
     }
 
 
@@ -135,7 +143,6 @@ public class WssMarketHandle implements Cloneable{
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) || System.currentTimeMillis() - lastPingTime > 10 * 1000) {
                             logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());

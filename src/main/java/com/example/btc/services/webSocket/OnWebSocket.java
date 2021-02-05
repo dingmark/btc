@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.unbescape.css.CssIdentifierEscapeLevel;
 
 import javax.annotation.PostConstruct;
 import javax.websocket.OnClose;
@@ -64,11 +65,9 @@ public class OnWebSocket {
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
-    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
-    OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(okurl);
     private  String bturl="wss://webws.gateio.live/v3/?v=647320";
-    BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
+
 
    // List<String> reqparams=urlPara.getHbpara();
     /**
@@ -109,11 +108,16 @@ public class OnWebSocket {
                         String parado = "market." + para + "usdt.depth.step0";
                         channels.add(parado);
                     }
+                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+
                     wssMarketHandle.sub(channels, response -> {
                         logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
                         long endTime = System.currentTimeMillis();
-                        if(this.session.isOpen())
-                        AppointSending(name, response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        } else {
+                            wssMarketHandle.close();
+                        }
                     });
                     Thread.sleep(Integer.MAX_VALUE);
                     break;
@@ -124,11 +128,16 @@ public class OnWebSocket {
                         String parado = "spot/depth5:" + para.toUpperCase() + "-USDT";
                         channelok.add(parado);
                     }
-                    OkwssMarketHandle.sub(channelok, response -> {
+                    OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl);
+                    okwssMarketHandle.sub(channelok, response -> {
                         logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
                         long endTime = System.currentTimeMillis();
-                        if(this.session.isOpen())
-                        AppointSending(name, response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                        else {
+                            okwssMarketHandle.close();
+                        }
                     });
                     Thread.sleep(Integer.MAX_VALUE);
                     break;
@@ -136,33 +145,27 @@ public class OnWebSocket {
                     List<String> reqparambt = urlPara.getHbpara();
                     //Object[] channelbt = {"BTC_USDT",5,"0.0001"};
                     List<Object> channelbts=new ArrayList<>();
-                    reqparambt.stream().forEach(e ->
+                    for (String e:reqparambt)
                     {
                         Object[] channelbt=new Object[3];
                         channelbt[0]=e.toUpperCase()+"_USDT";
                         channelbt[1]=5;
                         channelbt[2]="0";
+                        //channelbts.add(channelbt);
+                        BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
+                        btWssMarketHandle.sub(channelbt,response ->
+                        {
+                            if(this.session.isOpen()) {
+                                AppointSending(name, response.toString());
+                            }
+                            else
+                            {
+                                btWssMarketHandle.close();
+                            }
+                        });
+                    }
+                        Thread.sleep(Integer.MAX_VALUE);
 
-                        channelbts.add(channelbt);
-                    });
-                    btWssMarketHandle.sub(channelbts,response ->
-                    {
-                        AppointSending(name, response.toString());
-                    });
-                    Thread.sleep(Integer.MAX_VALUE);
-                    final Runnable runnable = new Runnable( ) {
-                        //String time = new Date().toString();
-                        Object[] channelbt = {"BTC_USDT",5,"0.0001"};
-                        @SneakyThrows
-                        @Override
-                        public void run() {;
-
-                        }
-                    };
-                    final ScheduledExecutorService service = Executors
-                            .newSingleThreadScheduledExecutor();
-                    // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
-                     service.scheduleAtFixedRate(runnable, 1, 5000, TimeUnit.MILLISECONDS);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + type);
@@ -180,10 +183,10 @@ public class OnWebSocket {
         switch (type)
         {
             case"hb":
-                wssMarketHandle.close();
+                //wssMarketHandle.close();
                 break;
             case "ok":
-                OkwssMarketHandle.close();
+                //OkwssMarketHandle.close();
                 break;
 
         }
@@ -192,7 +195,7 @@ public class OnWebSocket {
     }
 
     @OnMessage
-    public void OnMessage(String message)  {
+    public void OnMessage(String message) throws InterruptedException {
         log.info("[WebSocket] 收到消息：{}",message);
       //接收心跳
         String type=name.substring(0,2);
@@ -244,15 +247,15 @@ public class OnWebSocket {
      * @param name
      * @param message
      */
-    public void AppointSending(String name,String message){
+    public void AppointSending(String name,String message) throws InterruptedException {
+        // if (this.session.isOpen())
         try {
-           // if (this.session.isOpen())
+            Thread.sleep(150);
             webSocketSet.get(name).session.getBasicRemote().sendText(message);
-        }catch (IOException e){
-            //e.printStackTrace();
-            //webSocketSet.put(this.name,this);
-           // logger.info(name+"退出通信");
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
     }
 }

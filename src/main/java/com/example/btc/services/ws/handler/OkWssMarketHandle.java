@@ -58,7 +58,7 @@ public class OkWssMarketHandle implements Cloneable{
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
-                //dealReconnect();
+                dealReconnect();
                 //连接成功后，设置定时器，每隔25，自动向服务器发送心跳，保持与服务器连接
                 final Runnable runnable = new Runnable() {
                     String time = new Date().toString();
@@ -117,9 +117,14 @@ public class OkWssMarketHandle implements Cloneable{
     {
        return webSocketClient.getSocket().isConnected();
     }
-    public void close() {
+    public void close() throws InterruptedException {
         //webSocketClient.connect();
         webSocketClient.close();
+        scheduledExecutorService.shutdown();
+        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
+            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
+            scheduledExecutorService.shutdownNow();
+        }
     }
 
 
@@ -153,24 +158,9 @@ public class OkWssMarketHandle implements Cloneable{
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-
-                    try {
-                        if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) || System.currentTimeMillis() - lastPingTime > 10 * 1000) {
-                            logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
-                            Boolean reconnectResult = webSocketClient.reconnectBlocking();
-                            logger.error("重连的结果为：{}", reconnectResult);
-                            if (!reconnectResult) {
-                                webSocketClient.closeBlocking();
-                                logger.error("closeBlocking");
-                            }
-
-                        }
-                    } catch (Throwable e) {
-                        logger.error("OK交易所dealReconnect异常", e);
-                    }
-
+                    sub("ping");
                 }
-            }, 60, 10, TimeUnit.SECONDS);
+            }, 25, 25, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
