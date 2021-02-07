@@ -27,7 +27,7 @@ public class WssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -109,9 +109,12 @@ public class WssMarketHandle implements Cloneable{
         //webSocketClient.connect();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
+        scheduledExecutorService.shutdownNow();
+        logger.info("火币关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
             scheduledExecutorService.shutdownNow();
+            logger.info("火币关闭线程");
         }
     }
 
