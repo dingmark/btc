@@ -27,7 +27,7 @@ public class WssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(10);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
