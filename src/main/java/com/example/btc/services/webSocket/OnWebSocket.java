@@ -8,10 +8,7 @@ import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
-import com.example.btc.services.ws.handler.BnWssMarketHandle;
-import com.example.btc.services.ws.handler.BtWssMarketHandle;
-import com.example.btc.services.ws.handler.OkWssMarketHandle;
-import com.example.btc.services.ws.handler.WssMarketHandle;
+import com.example.btc.services.ws.handler.*;
 import com.example.btc.services.ws.hb.Hbprice;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -51,12 +48,15 @@ public class OnWebSocket {
     private  static  OkPrice okPrice;
     private  static bter mbter;
     private static mocha mmocha;
+    private static List<String> reqparams=new ArrayList<>();
     @Autowired
     public void setRepository(Hbprice hb) {
         OnWebSocket.hb = hb;
     }
     @Autowired
-    public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;}
+    public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;
+        reqparams=urlPara.getHbpara();
+    }
     @Autowired
     public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
     @Autowired
@@ -69,6 +69,8 @@ public class OnWebSocket {
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
     private  String bturl="wss://webws.gateio.live/v3/?v=647320";
     private  String bnurl="wss://stream.yshyqxx.com/stream";
+    private  String mcurl="wss://contract.mxc.me/ws";
+    private  String zburl="wss://api.zb.center/websocket/";
 
    // List<String> reqparams=urlPara.getHbpara();
     /**
@@ -103,7 +105,7 @@ public class OnWebSocket {
         try {
             switch (type) {
                 case "hb":
-                    List<String> reqparams = urlPara.getHbpara();
+                 //   List<String> reqparams = urlPara.getHbpara();
                     List<String> channels = new ArrayList<>();
                     for (String para : reqparams) {
                         String parado = "market." + para + "usdt.depth.step0";
@@ -115,16 +117,14 @@ public class OnWebSocket {
                         long endTime = System.currentTimeMillis();
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
-                        } else {
-                            wssMarketHandle.close();
                         }
                     });
-                    Thread.sleep(25000);
+                    Thread.sleep(60000);
                     break;
                 case "ok":
-                    List<String> reqparamok = urlPara.getHbpara();
+                   // List<String> reqparamok = urlPara.getHbpara();
                     List<String> channelok = new ArrayList<>();
-                    for (String para : reqparamok) {
+                    for (String para : reqparams) {
                         String parado = "spot/depth5:" + para.toUpperCase() + "-USDT";
                         channelok.add(parado);
                     }
@@ -135,17 +135,14 @@ public class OnWebSocket {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
-                        else {
-                            okwssMarketHandle.close();
-                        }
                     });
-                    Thread.sleep(25000);
+                    Thread.sleep(60000);
                     break;
                 case "bt":
-                    List<String> reqparambt = urlPara.getHbpara();
+                  //  List<String> reqparambt = urlPara.getHbpara();
                     //Object[] channelbt = {"BTC_USDT",5,"0.0001"};
                     List<Object> channelbts=new ArrayList<>();
-                    for (String e:reqparambt)
+                    for (String e:reqparams)
                     {
                         Object[] channelbt=new Object[3];
                         channelbt[0]=e.toUpperCase()+"_USDT";
@@ -158,19 +155,15 @@ public class OnWebSocket {
                             if(this.session.isOpen()) {
                                 AppointSending(name, response.toString());
                             }
-                            else
-                            {
-                                btWssMarketHandle.close();
-                            }
                         });
                     }
-                        Thread.sleep(25000);
+                        Thread.sleep(60000);
                     break;
                 case "bn":
-                    List<String> reqparambn = urlPara.getHbpara();
+                  //  List<String> reqparambn = urlPara.getHbpara();
                     //btcusdt@depth
                     List<String> params=new ArrayList<>();
-                    for (String e:reqparambn)
+                    for (String e:reqparams)
                     {
                         String str=e+"usdt@depth";
                         params.add(str);
@@ -181,12 +174,28 @@ public class OnWebSocket {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
-                        else
-                        {
-                            bnWssMarketHandle.close();
+                    });
+                    Thread.sleep(60000);
+                    break;
+                case "mc":
+                    McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl);
+                    mcWssMarketHandle.sub(reqparams,response->{
+                        //logger.info(response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(25000);
+                    Thread.sleep(60000);
+                    break;
+                case "zb":
+                    ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl);
+                    zbWssMarketHandle.sub(reqparams,response->{
+                        //logger.info(response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    Thread.sleep(60000);
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + type);
@@ -275,7 +284,7 @@ public class OnWebSocket {
             webSocketSet.get(name).session.getBasicRemote().sendText(message);
         } catch (IllegalStateException|IOException e) {
            // e.printStackTrace();
-            logger.info("发送报错");
+          //  logger.info("发送报错");
         }
 
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);

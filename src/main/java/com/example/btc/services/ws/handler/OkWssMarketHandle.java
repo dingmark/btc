@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import lombok.SneakyThrows;
 import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -59,19 +60,7 @@ public class OkWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channels);
                 dealReconnect();
-                //连接成功后，设置定时器，每隔25，自动向服务器发送心跳，保持与服务器连接
-                final Runnable runnable = new Runnable() {
-                    String time = new Date().toString();
-                    @Override
-                    public void run() {
-                        // task to run goes here
-                        sub("ping");
-                    }
-                };
-                final ScheduledExecutorService service = Executors
-                        .newSingleThreadScheduledExecutor();
-                // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间
-               // service.scheduleAtFixedRate(runnable, 25, 25, TimeUnit.SECONDS);
+                doClose();
             }
 
 
@@ -168,7 +157,20 @@ public class OkWssMarketHandle implements Cloneable{
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
-
+    }
+    private void doClose() {
+        try {
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    //每隔35秒销毁
+                    close();
+                }
+            }, 60, 60, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
+        }
     }
     //ok解压函数
     private static String uncompress(final byte[] bytes) {

@@ -52,16 +52,7 @@ public class BtWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channel);
                 dealReconnect();
-                final Runnable runnable = new Runnable() {
-                    //String time = new Date().toString();
-                    @Override
-                    public void  run()
-                    {}
-                };
-                final ScheduledExecutorService service = Executors
-                        .newSingleThreadScheduledExecutor();
-               // service.scheduleAtFixedRate(runnable, 1, 10, TimeUnit.SECONDS);
-
+                doClose();
             }
 
 
@@ -171,5 +162,18 @@ public class BtWssMarketHandle implements Cloneable{
 
     }
 
-
+    private void doClose() {
+        try {
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    //每隔35秒销毁
+                    close();
+                }
+            }, 60, 60, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
+        }
+    }
 }

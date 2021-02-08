@@ -1,18 +1,15 @@
 package com.example.btc.services.ws.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
 import lombok.SneakyThrows;
-import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -23,7 +20,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class WssMarketHandle implements Cloneable{
+public class McWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
@@ -35,11 +32,11 @@ public class WssMarketHandle implements Cloneable{
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
 
-    public WssMarketHandle() {
+    public McWssMarketHandle() {
 
     }
 
-    public WssMarketHandle(String pushUrl) {
+    public McWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
@@ -49,23 +46,21 @@ public class WssMarketHandle implements Cloneable{
 
 
     private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
-
-
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
-
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+                //定时关闭
                 doClose();
             }
-
-
+            @SneakyThrows
             @Override
             public void onMessage(String s) {
-                logger.debug("onMessage:{}", s);
+                //logger.info("onMessage:{}", s);
+                callback.onReceive(s);
             }
 
             @Override
@@ -111,22 +106,31 @@ public class WssMarketHandle implements Cloneable{
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
-        logger.info("火币关闭线程");
+        logger.info("抹茶关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
             scheduledExecutorService.shutdownNow();
-            logger.info("火币关闭线程");
+            logger.info("抹茶关闭线程");
         }
     }
 
 
     private void doSub(List<String> channels) {
-        channels.stream().forEach(e -> {
-            JSONObject sub = new JSONObject();
-            sub.put("sub", e);
+        //{  "method":"sub.depth.full","param":{"symbol":"ETH_USDT","limit":5}} 抹茶格式
+        //{"method":"sub.depth.full","param":{"symbol":"ETH_USDT","limit":5}}
+         channels.stream().forEach(e ->{
+             JSONObject sub = new JSONObject();
+             JSONObject params=new JSONObject();
+             params.put("symbol",e.toUpperCase()+"_USDT");
+             params.put("limit",5);
+             sub.put("param",params);
+             sub.put("method", "sub.depth.full");
+             webSocketClient.send(sub.toString());
+            });
+
             //sub.put("id","id7");
-            webSocketClient.send(sub.toString());
-        });
+
+
     }
 
 
@@ -143,27 +147,16 @@ public class WssMarketHandle implements Cloneable{
 
 
     private void dealReconnect() {
+        //int i=1;
         try {
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) || System.currentTimeMillis() - lastPingTime > 10 * 1000) {
-                            logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
-                            Boolean reconnectResult = webSocketClient.reconnectBlocking();
-                            logger.error("重连的结果为：{}", reconnectResult);
-                            if (!reconnectResult) {
-                                webSocketClient.closeBlocking();
-                                logger.error("closeBlocking");
-                            }
-
-                        }
-                    } catch (Throwable e) {
-                        logger.error("dealReconnect异常", e);
-                    }
-
+                    JSONObject sub=new JSONObject();
+                    sub.put("method","ping");
+                    webSocketClient.send(sub.toString());
                 }
-            }, 60, 10, TimeUnit.SECONDS);
+            }, 30, 30, TimeUnit.SECONDS);//抹茶每隔60秒心跳测试这里设置30
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
@@ -180,7 +173,7 @@ public class WssMarketHandle implements Cloneable{
                 }
             }, 60, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
-            logger.error("dealReconnect scheduledExecutorService异常", e);
+            logger.error("close scheduledExecutorService异常", e);
         }
     }
 

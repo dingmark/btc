@@ -54,6 +54,7 @@ public class BnWssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+                doClose();
             }
             @SneakyThrows
             @Override
@@ -86,6 +87,7 @@ public class BnWssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
+
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -103,8 +105,11 @@ public class BnWssMarketHandle implements Cloneable{
     public void close() throws InterruptedException {
         //webSocketClient.connect();
         webSocketClient.close();
+
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+
+
         logger.info("币安关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
@@ -164,6 +169,21 @@ public class BnWssMarketHandle implements Cloneable{
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
 
+    }
+
+    private void doClose() {
+        try {
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @SneakyThrows
+                @Override
+                public void run() {
+                    //每隔35秒销毁
+                    close();
+                }
+            }, 60, 60, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
+        }
     }
 
 }
