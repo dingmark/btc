@@ -22,9 +22,10 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BnWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
-
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
+    //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
+             //scheduledExecutorService.allowCoreThreadTimeOut(true);
+    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
@@ -54,6 +55,7 @@ public class BnWssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+               // dealPing();
                 doClose();
             }
             @SneakyThrows
@@ -65,29 +67,11 @@ public class BnWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
-                    } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
-                    }
-                });
             }
 
             @Override
             public void onClose(int i, String s, boolean b)
             {
-
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -105,11 +89,8 @@ public class BnWssMarketHandle implements Cloneable{
     public void close() throws InterruptedException {
         //webSocketClient.connect();
         webSocketClient.close();
-
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
-
-
         logger.info("币安关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
@@ -117,7 +98,6 @@ public class BnWssMarketHandle implements Cloneable{
             logger.info("币安关闭线程");
         }
     }
-
 
     private void doSub(List<String> channels) {
         //{"method":"SUBSCRIBE","params":["btcusdt@depth","ethusdt@depth"],"id":4}
@@ -129,8 +109,6 @@ public class BnWssMarketHandle implements Cloneable{
             webSocketClient.send(sub.toString());
 
     }
-
-
     private void dealPing() {
         try {
             JSONObject jsonMessage = new JSONObject();
@@ -157,7 +135,6 @@ public class BnWssMarketHandle implements Cloneable{
                                 webSocketClient.closeBlocking();
                                 logger.error("closeBlocking");
                             }
-
                         }
                     } catch (Throwable e) {
                         logger.error("dealReconnect异常", e);

@@ -61,8 +61,6 @@ public class WssMarketHandle implements Cloneable{
                 dealReconnect();
                 doClose();
             }
-
-
             @Override
             public void onMessage(String s) {
                 logger.debug("onMessage:{}", s);
@@ -156,7 +154,6 @@ public class WssMarketHandle implements Cloneable{
                                 webSocketClient.closeBlocking();
                                 logger.error("closeBlocking");
                             }
-
                         }
                     } catch (Throwable e) {
                         logger.error("dealReconnect异常", e);
@@ -167,7 +164,6 @@ public class WssMarketHandle implements Cloneable{
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
-
     }
     private void doClose() {
         try {

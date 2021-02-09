@@ -54,6 +54,7 @@ public class ZbWssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+                dealPing();
                 doClose();
             }
             @SneakyThrows
@@ -130,12 +131,21 @@ public class ZbWssMarketHandle implements Cloneable{
 
     private void dealPing() {
         try {
-            JSONObject jsonMessage = new JSONObject();
-            jsonMessage.put("pong", pong.incrementAndGet());
-            logger.debug("发送pong:{}", jsonMessage.toString());
-            webSocketClient.send(jsonMessage.toString());
-        } catch (Throwable t) {
-            logger.error("dealPing出现了异常");
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    //{"channel":"ping","event":"addChannel","binary":true,"isZip":true}
+                    // task to run goes here
+                    JSONObject subjs = new JSONObject();
+                    subjs.put("channel","ping");
+                    subjs.put("event","addChannel");
+                    subjs.put("binary",true);
+                    subjs.put("isZip",true);
+                    webSocketClient.send(subjs.toString());
+                }
+            }, 10, 10, TimeUnit.SECONDS);//比特儿10秒一次心跳
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
         }
     }
 

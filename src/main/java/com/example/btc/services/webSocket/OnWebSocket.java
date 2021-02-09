@@ -71,6 +71,7 @@ public class OnWebSocket {
     private  String bnurl="wss://stream.yshyqxx.com/stream";
     private  String mcurl="wss://contract.mxc.me/ws";
     private  String zburl="wss://api.zb.center/websocket/";
+    private  String bsurl="wss://api.aex.zone/wsv3";
 
    // List<String> reqparams=urlPara.getHbpara();
     /**
@@ -196,6 +197,14 @@ public class OnWebSocket {
                         }
                     });
                     Thread.sleep(60000);
+                case "bs":
+                    BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
+                    bsWssMarketHandle.sub(reqparams,response->{
+                      //  logger.info(response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + type);

@@ -23,15 +23,14 @@ import java.util.concurrent.atomic.AtomicLong;
 public class McWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
+    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
-    AtomicLong pong = new AtomicLong(0);
-    private Long lastPingTime = System.currentTimeMillis();
-    private int trytime=0;
-
+//    AtomicLong pong = new AtomicLong(0);
+//    private Long lastPingTime = System.currentTimeMillis();
+//    private int trytime=0;
     public McWssMarketHandle() {
 
     }
@@ -53,6 +52,8 @@ public class McWssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+                //心跳
+                dealPing();
                 //定时关闭
                 doClose();
             }
@@ -65,23 +66,6 @@ public class McWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
-                    } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
-                    }
-                });
             }
 
             @Override
@@ -117,7 +101,6 @@ public class McWssMarketHandle implements Cloneable{
 
     private void doSub(List<String> channels) {
         //{  "method":"sub.depth.full","param":{"symbol":"ETH_USDT","limit":5}} 抹茶格式
-        //{"method":"sub.depth.full","param":{"symbol":"ETH_USDT","limit":5}}
          channels.stream().forEach(e ->{
              JSONObject sub = new JSONObject();
              JSONObject params=new JSONObject();
@@ -127,27 +110,10 @@ public class McWssMarketHandle implements Cloneable{
              sub.put("method", "sub.depth.full");
              webSocketClient.send(sub.toString());
             });
-
-            //sub.put("id","id7");
-
-
     }
 
 
     private void dealPing() {
-        try {
-            JSONObject jsonMessage = new JSONObject();
-            jsonMessage.put("pong", pong.incrementAndGet());
-            logger.debug("发送pong:{}", jsonMessage.toString());
-            webSocketClient.send(jsonMessage.toString());
-        } catch (Throwable t) {
-            logger.error("dealPing出现了异常");
-        }
-    }
-
-
-    private void dealReconnect() {
-        //int i=1;
         try {
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
@@ -160,7 +126,32 @@ public class McWssMarketHandle implements Cloneable{
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
+    }
 
+
+    private void dealReconnect() {
+        try {
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if ((webSocketClient.isClosed() && !webSocketClient.isClosing())) {
+                            logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
+                            Boolean reconnectResult = webSocketClient.reconnectBlocking();
+                            logger.error("重连的结果为：{}", reconnectResult);
+                            if (!reconnectResult) {
+                                webSocketClient.closeBlocking();
+                                logger.error("closeBlocking");
+                            }
+                        }
+                    } catch (Throwable e) {
+                        logger.error("dealReconnect异常", e);
+                    }
+                }
+            }, 10, 10, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
+        }
     }
     private void doClose() {
         try {
@@ -168,7 +159,7 @@ public class McWssMarketHandle implements Cloneable{
                 @SneakyThrows
                 @Override
                 public void run() {
-                    //每隔35秒销毁
+                    //每隔60秒销毁
                     close();
                 }
             }, 60, 60, TimeUnit.SECONDS);

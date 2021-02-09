@@ -23,8 +23,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BtWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
+    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -52,10 +52,10 @@ public class BtWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channel);
                 dealReconnect();
+                //心跳
+                dealPing();
                 doClose();
             }
-
-
             @SneakyThrows
             @Override
             public void onMessage(String s) {
@@ -68,7 +68,7 @@ public class BtWssMarketHandle implements Cloneable{
             }
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
+               /* fixedThreadPool.execute(() -> {
                     try {
                         lastPingTime = System.currentTimeMillis();
                         String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
@@ -84,7 +84,7 @@ public class BtWssMarketHandle implements Cloneable{
                     } catch (Exception e ) {
                         logger.error("比特儿交易onMessage异常", e);
                     }
-                });
+                });*/
             }
 
             @Override
@@ -132,18 +132,6 @@ public class BtWssMarketHandle implements Cloneable{
 
     private void dealPing() {
         try {
-            JSONObject jsonMessage = new JSONObject();
-            jsonMessage.put("pong", pong.incrementAndGet());
-            logger.debug("发送pong:{}", jsonMessage.toString());
-            webSocketClient.send(jsonMessage.toString());
-        } catch (Throwable t) {
-            logger.error("dealPing出现了异常");
-        }
-    }
-
-
-    private void dealReconnect() {
-        try {
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -155,11 +143,36 @@ public class BtWssMarketHandle implements Cloneable{
                     subjs.put("params",channel);
                     webSocketClient.send(subjs.toString());
                 }
+            }, 10, 10, TimeUnit.SECONDS);//比特儿10秒一次心跳
+        } catch (Exception e) {
+            logger.error("dealReconnect scheduledExecutorService异常", e);
+        }
+    }
+
+
+    private void dealReconnect() {
+        try {
+            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if ((webSocketClient.isClosed() && !webSocketClient.isClosing())) {
+                            logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
+                            Boolean reconnectResult = webSocketClient.reconnectBlocking();
+                            logger.error("重连的结果为：{}", reconnectResult);
+                            if (!reconnectResult) {
+                                webSocketClient.closeBlocking();
+                                logger.error("closeBlocking");
+                            }
+                        }
+                    } catch (Throwable e) {
+                        logger.error("dealReconnect异常", e);
+                    }
+                }
             }, 10, 10, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
-
     }
 
     private void doClose() {
