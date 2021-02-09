@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -111,6 +112,8 @@ public class OkWssMarketHandle implements Cloneable{
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        fixedThreadPool.shutdown();
+        fixedThreadPool.shutdownNow();
         logger.info("OK关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
@@ -122,10 +125,18 @@ public class OkWssMarketHandle implements Cloneable{
 
     private void doSub(List<String> channels) {
 
-        final String s = listToJson(channels);
-        final String str = "{\"op\": \"subscribe\", \"args\":" + s + "}";
-        //  sub.put("id","id7");
-        webSocketClient.send(str);
+        // List<String> reqparamok = urlPara.getHbpara();
+        List<String> channelok = new ArrayList<>();
+        for (String para : channels) {
+            String parado = "spot/depth5:" + para.toUpperCase() + "-USDT";
+            channelok.add(parado);
+        }
+        final String s = listToJson(channelok);
+        JSONObject jspara=new JSONObject();
+        jspara.put("op","subscribe");
+        jspara.put("args",s);
+       // final String str = "{\"op\": \"subscribe\", \"args\":" + s + "}";
+        webSocketClient.send(jspara.toString());
     }
     private void sub(String message)
     {

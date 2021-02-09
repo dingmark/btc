@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +25,7 @@ public class BtWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -40,12 +41,12 @@ public class BtWssMarketHandle implements Cloneable{
         this.pushUrl = pushUrl;
     }
 
-    public void sub(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    public void sub(List<String> channel, SubscriptionListener<String> callback) throws URISyntaxException {
         doConnect(channel, callback);
     }
 
 
-    private void doConnect(Object[] channel, SubscriptionListener<String> callback) throws URISyntaxException {
+    private void doConnect(List<String> channel, SubscriptionListener<String> callback) throws URISyntaxException {
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
@@ -56,15 +57,21 @@ public class BtWssMarketHandle implements Cloneable{
                 dealPing();
                 doClose();
             }
-            @SneakyThrows
+
             @Override
             public void onMessage(String s) {
                 //webSocketClient.close();
-                JSONObject js=JSONObject.parseObject(s);
-                if(s.indexOf("pong")==-1) {
-                   // logger.info("onMessage:{}", s);
-                    callback.onReceive(s);
-                }
+                fixedThreadPool.execute(() -> {
+                   // JSONObject js = JSONObject.parseObject(s);
+                    if (s.indexOf("pong") == -1) {
+                        // logger.info("onMessage:{}", s);
+                        try {
+                            callback.onReceive(s);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
             @Override
             public void onMessage(ByteBuffer bytes) {
@@ -109,6 +116,8 @@ public class BtWssMarketHandle implements Cloneable{
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        fixedThreadPool.shutdown();
+        fixedThreadPool.shutdownNow();
         logger.info("比特儿关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
@@ -121,11 +130,21 @@ public class BtWssMarketHandle implements Cloneable{
     {
       return    webSocketClient.getSocket().isConnected();
     }
-    private void doSub(Object[] channel) {
+    private void doSub(List<String> channel) {
+        //{"method":"depth.subscribe","id":6689915,"params":[["ADA_USDT",5,"0"],["BTC_USDT",5,"0"]]}
                 JSONObject sub = new JSONObject();
                 sub.put("id",6689915);
                 sub.put("method","depth.subscribe");
-                sub.put("params",channel);
+                List<Object[]> channels=new ArrayList<>();
+                for(String s:channel)
+                {
+                    Object[] ob=new Object[3];
+                    ob[0]=s.toUpperCase()+"_USDT";
+                    ob[1]=5;
+                    ob[2]="0";
+                    channels.add(ob);
+                }
+                sub.put("params",channels);
                 webSocketClient.send(sub.toString());
     }
 

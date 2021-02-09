@@ -23,7 +23,7 @@ public class ZbWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+   // private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -66,7 +66,7 @@ public class ZbWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
+             /*   fixedThreadPool.execute(() -> {
                     try {
                         lastPingTime = System.currentTimeMillis();
                         String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
@@ -82,7 +82,7 @@ public class ZbWssMarketHandle implements Cloneable{
                     } catch (Throwable e) {
                         logger.error("onMessage异常", e);
                     }
-                });
+                });*/
             }
 
             @Override

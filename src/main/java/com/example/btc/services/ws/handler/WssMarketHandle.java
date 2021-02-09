@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -109,6 +110,9 @@ public class WssMarketHandle implements Cloneable{
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        fixedThreadPool.shutdown();
+        fixedThreadPool.shutdownNow();
+
         logger.info("火币关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
@@ -119,10 +123,10 @@ public class WssMarketHandle implements Cloneable{
 
 
     private void doSub(List<String> channels) {
+
         channels.stream().forEach(e -> {
             JSONObject sub = new JSONObject();
-            sub.put("sub", e);
-            //sub.put("id","id7");
+            sub.put("sub", "market." + e + "usdt.depth.step0");
             webSocketClient.send(sub.toString());
         });
     }

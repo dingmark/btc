@@ -67,7 +67,7 @@ public class OnWebSocket {
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
-    private  String bturl="wss://webws.gateio.live/v3/?v=647320";
+    private  String bturl="wss://ws.gateio.ws/v3/";//"wss://webws.gateio.live/v3/?v=647320";//wss://ws.gateio.ws/v3/
     private  String bnurl="wss://stream.yshyqxx.com/stream";
     private  String mcurl="wss://contract.mxc.me/ws";
     private  String zburl="wss://api.zb.center/websocket/";
@@ -106,14 +106,8 @@ public class OnWebSocket {
         try {
             switch (type) {
                 case "hb":
-                 //   List<String> reqparams = urlPara.getHbpara();
-                    List<String> channels = new ArrayList<>();
-                    for (String para : reqparams) {
-                        String parado = "market." + para + "usdt.depth.step0";
-                        channels.add(parado);
-                    }
                     WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
-                    wssMarketHandle.sub(channels, response -> {
+                    wssMarketHandle.sub(reqparams, response -> {
                         //logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
                         long endTime = System.currentTimeMillis();
                         if(this.session.isOpen()) {
@@ -123,14 +117,8 @@ public class OnWebSocket {
                     Thread.sleep(60000);
                     break;
                 case "ok":
-                   // List<String> reqparamok = urlPara.getHbpara();
-                    List<String> channelok = new ArrayList<>();
-                    for (String para : reqparams) {
-                        String parado = "spot/depth5:" + para.toUpperCase() + "-USDT";
-                        channelok.add(parado);
-                    }
                     OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl);
-                    okwssMarketHandle.sub(channelok, response -> {
+                    okwssMarketHandle.sub(reqparams, response -> {
                        // logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
                         long endTime = System.currentTimeMillis();
                         if(this.session.isOpen()) {
@@ -140,24 +128,13 @@ public class OnWebSocket {
                     Thread.sleep(60000);
                     break;
                 case "bt":
-                  //  List<String> reqparambt = urlPara.getHbpara();
-                    //Object[] channelbt = {"BTC_USDT",5,"0.0001"};
-                    List<Object> channelbts=new ArrayList<>();
-                    for (String e:reqparams)
-                    {
-                        Object[] channelbt=new Object[3];
-                        channelbt[0]=e.toUpperCase()+"_USDT";
-                        channelbt[1]=5;
-                        channelbt[2]="0";
-                        //channelbts.add(channelbt);
                         BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
-                        btWssMarketHandle.sub(channelbt,response ->
+                        btWssMarketHandle.sub(reqparams,response ->
                         {
                             if(this.session.isOpen()) {
                                 AppointSending(name, response.toString());
                             }
                         });
-                    }
                         Thread.sleep(60000);
                     break;
                 case "bn":
@@ -288,13 +265,16 @@ public class OnWebSocket {
      */
     public void AppointSending(String name,String message) throws InterruptedException {
         // if (this.session.isOpen())
-        try {
-            //Thread.sleep(1000);
-            webSocketSet.get(name).session.getBasicRemote().sendText(message);
-        } catch (IllegalStateException|IOException e) {
-           // e.printStackTrace();
-          //  logger.info("发送报错");
+        synchronized(this.session) {
+            try {
+                //Thread.sleep(1000);
+                webSocketSet.get(name).session.getBasicRemote().sendText(message);
+            } catch (IllegalStateException | IOException e) {
+                // e.printStackTrace();
+                logger.info("发送报错");
+            }
         }
+
 
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
     }
