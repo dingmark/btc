@@ -61,6 +61,7 @@ public class BsWssMarketHandle implements Cloneable{
             @Override
             public void onMessage(String s) {
                 //logger.info("onMessage:{}", s);
+               if(s.indexOf("pong")==-1)
                 callback.onReceive(s);
             }
 
@@ -116,18 +117,14 @@ public class BsWssMarketHandle implements Cloneable{
         sub.put("action", "sub");
         sub.put("cmd",3);
         webSocketClient.send(sub.toString());
-
-
     }
-
-
     private void dealPing() {
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 webSocketClient.send("ping");
             }
-        },20,20,TimeUnit.SECONDS);
+        },0,10,TimeUnit.SECONDS);
 
     }
 

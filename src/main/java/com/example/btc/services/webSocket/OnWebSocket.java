@@ -108,8 +108,6 @@ public class OnWebSocket {
                 case "hb":
                     WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
                     wssMarketHandle.sub(reqparams, response -> {
-                        //logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                        long endTime = System.currentTimeMillis();
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
@@ -119,8 +117,6 @@ public class OnWebSocket {
                 case "ok":
                     OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl);
                     okwssMarketHandle.sub(reqparams, response -> {
-                       // logger.info("detailEvent用户收到的数据===============:{}", JSON.toJSON(response));
-                        long endTime = System.currentTimeMillis();
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
@@ -138,17 +134,8 @@ public class OnWebSocket {
                         Thread.sleep(60000);
                     break;
                 case "bn":
-                  //  List<String> reqparambn = urlPara.getHbpara();
-                    //btcusdt@depth
-                    List<String> params=new ArrayList<>();
-                    for (String e:reqparams)
-                    {
-                        String str=e+"usdt@depth";
-                        params.add(str);
-                    }
                     BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl);
-                    bnWssMarketHandle.sub(params,response ->{
-                    //logger.info(response.toString());
+                    bnWssMarketHandle.sub(reqparams,response ->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
@@ -177,14 +164,13 @@ public class OnWebSocket {
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
                     bsWssMarketHandle.sub(reqparams,response->{
-                      //  logger.info(response.toString());
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
                     });
                     break;
                 default:
-                    throw new IllegalStateException("Unexpected value: " + type);
+                    break;
             }
         }
         catch (InterruptedException| URISyntaxException e)

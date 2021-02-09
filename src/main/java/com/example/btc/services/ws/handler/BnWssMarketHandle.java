@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -101,13 +102,18 @@ public class BnWssMarketHandle implements Cloneable{
 
     private void doSub(List<String> channels) {
         //{"method":"SUBSCRIBE","params":["btcusdt@depth","ethusdt@depth"],"id":4}
+            List<String> params=new ArrayList<>();
+            for (String e:channels)
+            {
+                String str=e+"usdt@depth";
+                params.add(str);
+            }
             JSONObject sub = new JSONObject();
             sub.put("id",4);
-            sub.put("params",channels);
+            sub.put("params",params);
             sub.put("method", "SUBSCRIBE");
             //sub.put("id","id7");
             webSocketClient.send(sub.toString());
-
     }
     private void dealPing() {
         try {

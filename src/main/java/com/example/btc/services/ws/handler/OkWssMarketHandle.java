@@ -124,7 +124,6 @@ public class OkWssMarketHandle implements Cloneable{
 
 
     private void doSub(List<String> channels) {
-
         // List<String> reqparamok = urlPara.getHbpara();
         List<String> channelok = new ArrayList<>();
         for (String para : channels) {
@@ -132,11 +131,12 @@ public class OkWssMarketHandle implements Cloneable{
             channelok.add(parado);
         }
         final String s = listToJson(channelok);
-        JSONObject jspara=new JSONObject();
-        jspara.put("op","subscribe");
-        jspara.put("args",s);
-       // final String str = "{\"op\": \"subscribe\", \"args\":" + s + "}";
-        webSocketClient.send(jspara.toString());
+        //JSONObject jspara=new JSONObject();
+        //jspara.put("op","subscribe");
+        //jspara.put("args",s);
+        //{"op": "subscribe", "args": ["spot/depth5:ETH-USDT","spot/depth5:BTC-USDT"]}
+        final String str = "{\"op\": \"subscribe\", \"args\":" + s + "}";
+        webSocketClient.send(str);
     }
     private void sub(String message)
     {
