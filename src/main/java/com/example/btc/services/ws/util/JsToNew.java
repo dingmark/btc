@@ -3,6 +3,8 @@ package com.example.btc.services.ws.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 public class JsToNew {
     public static JSONObject jstojs(String name,JSONArray js,
                                     String pricename,String mountname,
@@ -75,5 +77,11 @@ public class JsToNew {
         JSONObject jsresult=new JSONObject();
 
         return jsresult;
+    }
+    //参数转化
+    public static   String listToJson(final List<String> list) {
+        final JSONArray jsonArray = new JSONArray();
+        jsonArray.addAll(list);
+        return jsonArray.toJSONString();
     }
 }

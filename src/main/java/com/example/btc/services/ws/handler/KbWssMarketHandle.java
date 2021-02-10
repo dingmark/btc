@@ -2,7 +2,7 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
-import com.example.btc.services.ws.util.ZipUtil;
+import com.example.btc.services.ws.util.JsToNew;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -14,16 +14,15 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BnWssMarketHandle implements Cloneable{
+public class KbWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
     //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
              //scheduledExecutorService.allowCoreThreadTimeOut(true);
     //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
@@ -33,11 +32,11 @@ public class BnWssMarketHandle implements Cloneable{
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
 
-    public BnWssMarketHandle() {
+    public KbWssMarketHandle() {
 
     }
 
-    public BnWssMarketHandle(String pushUrl) {
+    public KbWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
@@ -47,8 +46,6 @@ public class BnWssMarketHandle implements Cloneable{
 
 
     private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
-
-
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
@@ -56,7 +53,7 @@ public class BnWssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
-               // dealPing();
+                dealPing();
                 doClose();
             }
             @SneakyThrows
@@ -66,8 +63,10 @@ public class BnWssMarketHandle implements Cloneable{
                 callback.onReceive(s);
             }
 
+            @SneakyThrows
             @Override
             public void onMessage(ByteBuffer bytes) {
+                callback.onReceive(bytes.toString());
             }
 
             @Override
@@ -92,38 +91,48 @@ public class BnWssMarketHandle implements Cloneable{
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
-        logger.info("币安关闭线程");
+        logger.info("库币关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
             // 超时的时候向线程池中所有的线程发出中断(interrupted)。
             scheduledExecutorService.shutdownNow();
-            logger.info("币安关闭线程");
+            logger.info("库币关闭线程");
         }
     }
 
     private void doSub(List<String> channels) {
-        //{"method":"SUBSCRIBE","params":["btcusdt@depth","ethusdt@depth"],"id":4}
-            List<String> params=new ArrayList<>();
-            for (String e:channels)
-            {
-                String str=e+"usdt@depth";
-                params.add(str);
-            }
-            JSONObject sub = new JSONObject();
-            sub.put("id",4);
-            sub.put("params",params);
-            sub.put("method", "SUBSCRIBE");
+        //42["bullet","{\"id\":\"_event__subscribe_z2jmuey8f_1612922846807\",\"type\":\"subscribe\",\"topic\":\"/market/level2web:BTC-USDT,ETH-USDT\",\"privateChannel\":false,\"response\":true}"]
+       // List<String> params=new ArrayList<>();
+        String str="";
+        for (String e:channels)
+        {
+             str +=e.toUpperCase()+"-USDT,";
+        }
+        str=str.substring(0,str.length()-1);
+        JSONObject sub = new JSONObject();
+        sub.put("id","_event__subscribe_z2jmuey8f_1612922846807");
+        sub.put("type","subscribe");
+        sub.put("topic", "/market/level2web:"+str);
+        sub.put("privateChannel",false);
+        sub.put("response",true);
+       // String[] finalestr=new String[2];
+        List<String> finalestr=new ArrayList<>();
+        finalestr.add("bullet");
+        finalestr.add(sub.toString());
             //sub.put("id","id7");
-            webSocketClient.send(sub.toString());
+            webSocketClient.send("42"+ JsToNew.listToJson(finalestr));
     }
     private void dealPing() {
-        try {
-            JSONObject jsonMessage = new JSONObject();
-            jsonMessage.put("pong", pong.incrementAndGet());
-            logger.debug("发送pong:{}", jsonMessage.toString());
-            webSocketClient.send(jsonMessage.toString());
-        } catch (Throwable t) {
-            logger.error("dealPing出现了异常");
-        }
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    webSocketClient.send("2");
+                } catch (Throwable t) {
+                    logger.error("dealPing出现了异常");
+                }
+            }
+        },0,40,TimeUnit.SECONDS);
+
     }
 
 

@@ -72,6 +72,8 @@ public class OnWebSocket {
     private  String mcurl="wss://contract.mxc.me/ws";
     private  String zburl="wss://api.zb.center/websocket/";
     private  String bsurl="wss://api.aex.zone/wsv3";
+    //库币前端socket地址
+    private  String kburl="wss://push-socketio.kucoin.cc/socket.io/?token=2neAiuYvAU5cbMXpmsXD5OJlewXCKryg8dSpDCgag8ZwbZpn3uIHi6siD_s132wYwoXOiOG0Q0GtkO7lJxgkJLlUcTB0YEwtDLb3Wn3QP70Gg-Y4I5btzKqRyqznCVt1whuoNZhpWWEsP1jUbPa-MVk_m4uS-u53.UQNVzzBGHR3T5IjiT0lrWA%3D%3D&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
 
    // List<String> reqparams=urlPara.getHbpara();
     /**
@@ -164,6 +166,14 @@ public class OnWebSocket {
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
                     bsWssMarketHandle.sub(reqparams,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    break;
+                case "kb":
+                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl);
+                    kbWssMarketHandle.sub(reqparams,response->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
