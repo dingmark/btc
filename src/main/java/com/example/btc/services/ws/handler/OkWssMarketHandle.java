@@ -90,6 +90,7 @@ public class OkWssMarketHandle implements Cloneable{
 
             @Override
             public void onClose(int i, String s, boolean b) {
+                close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 

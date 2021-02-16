@@ -3,6 +3,7 @@ package com.example.btc.services.ws.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsToNew {
@@ -84,4 +85,19 @@ public class JsToNew {
         jsonArray.addAll(list);
         return jsonArray.toJSONString();
     }
+    //object to list
+    public static <T> List<T> castList(Object obj, Class<T> clazz)
+    {
+        List<T> result = new ArrayList<T>();
+        if(obj instanceof List<?>)
+        {
+            for (Object o : (List<?>) obj)
+            {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
+    }
+
 }

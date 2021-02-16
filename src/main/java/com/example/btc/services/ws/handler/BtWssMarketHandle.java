@@ -96,6 +96,7 @@ public class BtWssMarketHandle implements Cloneable{
 
             @Override
             public void onClose(int i, String s, boolean b) {
+                close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -141,7 +142,7 @@ public class BtWssMarketHandle implements Cloneable{
                     Object[] ob=new Object[3];
                     ob[0]=s.toUpperCase()+"_USDT";
                     ob[1]=5;
-                    ob[2]="0";
+                    ob[2]="0.0001";
                     channels.add(ob);
                 }
                 sub.put("params",channels);

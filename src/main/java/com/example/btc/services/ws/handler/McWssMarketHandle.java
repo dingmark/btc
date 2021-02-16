@@ -71,6 +71,7 @@ public class McWssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
+                close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -110,6 +111,7 @@ public class McWssMarketHandle implements Cloneable{
              sub.put("method", "sub.depth.full");
              webSocketClient.send(sub.toString());
             });
+
     }
 
 

@@ -73,7 +73,7 @@ public class BsWssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
-
+                close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -110,6 +110,11 @@ public class BsWssMarketHandle implements Cloneable{
         for(String e:channels)
         {
             params +=e+"_usdt,";
+        }
+
+        for(String e:channels)
+        {
+            params +=e+"_eth,";
         }
         params=params.substring(0,params.length()-1);
         sub.put("symbol", params);

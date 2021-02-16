@@ -91,6 +91,7 @@ public class WssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
+                close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -129,6 +130,17 @@ public class WssMarketHandle implements Cloneable{
             sub.put("sub", "market." + e + "usdt.depth.step0");
             webSocketClient.send(sub.toString());
         });
+        channels.stream().forEach(e -> {
+            JSONObject sub = new JSONObject();
+            sub.put("sub", "market." + e + "btc.depth.step0");
+            webSocketClient.send(sub.toString());
+        });
+        channels.stream().forEach(e -> {
+            JSONObject sub = new JSONObject();
+            sub.put("sub", "market." + e + "eth.depth.step0");
+            webSocketClient.send(sub.toString());
+        });
+
     }
 
 

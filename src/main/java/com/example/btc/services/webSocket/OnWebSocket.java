@@ -6,6 +6,9 @@ import com.example.btc.baseDao.UrlPara;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
+import com.example.btc.services.http.hb.HttpHbGetSymbols;
+import com.example.btc.services.http.kb.HttpKbGetSymbols;
+import com.example.btc.services.http.kb.HttpKbGetToken;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
 import com.example.btc.services.ws.handler.*;
@@ -43,19 +46,24 @@ import java.util.concurrent.TimeUnit;
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
-    private static Hbprice hb;
+    private  static HttpKbGetToken httpKbGetToken;
+    private  static  HttpKbGetSymbols httpKbGetSymbols;
+    private  static  HttpHbGetSymbols hbsymbols;
     private  static UrlPara urlPara;
     private  static  OkPrice okPrice;
     private  static bter mbter;
     private static mocha mmocha;
     private static List<String> reqparams=new ArrayList<>();
+    private static List<String> kbreqparams=new ArrayList<>();
+    private static String token="";
     @Autowired
-    public void setRepository(Hbprice hb) {
-        OnWebSocket.hb = hb;
+    public void setRepository(HttpHbGetSymbols hbsymbols) throws MalformedURLException {
+        OnWebSocket.hbsymbols=hbsymbols;
+        reqparams=hbsymbols.gethbSymbols();
     }
     @Autowired
-    public void setUrlPara(UrlPara urlPara){OnWebSocket.urlPara=urlPara;
-        reqparams=urlPara.getHbpara();
+    public void setUrlPara(UrlPara urlPara)  {OnWebSocket.urlPara=urlPara;
+        //urlPara.getHbpara();
     }
     @Autowired
     public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
@@ -63,6 +71,14 @@ public class OnWebSocket {
     public  void  setBter(bter mbter){OnWebSocket.mbter=mbter;}
     @Autowired
     public void setMocha(mocha mmocha){OnWebSocket.mmocha=mmocha;}
+    @Autowired
+    public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException { OnWebSocket.httpKbGetToken=httpKbGetToken;
+        token=httpKbGetToken.getkbToken();
+    }
+    @Autowired
+    public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException { OnWebSocket.httpKbGetSymbols=httpKbGetSymbols;
+        kbreqparams=httpKbGetSymbols.gethbSymbols();
+    }
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
@@ -73,7 +89,7 @@ public class OnWebSocket {
     private  String zburl="wss://api.zb.center/websocket/";
     private  String bsurl="wss://api.aex.zone/wsv3";
     //库币前端socket地址
-    private  String kburl="wss://push-socketio.kucoin.cc/socket.io/?token=2neAiuYvAU5cbMXpmsXD5OJlewXCKryg8dSpDCgag8ZwbZpn3uIHi6siD_s132wYwoXOiOG0Q0GtkO7lJxgkJLlUcTB0YEwtDLb3Wn3QP70Gg-Y4I5btzKqRyqznCVt1whuoNZhpWWEsP1jUbPa-MVk_m4uS-u53.UQNVzzBGHR3T5IjiT0lrWA%3D%3D&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+    private  String kburl="wss://push-private.kucoin.cc/endpoint?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
 
    // List<String> reqparams=urlPara.getHbpara();
     /**
@@ -123,6 +139,18 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
+                    OkBtcWssMarketHandle okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl);
+                    okBtcwssMarketHandle.sub(reqparams, response -> {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    OkEthWssMarketHandle okEthwssMarketHandle = new OkEthWssMarketHandle(okurl);
+                    okEthwssMarketHandle.sub(reqparams, response -> {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
                     Thread.sleep(60000);
                     break;
                 case "bt":
@@ -133,11 +161,37 @@ public class OnWebSocket {
                                 AppointSending(name, response.toString());
                             }
                         });
+                    BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl);
+                    btBtcWssMarketHandle.sub(reqparams,response ->
+                    {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl);
+                    btEthWssMarketHandle.sub(reqparams,response ->
+                    {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
                         Thread.sleep(60000);
                     break;
                 case "bn":
                     BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl);
                     bnWssMarketHandle.sub(reqparams,response ->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    BnBtcWssMarketHandle bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl);
+                    bnBtcWssMarketHandle.sub(reqparams,response ->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    BnEthWssMarketHandle bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl);
+                    bnEthWssMarketHandle.sub(reqparams,response ->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
@@ -162,6 +216,20 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
+                    ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
+                    zbQcWssMarketHandle.sub(reqparams,response->{
+                        //logger.info(response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
+                    zbBtcWssMarketHandle.sub(reqparams,response->{
+                        //logger.info(response.toString());
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
                     Thread.sleep(60000);
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
@@ -170,14 +238,56 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    break;
-                case "kb":
-                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl);
-                    kbWssMarketHandle.sub(reqparams,response->{
+                    BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl);
+                    bsBtcWssMarketHandle.sub(reqparams,response->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
                     });
+                    Thread.sleep(60000);
+                    break;
+                case "kb":
+                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl);
+                    List<String> kb1=kbreqparams.subList(0,99);
+                    kbWssMarketHandle.sub(kb1,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    KbWssMarketHandle kb2WssMarketHandle=new KbWssMarketHandle(kburl);
+                    List<String> kb2=kbreqparams.subList(100,199);
+                    kb2WssMarketHandle.sub(kb2,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    KbWssMarketHandle kb3WssMarketHandle=new KbWssMarketHandle(kburl);
+                    List<String> kb3=kbreqparams.subList(200,299);
+                    kb3WssMarketHandle.sub(kb3,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    KbWssMarketHandle kb4WssMarketHandle=new KbWssMarketHandle(kburl);
+                    List<String> kb4=kbreqparams.subList(300,399);
+                    kb4WssMarketHandle.sub(kb4,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    /*KbBtcWssMarketHandle kbBtcWssMarketHandle=new KbBtcWssMarketHandle(kburl);
+                    kbBtcWssMarketHandle.sub(reqparams,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    KbEthWssMarketHandle kbEthWssMarketHandle=new KbEthWssMarketHandle(kburl);
+                    kbEthWssMarketHandle.sub(reqparams,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });*/
+                    Thread.sleep(60000);
                     break;
                 default:
                     break;

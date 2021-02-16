@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.btc.baseDao.UrlPara">
 <select id="getHbpara" parameterType="INTEGER"  resultType="java.lang.String" > <!-- resultMap="LibrarianMap"-->
-    SELECT LOWER(hb) FROM btc.hb where hb not in('XMR','IOTA','IOST','OMG','QTUM','NEST','BTM') limit 50
+    SELECT LOWER(hb) FROM btc.hb where hb not in('HT','BSV','XMR','IOTA','IOST','OMG','QTUM','NEST','BTM'
+    ,'NEAR','YFII','ANT','RSR','CTXC','MATIC','CVC','HPT','ZIL','STORJ','BHD','ZRX','LAMB','DF','CNNS',
+    'FIS','FOR','AVAX','KAVA','TRB','SOL','BAND','OXT','CRE','ELF','ACH','IRIS','WICC','DOCK','NBS'
+    ,'ELA','RING','AR','GXC','NEXO','DTA','HC','FIRO','BTS','YEE') limit 50
 </select>
 </mapper>

@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class KbWssMarketHandle implements Cloneable{
+public class KbEthWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
@@ -32,11 +32,11 @@ public class KbWssMarketHandle implements Cloneable{
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
 
-    public KbWssMarketHandle() {
+    public KbEthWssMarketHandle() {
 
     }
 
-    public KbWssMarketHandle(String pushUrl) {
+    public KbEthWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
@@ -106,22 +106,21 @@ public class KbWssMarketHandle implements Cloneable{
         String str="";
         for (String e:channels)
         {
-             str +=e.toUpperCase()+",";//-USDT
+             str +=e.toUpperCase()+"-ETH,";
         }
         str=str.substring(0,str.length()-1);
         JSONObject sub = new JSONObject();
-        sub.put("id","1545910660740");
+        sub.put("id","_event__subscribe_z2jmuey8f_1612922846807");
         sub.put("type","subscribe");
-        sub.put("topic", "/spotMarket/level2Depth5:"+str);///market/level2web
-        //sub.put("privateChannel",false);
+        sub.put("topic", "/market/level2:"+str);
+        sub.put("privateChannel",false);
         sub.put("response",true);
        // String[] finalestr=new String[2];
-        //List<String> finalestr=new ArrayList<>();
-        //finalestr.add("bullet");
-        //finalestr.add(sub.toString());
+        List<String> finalestr=new ArrayList<>();
+        finalestr.add("bullet");
+        finalestr.add(sub.toString());
             //sub.put("id","id7");
-            //webSocketClient.send("42"+ JsToNew.listToJson(finalestr));
-        webSocketClient.send(sub.toString());
+            webSocketClient.send("42"+ JsToNew.listToJson(finalestr));
     }
     private void dealPing() {
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
