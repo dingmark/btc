@@ -24,9 +24,9 @@ websockethb.onclose=function () {
 
 }
 window.onload=function () {
-     gethbprice("btcusdt");
+    // gethbprice("btcusdt");
     //clearInterval(t);
-     gethbprice("ethusdt");
+    // gethbprice("ethusdt");
     //clearInterval(t1);
 }
 function gethbprice(symbol) {

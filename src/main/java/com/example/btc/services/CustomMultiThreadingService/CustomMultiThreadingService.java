@@ -53,12 +53,20 @@ public class CustomMultiThreadingService {
     @Scheduled(fixedRate = 2000)
     public void excuteAsyncHbBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float hbbtcprice=httpHbNewPrice.gethbNewPrice("btcusdt");
-        hbrealjs.put("hbbtcustd",hbbtcprice);
+        if(hbbtcprice!=0)
+        {
+            hbrealjs.put("hbbtcustd",hbbtcprice);
+        }
+
     }
     @Async
     @Scheduled(fixedRate = 2000)
     public void excuteAsyncHbEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float hbethprice=httpHbNewPrice.gethbNewPrice("ethusdt");
-        hbrealjs.put("hbethusdt",hbethprice);
+        if(hbethprice!=0)
+        {
+            hbrealjs.put("hbethusdt",hbethprice);
+        }
+
     }
 }
