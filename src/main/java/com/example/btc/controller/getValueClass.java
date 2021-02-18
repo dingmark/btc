@@ -8,6 +8,7 @@ import com.example.btc.services.http.bian.BiAnListprice;
 import com.example.btc.services.http.bter.BterListprice;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.hb.HttpHbList;
+import com.example.btc.services.http.hb.HttpHbNewPrice;
 import com.example.btc.services.http.mocha.MochaList;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkListPrice;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -26,6 +28,7 @@ import java.util.List;
 @Controller
 public class getValueClass {
     @Autowired Hbprice hb;
+    @Autowired HttpHbNewPrice httpHbNewPrice;
     @Autowired OkPrice okprice;
     @Autowired bter btr;
     @Autowired mocha mc;
@@ -37,7 +40,16 @@ public class getValueClass {
     @Autowired BiAnListprice biAnListprice;
     @Autowired BterListprice bterListprice;
     @Autowired MochaList mochaList;
-
+    @RequestMapping("/getNewValue.do")
+    @ResponseBody
+    public String getnewvalue(HttpServletRequest request) throws MalformedURLException {
+        String param=request.getParameter("symbol");
+       float price= httpHbNewPrice.gethbNewPrice(param);
+        JSONObject rejs=new JSONObject();
+        rejs.put("org","hb");
+        rejs.put(param,price);
+        return rejs.toString();
+    }
     @RequestMapping("/getvalue.do")
     @ResponseBody
     public String getValueHb () throws InterruptedException, URISyntaxException, IOException {

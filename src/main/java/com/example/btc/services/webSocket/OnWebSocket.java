@@ -380,8 +380,6 @@ public class OnWebSocket {
                 logger.info("发送报错");
             }
         }
-
-
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
     }
 }
