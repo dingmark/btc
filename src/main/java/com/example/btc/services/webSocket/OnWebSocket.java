@@ -7,6 +7,7 @@ import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreading
 import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
 import com.example.btc.services.http.hb.HttpHbGetSymbols;
+import com.example.btc.services.http.hb.HttpHbNewPrice;
 import com.example.btc.services.http.kb.HttpKbGetSymbols;
 import com.example.btc.services.http.kb.HttpKbGetToken;
 import com.example.btc.services.http.mocha.mocha;
@@ -49,6 +50,7 @@ public class OnWebSocket {
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
     private  static  HttpHbGetSymbols hbsymbols;
+    private  static  CustomMultiThreadingService customMultiThreadingService;
     private  static UrlPara urlPara;
     private  static  OkPrice okPrice;
     private  static bter mbter;
@@ -63,7 +65,6 @@ public class OnWebSocket {
     }
     @Autowired
     public void setUrlPara(UrlPara urlPara)  {OnWebSocket.urlPara=urlPara;
-        //urlPara.getHbpara();
     }
     @Autowired
     public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
@@ -79,6 +80,8 @@ public class OnWebSocket {
     public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException { OnWebSocket.httpKbGetSymbols=httpKbGetSymbols;
         kbreqparams=httpKbGetSymbols.gethbSymbols();
     }
+    @Autowired
+    public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
@@ -106,7 +109,7 @@ public class OnWebSocket {
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
-
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
@@ -117,6 +120,9 @@ public class OnWebSocket {
         webSocketSet.put(this.name,this);
         log.info("[WebSocket] 连接成功，当前连接人数为：={}",webSocketSet.size());
         String type=name.substring(0,2);
+        //8个站点输出实时btc eth兑换美元
+
+        //8个站点输出depth参数
         socketdo(type);
     }
 
@@ -275,25 +281,23 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    /*KbBtcWssMarketHandle kbBtcWssMarketHandle=new KbBtcWssMarketHandle(kburl);
-                    kbBtcWssMarketHandle.sub(reqparams,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    KbEthWssMarketHandle kbEthWssMarketHandle=new KbEthWssMarketHandle(kburl);
-                    kbEthWssMarketHandle.sub(reqparams,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });*/
                     Thread.sleep(60000);
+                    break;
+                case "re":
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            AppointSending(name, customMultiThreadingService.hbrealjs.toString());
+                        }
+                    }, 0, 1, TimeUnit.SECONDS);
+
                     break;
                 default:
                     break;
             }
         }
-        catch (InterruptedException| URISyntaxException e)
+        catch (InterruptedException | URISyntaxException  e)
         {
             logger.info("尝试给前端发送消息失败！！！{}",e);
         }

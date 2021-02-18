@@ -1,4 +1,6 @@
 package com.example.btc.services.CustomMultiThreadingService;
+import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.http.hb.HttpHbNewPrice;
 import com.example.btc.services.ws.hb.Hbprice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +15,12 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 @Service
+@EnableScheduling
 public class CustomMultiThreadingService {
     private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
-    @Autowired Hbprice hb;
+    @Autowired
+    HttpHbNewPrice httpHbNewPrice;
+    public JSONObject hbrealjs=new JSONObject();
 
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
@@ -46,12 +51,14 @@ public class CustomMultiThreadingService {
     }
     @Async
     @Scheduled(fixedRate = 2000)
-    public void excuteAsyncHbThead() throws InterruptedException, URISyntaxException, MalformedURLException {
-//        String param="market.btcusdt.trade.detail";
-//        float hbprice=hb.getHbprice(param);
-//        String hbpricestr=String.valueOf(hbprice);
-//        ws.AppointSending("通道名称","消息");
-        logger.info("11111");
-
+    public void excuteAsyncHbBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
+        float hbbtcprice=httpHbNewPrice.gethbNewPrice("btcusdt");
+        hbrealjs.put("hbbtcustd",hbbtcprice);
+    }
+    @Async
+    @Scheduled(fixedRate = 2000)
+    public void excuteAsyncHbEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
+        float hbethprice=httpHbNewPrice.gethbNewPrice("ethusdt");
+        hbrealjs.put("hbethusdt",hbethprice);
     }
 }

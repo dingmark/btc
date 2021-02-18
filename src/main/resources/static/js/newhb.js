@@ -24,11 +24,13 @@ websockethb.onclose=function () {
 
 }
 window.onload=function () {
-    gethbprice("btcusdt");
-    gethbprice("ethusdt")
+     gethbprice("btcusdt");
+    //clearInterval(t);
+     gethbprice("ethusdt");
+    //clearInterval(t1);
 }
 function gethbprice(symbol) {
-    setTimeout(gethbprice,1000);
+    //setTimeout('gethbprice(symbol)',1000);
     $(document).ready(function () {
         $.ajax({
             url: "/getNewValue.do",
@@ -48,10 +50,14 @@ function gethbprice(symbol) {
                     case 'btcusdt':
                         hbbtcustd= result.btcusdt;
                         $('#hbbtcprice')[0].value=hbbtcustd;
+                        setTimeout('gethbprice("btcusdt")',1000);
+                        //clearInterval(t);
                         break;
                     case 'ethusdt':
                         hbethustd=result.ethusdt;
                         $('#hbethprice')[0].value=hbethustd;
+                        setTimeout('gethbprice("ethusdt")',1000);
+                        //clearInterval(t1);
                         break;
                 }
             },
