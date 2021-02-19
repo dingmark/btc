@@ -108,11 +108,11 @@ public class WssMarketHandle implements Cloneable{
 
     public void close() throws InterruptedException {
         //webSocketClient.connect();
+        fixedThreadPool.shutdown();
+        fixedThreadPool.shutdownNow();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
-        fixedThreadPool.shutdown();
-        fixedThreadPool.shutdownNow();
 
         logger.info("火币关闭线程");
         if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){

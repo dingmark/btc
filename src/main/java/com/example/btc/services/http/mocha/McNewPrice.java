@@ -1,8 +1,8 @@
-package com.example.btc.services.http.hb;
+package com.example.btc.services.http.mocha;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,29 +16,31 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class HttpHbNewPrice {
+public class McNewPrice {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${hbnewprice}")
-    private String hbnewprice;
-    public float gethbNewPrice(String symbol) throws MalformedURLException {
+    @Value("${monewprice}")
+    private String mourl;
+    @Value("${mckey}")
+    private String mckey;
+    public float getMcPrice(String para) throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         float price=0;
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
-        //String hblist=hblisturl+"symbol="+para+"usdt&type=step0&depth=5";
-        URL url=new URL(hbnewprice+symbol);
+        String mcurl=mourl+para;
+        URL url=new URL(mcurl);
         HttpURLConnection urlConnection=null;
         try {
-            //Thread.sleep(500);
+           // Thread.sleep(500);
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
-            urlConnection.setConnectTimeout(5000);
-            urlConnection.setReadTimeout(5000);
+            urlConnection.setConnectTimeout(1000);
+            urlConnection.setReadTimeout(1000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
@@ -49,18 +51,14 @@ public class HttpHbNewPrice {
 
                 charinfo.add(line);
             }
-            //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("火币"+symbol+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
-            JSONObject js =JSONObject.parseObject(charinfo.get(0));
-           price= ((JSONObject)((JSONArray)((JSONObject)js.get("tick")).get("data")).get(0)).getFloat("price");
-
-
+            logger.info("抹茶"+para+"实时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            JSONObject js = JSON.parseObject(charinfo.get(0));
+            JSONObject jsdata=(JSONObject)((JSONArray)JSONArray.parse(js.get("data").toString())).get(0);
+            price=jsdata.getFloat("last");
         }
         catch (IOException  e)
         {
-            //e.printStackTrace();
-            logger.info("火币获取实时价格超时");
             return 0;
         }
         finally {
