@@ -37,8 +37,8 @@ public class BiAnNewPrice {
             urlConnection.setConnectTimeout(1000);
             urlConnection.setReadTimeout(1000);
             InputStream in = urlConnection.getInputStream();
-            GZIPInputStream gZipS = new GZIPInputStream(in);
-            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            //GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(in, "GBK");
             BufferedReader reader = new BufferedReader(res);
             String line;
             List<String> charinfo = new ArrayList<String>();
