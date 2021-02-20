@@ -2,7 +2,6 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
-import com.example.btc.services.ws.util.ZipUtil;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -12,15 +11,13 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BsWssMarketHandle implements Cloneable{
+public class BsNewPriceWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
@@ -33,11 +30,11 @@ public class BsWssMarketHandle implements Cloneable{
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
-    public BsWssMarketHandle() {
+    public BsNewPriceWssMarketHandle() {
 
     }
 
-    public BsWssMarketHandle(String pushUrl) {
+    public BsNewPriceWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
@@ -104,18 +101,21 @@ public class BsWssMarketHandle implements Cloneable{
 
     private void doSub(List<String> channels) {
         //{"cmd":3,"action":"sub","code":20000,"symbol":"btc_usdt,eth_usdt"}
+        //{"cmd":1,"action":"sub","symbol":"btc_cnc,eth_cnc"}
         JSONObject sub = new JSONObject();
         String params = "";
             //params.add(e+"_usdt");
-        for(String e:channels)
-        {
-            params +=e+"_usdt,";
-        }
-        params=params.substring(0,params.length()-1);
+//        for(String e:channels)
+//        {
+//            params +=e+"_usdt,";
+//        }
+
+       // params=params.substring(0,params.length()-1);
+        params="btc_usdt,eth_usdt,usdt_cnc";
         sub.put("symbol", params);
         sub.put("code",20000);
         sub.put("action", "sub");
-        sub.put("cmd",3);
+        sub.put("cmd",1);
         webSocketClient.send(sub.toString());
     }
     private void dealPing() {

@@ -17,7 +17,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BsEthWssMarketHandle implements Cloneable{
+public class BsCncWssMarketHandle extends BsWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
@@ -30,11 +30,11 @@ public class BsEthWssMarketHandle implements Cloneable{
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
-    public BsEthWssMarketHandle() {
+    public BsCncWssMarketHandle() {
 
     }
 
-    public BsEthWssMarketHandle(String pushUrl) {
+    public BsCncWssMarketHandle(String pushUrl) {
         this.pushUrl = pushUrl;
     }
 
@@ -106,7 +106,7 @@ public class BsEthWssMarketHandle implements Cloneable{
             //params.add(e+"_usdt");
         for(String e:channels)
         {
-            params +=e+"_eth,";
+            params +=e+"_cnc,";
         }
         params=params.substring(0,params.length()-1);
         sub.put("symbol", params);

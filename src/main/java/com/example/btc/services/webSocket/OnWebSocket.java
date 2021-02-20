@@ -241,6 +241,8 @@ public class OnWebSocket {
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
                     BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl);
+                    BsCncWssMarketHandle bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl);
+
                     bsWssMarketHandle.sub(reqparams,response->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -251,6 +253,12 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
+                    bsCncWssMarketHandle.sub(reqparams,response->{
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+
                     Thread.sleep(60000);
                     break;
                 case "kb":
