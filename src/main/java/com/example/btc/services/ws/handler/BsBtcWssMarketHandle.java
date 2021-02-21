@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +24,7 @@ public class BsBtcWssMarketHandle implements Cloneable{
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
     //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
              //scheduledExecutorService.allowCoreThreadTimeOut(true);
-    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
-
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
@@ -57,9 +57,16 @@ public class BsBtcWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                //logger.info("onMessage:{}", s);
-               if(s.indexOf("pong")==-1)
-                callback.onReceive(s);
+                fixedThreadPool.execute(() -> {
+                    if(s.indexOf("pong")==-1) {
+                        try {
+                            callback.onReceive(s);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
 
             @Override
@@ -87,6 +94,7 @@ public class BsBtcWssMarketHandle implements Cloneable{
 
     public void close() throws InterruptedException {
         //webSocketClient.connect();
+        fixedThreadPool.shutdownNow();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();

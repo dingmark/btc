@@ -54,10 +54,7 @@ public class CustomMultiThreadingService {
      * @Throws
      * @param i
      */
-    @Async
-    public void executeAysncTask1(Integer i){
-        logger.info("CustomMultiThreadingService ==> executeAysncTask1 method: 执行异步任务{} ", i);
-    }
+
 
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，
@@ -68,10 +65,6 @@ public class CustomMultiThreadingService {
      * @Throws
      * @param i
      */
-    @Async
-    public void executeAsyncTask2(Integer i){
-        logger.info("CustomMultiThreadingService ==> executeAsyncTask2 method: 执行异步任务{} ", i);
-    }
     @Async
     @Scheduled(fixedRate = 20000)
     public void executeAsynBsNewPrice() throws URISyntaxException, InterruptedException {
@@ -98,6 +91,7 @@ public class CustomMultiThreadingService {
                    case  "usdt_cnc":
                        hbrealjs.put("bsusdtcnc",fprice);
                        break;
+                   default:
                }
                }
         });

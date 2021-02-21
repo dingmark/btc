@@ -101,11 +101,11 @@ public class WssMCMarketTest {
     @Test
     public void testthread() throws InterruptedException, MalformedURLException, URISyntaxException {
 
-        CustomMultiThreadingService cs=new CustomMultiThreadingService();
-        for (int i=0;i<10;i++){
-            cs.executeAysncTask1(i);
-            cs.executeAsyncTask2(i);
-        }
+//        CustomMultiThreadingService cs=new CustomMultiThreadingService();
+//        for (int i=0;i<10;i++){
+//            cs.executeAysncTask1(i);
+//            cs.executeAsyncTask2(i);
+//        }
         //cs.excuteAsyncHbThead();
         //Thread.sleep(Integer.MAX_VALUE);
        // String message="{\"hb\":\"btc\"}";

@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ public class ZbQcWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-   // private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -58,29 +59,18 @@ public class ZbQcWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                //logger.info("onMessage:{}", s);
-                callback.onReceive(s);
+                fixedThreadPool.execute(()->{
+                    try {
+                        callback.onReceive(s);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-             /*   fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
-                    } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
-                    }
-                });*/
+
             }
 
             @Override

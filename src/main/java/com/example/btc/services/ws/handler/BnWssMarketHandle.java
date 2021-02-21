@@ -26,7 +26,7 @@ public class BnWssMarketHandle implements Cloneable{
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
     //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
              //scheduledExecutorService.allowCoreThreadTimeOut(true);
-    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
@@ -62,8 +62,13 @@ public class BnWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                //logger.info("onMessage:{}", s);
-                callback.onReceive(s);
+                fixedThreadPool.execute(() -> {
+                    try {
+                        callback.onReceive(s);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
 
             @Override
@@ -90,6 +95,7 @@ public class BnWssMarketHandle implements Cloneable{
 
     public void close() throws InterruptedException {
         //webSocketClient.connect();
+        fixedThreadPool.shutdownNow();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();

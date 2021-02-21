@@ -23,7 +23,7 @@ public class BtEthWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -112,6 +112,7 @@ public class BtEthWssMarketHandle implements Cloneable{
 
     public void close() throws InterruptedException {
         //webSocketClient.connect();
+        fixedThreadPool.shutdownNow();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();

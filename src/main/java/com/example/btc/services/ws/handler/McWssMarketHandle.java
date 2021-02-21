@@ -24,7 +24,7 @@ public class McWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
-    //private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -60,8 +60,13 @@ public class McWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                //logger.info("onMessage:{}", s);
-                callback.onReceive(s);
+                fixedThreadPool.execute(()->{
+                    try {
+                        callback.onReceive(s);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
 
             @Override
@@ -88,6 +93,7 @@ public class McWssMarketHandle implements Cloneable{
 
     public void close() throws InterruptedException {
         //webSocketClient.connect();
+        fixedThreadPool.shutdownNow();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();

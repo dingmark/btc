@@ -1,8 +1,10 @@
 package com.example.btc.services.ws.handler;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.ZipUtil;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.BEncoderStream;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
@@ -28,7 +30,7 @@ public class WssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -77,7 +79,8 @@ public class WssMarketHandle implements Cloneable{
                         Object ch = JSONMessage.get("ch");
                         Object ping = JSONMessage.get("ping");
                         if (ch != null) {
-                            callback.onReceive(message);
+                            JSONObject js=getdetpth(message);
+                            callback.onReceive(js.toJSONString());
                         }
                         if (ping != null) {
                             dealPing();
@@ -91,7 +94,7 @@ public class WssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
-                close();
+                this.close();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -105,7 +108,27 @@ public class WssMarketHandle implements Cloneable{
 
     }
 
+    public JSONObject getdetpth(String message)
+    {
+        JSONObject jsre=new JSONObject();
+        JSONObject jsonObject=JSONObject.parseObject(message);
+        //JSONArray jsasks=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("asks");
+        //JSONArray jsbids=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("bids");
+        String bz=jsonObject.getString("ch");
+        int begin=bz.indexOf(".");
+        int end=bz.indexOf(".",begin+1);
+        bz=bz.substring(begin+1,end);
+        JSONObject jstick=jsonObject.getJSONObject("tick");
+        JSONArray asks= jstick.getJSONArray("asks");
+        JSONArray bids= jstick.getJSONArray("bids");
+        List<Object>asksdepth=asks.subList(0,5);
+        List<Object>bidsdepth=bids.subList(0,5);
+        jsre.put("bz",bz);
+        jsre.put("asks",asksdepth);
+        jsre.put("bids",bidsdepth);
+        return  jsre;
 
+    }
     public void close() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdown();
