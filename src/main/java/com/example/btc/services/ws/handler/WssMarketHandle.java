@@ -3,6 +3,7 @@ package com.example.btc.services.ws.handler;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
+import com.example.btc.services.ws.util.DealDepth;
 import com.example.btc.services.ws.util.ZipUtil;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.util.BEncoderStream;
 import lombok.SneakyThrows;
@@ -79,7 +80,7 @@ public class WssMarketHandle implements Cloneable{
                         Object ch = JSONMessage.get("ch");
                         Object ping = JSONMessage.get("ping");
                         if (ch != null) {
-                            JSONObject js=getdetpth(message);
+                            JSONObject js= DealDepth.getHbDetpth(message);
                             callback.onReceive(js.toJSONString());
                         }
                         if (ping != null) {
@@ -91,12 +92,14 @@ public class WssMarketHandle implements Cloneable{
                 });
             }
 
+            @SneakyThrows
             @Override
             public void onClose(int i, String s, boolean b)
             {
-                this.close();
+                closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
+
 
             @Override
             public void onError(Exception e) {
@@ -108,28 +111,7 @@ public class WssMarketHandle implements Cloneable{
 
     }
 
-    public JSONObject getdetpth(String message)
-    {
-        JSONObject jsre=new JSONObject();
-        JSONObject jsonObject=JSONObject.parseObject(message);
-        //JSONArray jsasks=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("asks");
-        //JSONArray jsbids=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("bids");
-        String bz=jsonObject.getString("ch");
-        int begin=bz.indexOf(".");
-        int end=bz.indexOf(".",begin+1);
-        bz=bz.substring(begin+1,end);
-        JSONObject jstick=jsonObject.getJSONObject("tick");
-        JSONArray asks= jstick.getJSONArray("asks");
-        JSONArray bids= jstick.getJSONArray("bids");
-        List<Object>asksdepth=asks.subList(0,5);
-        List<Object>bidsdepth=bids.subList(0,5);
-        jsre.put("bz",bz);
-        jsre.put("asks",asksdepth);
-        jsre.put("bids",bidsdepth);
-        return  jsre;
-
-    }
-    public void close() throws InterruptedException {
+    public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdown();
         fixedThreadPool.shutdownNow();
@@ -211,7 +193,7 @@ public class WssMarketHandle implements Cloneable{
                 @Override
                 public void run() {
                     //每隔35秒销毁
-                    close();
+                    closechannel();
                 }
             }, 60, 60, TimeUnit.SECONDS);
         } catch (Exception e) {

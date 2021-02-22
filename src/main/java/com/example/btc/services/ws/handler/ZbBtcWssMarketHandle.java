@@ -71,29 +71,14 @@ public class ZbBtcWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-             /*   fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
-                    } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
-                    }
-                });*/
+
             }
 
+            @SneakyThrows
             @Override
             public void onClose(int i, String s, boolean b)
             {
-                close();
+                closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -108,7 +93,7 @@ public class ZbBtcWssMarketHandle implements Cloneable{
     }
 
 
-    public void close() throws InterruptedException {
+    public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         webSocketClient.close();
         scheduledExecutorService.shutdown();
@@ -190,7 +175,7 @@ public class ZbBtcWssMarketHandle implements Cloneable{
                 @Override
                 public void run() {
                     //每隔35秒销毁
-                    close();
+                    closechannel();
                 }
             }, 60, 60, TimeUnit.SECONDS);
         } catch (Exception e) {

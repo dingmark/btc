@@ -63,7 +63,7 @@ public class CustomMultiThreadingService {
      * @Date: 2018年9月21日 下午2:55:04
      * @Author: OnlyMate
      * @Throws
-     * @param i
+     * @param
      */
     @Async
     @Scheduled(fixedRate = 20000)
@@ -96,7 +96,7 @@ public class CustomMultiThreadingService {
                }
         });
         Thread.sleep(20000);
-        bsNewPriceWssMarketHandle.close();
+        bsNewPriceWssMarketHandle.closechannel();
     }
     @Scheduled(fixedRate = 500)
     @Async

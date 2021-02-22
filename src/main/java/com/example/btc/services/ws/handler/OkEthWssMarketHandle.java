@@ -1,7 +1,9 @@
 package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
+import com.example.btc.services.ws.util.DealDepth;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.compressors.deflate64.Deflate64CompressorInputStream;
 import org.java_websocket.client.WebSocketClient;
@@ -77,7 +79,11 @@ public class OkEthWssMarketHandle implements Cloneable{
                         final String s = uncompress(bytes.array());
                         //logger.info(s);
                         //回调
-                        if(!s.equals("pong")) callback.onReceive(s);
+                        if(!s.equals("pong")&&JSONObject.parseObject(s).get("data") !=null)
+                        {
+                            JSONObject js= DealDepth.getOkDetpth(s);
+                            callback.onReceive(s);
+                        }
                     } catch (Throwable e) {
                         logger.error("OK 接收onMessage异常", e);
 
@@ -85,9 +91,10 @@ public class OkEthWssMarketHandle implements Cloneable{
                 });
             }
 
+            @SneakyThrows
             @Override
             public void onClose(int i, String s, boolean b) {
-                close();
+                closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -105,7 +112,7 @@ public class OkEthWssMarketHandle implements Cloneable{
     {
        return webSocketClient.getSocket().isConnected();
     }
-    public void close() throws InterruptedException {
+    public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
         webSocketClient.close();
@@ -189,7 +196,7 @@ public class OkEthWssMarketHandle implements Cloneable{
                 @Override
                 public void run() {
                     //每隔35秒销毁
-                    close();
+                    closechannel();
                 }
             }, 60, 60, TimeUnit.SECONDS);
         } catch (Exception e) {

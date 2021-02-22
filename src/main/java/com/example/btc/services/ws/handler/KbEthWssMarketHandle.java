@@ -75,10 +75,11 @@ public class KbEthWssMarketHandle implements Cloneable{
                 callback.onReceive(bytes.toString());
             }
 
+            @SneakyThrows
             @Override
             public void onClose(int i, String s, boolean b)
             {
-                close();
+                closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -93,7 +94,7 @@ public class KbEthWssMarketHandle implements Cloneable{
     }
 
 
-    public void close() throws InterruptedException {
+    public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
         webSocketClient.close();
@@ -178,7 +179,7 @@ public class KbEthWssMarketHandle implements Cloneable{
                 @Override
                 public void run() {
                     //每隔35秒销毁
-                    close();
+                    closechannel();
                 }
             }, 60, 60, TimeUnit.SECONDS);
         } catch (Exception e) {

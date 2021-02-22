@@ -74,10 +74,11 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
                 logger.info(bytes.toString());
             }
 
+            @SneakyThrows
             @Override
             public void onClose(int i, String s, boolean b)
             {
-                close();
+                closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
@@ -92,7 +93,7 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
     }
 
 
-    public void close() throws InterruptedException {
+    public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
         webSocketClient.close();
@@ -168,10 +169,10 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
                 @SneakyThrows
                 @Override
                 public void run() {
-                    //每隔35秒销毁
-                    close();
+                    //获取实时价格每隔20秒销毁
+                    closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, 20, 20, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
