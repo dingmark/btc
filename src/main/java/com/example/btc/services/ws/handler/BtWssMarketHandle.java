@@ -2,6 +2,7 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
+import com.example.btc.services.ws.util.DealDepth;
 import com.example.btc.services.ws.util.ZipUtil;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
@@ -66,7 +67,20 @@ public class BtWssMarketHandle implements Cloneable{
                     if (s.indexOf("pong") == -1) {
                         // logger.info("onMessage:{}", s);
                         try {
-                            callback.onReceive(s);
+                            List<JSONObject> listbt=new ArrayList<>();
+                            if(s.contains("true") &&JSONObject.parseObject(s).get("params")!=null)
+                            {
+                                JSONObject js=DealDepth.getBtDepth(s);
+                                listbt.add(js);
+                                callback.onReceive(js.toJSONString());
+                            }
+                            if(s.contains("false") &&JSONObject.parseObject(s).get("params")!=null)
+                            {
+                                //如果程序走到这一定是listbt里有这个交易对的完整数据，现在要在listbt里找到这个交易对并更新数据
+
+                                //callback.onReceive(js.toJSONString());
+                            }
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

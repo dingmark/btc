@@ -62,7 +62,7 @@ public class BsBtcWssMarketHandle implements Cloneable{
                     if(s.indexOf("pong")==-1&&JSONObject.parseObject(s).getInteger("cmd")==3) {
                         try {
                             JSONObject js= DealDepth.getBsDepth(s);
-                            callback.onReceive(s);
+                            callback.onReceive(js.toJSONString());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
