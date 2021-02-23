@@ -164,7 +164,7 @@ public class OnWebSocket {
                     BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
                     BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl);
                     BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl);
-                        btWssMarketHandle.sub(reqparams,response ->
+                    btWssMarketHandle.sub(reqparams,response ->
                         {
                             if(this.session.isOpen()) {
                                 AppointSending(name, response.toString());

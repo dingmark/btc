@@ -99,4 +99,19 @@ public class DealDepth {
         jsre.put("bids",lisbids);
         return  jsre;
     }
+    public static  JSONObject getKbDepth(String message)
+    {
+        JSONObject jsre=new JSONObject();
+        JSONObject jsonObject=JSONObject.parseObject(message);
+        String symbol=jsonObject.getString("topic");
+        int begin=symbol.indexOf(":");
+        symbol=symbol.substring(begin+1,symbol.length());
+        JSONObject jsdata=jsonObject.getJSONObject("data");
+        JSONArray asks=jsdata.getJSONArray("asks");
+        JSONArray bids=jsdata.getJSONArray("bids");
+        jsre.put("symbol",symbol);
+        jsre.put("asks",asks);
+        jsre.put("bids",bids);
+        return  jsre;
+    }
 }
