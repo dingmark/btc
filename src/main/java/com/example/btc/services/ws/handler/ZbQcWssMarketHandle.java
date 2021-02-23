@@ -2,6 +2,7 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
+import com.example.btc.services.ws.util.DealDepth;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -61,7 +62,11 @@ public class ZbQcWssMarketHandle implements Cloneable{
             public void onMessage(String s) {
                 fixedThreadPool.execute(()->{
                     try {
-                        callback.onReceive(s);
+                        if(JSONObject.parseObject(s).get("code")==null)
+                        {
+                            JSONObject js= DealDepth.getZbDepth(s);
+                            callback.onReceive(js.toJSONString());
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

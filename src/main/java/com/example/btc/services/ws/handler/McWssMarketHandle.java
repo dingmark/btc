@@ -66,7 +66,6 @@ public class McWssMarketHandle implements Cloneable{
                     try {
                         if (s.indexOf("push")!=-1)
                         {
-                            //JSONObject js=getdetpth(s);
                             JSONObject js=DealDepth.getMcDetpth(s);
                             callback.onReceive(js.toJSONString());
                         }

@@ -84,7 +84,7 @@ public class OkWssMarketHandle implements Cloneable{
                         if(!s.equals("pong")&& JSONObject.parseObject(s).get("data") !=null)
                         {
                             JSONObject js= DealDepth.getOkDetpth(s);
-                            callback.onReceive(s);
+                            callback.onReceive(js.toJSONString());
                         }
                     } catch (Throwable e) {
                         logger.error("OK 接收onMessage异常", e);
