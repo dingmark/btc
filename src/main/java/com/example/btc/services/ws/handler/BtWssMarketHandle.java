@@ -67,6 +67,8 @@ public class BtWssMarketHandle implements Cloneable{
                     if (s.indexOf("pong") == -1) {
                         // logger.info("onMessage:{}", s);
                         try {
+                            callback.onReceive(s);
+                            /*
                             List<JSONObject> listbt=new ArrayList<>();
                             if(s.contains("true") &&JSONObject.parseObject(s).get("params")!=null)
                             {
@@ -79,7 +81,7 @@ public class BtWssMarketHandle implements Cloneable{
                                 //如果程序走到这一定是listbt里有这个交易对的完整数据，现在要在listbt里找到这个交易对并更新数据
 
                                 //callback.onReceive(js.toJSONString());
-                            }
+                            }*/
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();

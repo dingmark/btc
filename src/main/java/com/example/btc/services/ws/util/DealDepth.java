@@ -136,18 +136,40 @@ public class DealDepth {
     public static JSONObject getBtDepthUpdate(JSONObject jsold,String message)
     {
         JSONObject jsre=new JSONObject();
+        JSONArray asksre=new JSONArray();
         JSONObject jsonObject=JSONObject.parseObject(message);
-        JSONArray jsonArray= jsonObject.getJSONArray("params")
+        JSONArray jsonArray= jsonObject.getJSONArray("params");
         //jsonArray.getJSONObject(2);
         JSONObject jsdata=jsonArray.getJSONObject(1);
+
+        //对卖方深度更新
         if(jsdata.getJSONArray("asks")!=null)
-        {
+        {   //原数组下标i 更新数组下标j
+            int i=0,j=0;
             JSONArray jsasksold=jsold.getJSONArray("asks");
-            jsasksold.f
+            JSONArray jsasksupdate=jsdata.getJSONArray("asks");
+           // "undefined" == typeof c[e.a] ? d.push(a[e.b++]) : "undefined" == typeof a[e.b] ? d.push(c[e.a++]) : parseFloat(c[e.a][0]) > parseFloat(a[e.b][0]) ? d.push(a[e.b++]) : c[e.a][0] == a[e.b][0] ? (1e-8 < parseFloat(a[e.b][1]) ? d.push(a[e.b++]) : e.b++,e.a++) : d.push(c[e.a++]);
+            for (; i < jsasksold.size() || j < jsasksupdate.size(); )
+            {
+                jsasksold.get(i)==null?asksre.add(jsasksupdate.get(j++)):
+                        jsasksupdate.get(j)==null?asksre.add(jsasksold.get(i++)):
+                                jsasksold.getJSONArray(i).getFloat(0)>jsasksupdate.getJSONArray(j).getFloat(0)? asksre.add(jsasksupdate.get(j++)):
+                                        jsasksold.getJSONArray(i).getFloat(0).equals(jsasksupdate.getJSONArray(j).getFloat(0))? (Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1)? asksre.add(jsasksupdate.get(j++)):):asksre.add(jsasksold.get(i++));
+
+            }
+        }
+        //买方深度更新
+        if(jsdata.getJSONArray("bids")!=null)
+        {
+
         }
 
-        jsasks.ad
         JSONArray jsbidsold=jsold.getJSONArray("bids");
         return  jsre;
+    }
+    static  void  aa(int i,int j)
+    {
+        i++;
+        j++;
     }
 }
