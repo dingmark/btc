@@ -151,11 +151,25 @@ public class DealDepth {
            // "undefined" == typeof c[e.a] ? d.push(a[e.b++]) : "undefined" == typeof a[e.b] ? d.push(c[e.a++]) : parseFloat(c[e.a][0]) > parseFloat(a[e.b][0]) ? d.push(a[e.b++]) : c[e.a][0] == a[e.b][0] ? (1e-8 < parseFloat(a[e.b][1]) ? d.push(a[e.b++]) : e.b++,e.a++) : d.push(c[e.a++]);
             for (; i < jsasksold.size() || j < jsasksupdate.size(); )
             {
-                jsasksold.get(i)==null?asksre.add(jsasksupdate.get(j++)):
-                        jsasksupdate.get(j)==null?asksre.add(jsasksold.get(i++)):
-                                jsasksold.getJSONArray(i).getFloat(0)>jsasksupdate.getJSONArray(j).getFloat(0)? asksre.add(jsasksupdate.get(j++)):
-                                        jsasksold.getJSONArray(i).getFloat(0).equals(jsasksupdate.getJSONArray(j).getFloat(0))? (Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1)? asksre.add(jsasksupdate.get(j++)):):asksre.add(jsasksold.get(i++));
-
+               if(jsasksold.getJSONArray(i).getFloat(0)>jsasksupdate.getJSONArray(j).getFloat(0))
+               {
+                   asksre.add(jsasksupdate.get(j++));
+               }
+               else
+               {
+                   asksre.add(jsasksold.get(i++));
+               }
+               if(jsasksold.getJSONArray(i).getFloat(0)==(jsasksupdate.getJSONArray(j).getFloat(0))
+                       &&Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1))
+               {
+                   asksre.add(jsasksupdate.get(j++));
+               }
+               else
+               {
+                   i++;
+                   j++;
+               }
+                
             }
         }
         //买方深度更新
