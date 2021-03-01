@@ -135,7 +135,7 @@ public class BtEthWssMarketHandle implements Cloneable{
         //{"method":"depth.subscribe","id":6689915,"params":[["ADA_USDT",5,"0"],["BTC_USDT",5,"0"]]}
                 JSONObject sub = new JSONObject();
                 sub.put("id",6689915);
-                sub.put("method","depth.subscribe");
+                sub.put("method","depth.query");
                 List<Object[]> channels=new ArrayList<>();
                 for(String s:channel)
                 {

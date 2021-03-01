@@ -48,6 +48,8 @@ public class BtWssMarketHandle implements Cloneable{
 
 
     private void doConnect(List<String> channel, SubscriptionListener<String> callback) throws URISyntaxException {
+        //保存全量数据
+        JSONObject jsall=new JSONObject();
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
@@ -66,8 +68,26 @@ public class BtWssMarketHandle implements Cloneable{
                    // JSONObject js = JSONObject.parseObject(s);
                     if (s.indexOf("pong") == -1) {
                         // logger.info("onMessage:{}", s);
+
                         try {
                             callback.onReceive(s);
+                            JSONObject jsmess=JSONObject.parseObject(s);
+                            JSONObject jsold=new JSONObject();
+                            if(jsmess.getJSONArray("params").getBoolean(0))
+                            {
+                                jsold =DealDepth.getBtDepth(s);
+                                jsall.put(jsold.getString("symbol"),jsold);
+                                callback.onReceive(jsold.toJSONString());
+                            }
+                            else
+                            {
+                                JSONObject  jsupdate=JSONObject.parseObject(s);
+                                String symbol=jsupdate.getJSONArray("params").getString(2);
+                                JSONObject js= jsall.getJSONObject(symbol);
+                                jsupdate= DealDepth.getBtDepthUpdate(js,s);
+                                callback.onReceive(jsupdate.toJSONString());
+                            }
+
                             /*
                             List<JSONObject> listbt=new ArrayList<>();
                             if(s.contains("true") &&JSONObject.parseObject(s).get("params")!=null)
@@ -135,9 +155,10 @@ public class BtWssMarketHandle implements Cloneable{
     }
     private void doSub(List<String> channel) {
         //{"method":"depth.subscribe","id":6689915,"params":[["ADA_USDT",5,"0"],["BTC_USDT",5,"0"]]}
+        //{"method":"depth.query","id":6689915,"params":["BTC_USDT",5,"0"]}
                 JSONObject sub = new JSONObject();
                 sub.put("id",6689915);
-                sub.put("method","depth.subscribe");
+                sub.put("method","depth.subscribe");//depth.subscribe
                 List<Object[]> channels=new ArrayList<>();
                 for(String s:channel)
                 {
@@ -145,6 +166,8 @@ public class BtWssMarketHandle implements Cloneable{
                     ob[0]=s.toUpperCase()+"_USDT";
                     ob[1]=5;
                     ob[2]="0.0001";
+                    //sub.put("params",ob);
+                   // webSocketClient.send(sub.toJSONString());
                     channels.add(ob);
                 }
                 sub.put("params",channels);

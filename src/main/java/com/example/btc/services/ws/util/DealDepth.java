@@ -137,6 +137,7 @@ public class DealDepth {
     {
         JSONObject jsre=new JSONObject();
         JSONArray asksre=new JSONArray();
+        JSONArray bidsre=new JSONArray();
         JSONObject jsonObject=JSONObject.parseObject(message);
         JSONArray jsonArray= jsonObject.getJSONArray("params");
         //jsonArray.getJSONObject(2);
@@ -153,37 +154,68 @@ public class DealDepth {
             {
                if(jsasksold.getJSONArray(i).getFloat(0)>jsasksupdate.getJSONArray(j).getFloat(0))
                {
-                   asksre.add(jsasksupdate.get(j++));
+                   asksre.add(jsasksupdate.get(j));//更新组处理一个数据则更新组下标加1
+                   j++;
                }
                else
                {
-                   asksre.add(jsasksold.get(i++));
+                   asksre.add(jsasksold.get(i));
+                   i++;
+                   continue;
                }
                if(jsasksold.getJSONArray(i).getFloat(0)==(jsasksupdate.getJSONArray(j).getFloat(0))
                        &&Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1))
                {
-                   asksre.add(jsasksupdate.get(j++));
+                   asksre.add(jsasksupdate.get(j));
+                   j++;
                }
                else
                {
                    i++;
                    j++;
                }
-                
+
             }
         }
         //买方深度更新
         if(jsdata.getJSONArray("bids")!=null)
         {
+            //买方就是值大放在第一位
+            int i=0,j=0;
+            JSONArray jsbidssold=jsold.getJSONArray("bids");
+            JSONArray jsbidsupdate=jsdata.getJSONArray("bids");
+            // "undefined" == typeof c[e.a] ? d.push(a[e.b++]) : "undefined" == typeof a[e.b] ? d.push(c[e.a++]) : parseFloat(c[e.a][0]) > parseFloat(a[e.b][0]) ? d.push(a[e.b++]) : c[e.a][0] == a[e.b][0] ? (1e-8 < parseFloat(a[e.b][1]) ? d.push(a[e.b++]) : e.b++,e.a++) : d.push(c[e.a++]);
+            for (; i < jsbidssold.size() || j < jsbidsupdate.size(); )
+            {
+                if(jsbidssold.getJSONArray(i).getFloat(0)<jsbidsupdate.getJSONArray(j).getFloat(0))
+                {
+                    bidsre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
+                    j++;
+                }
+                else
+                {
+                    bidsre.add(jsbidssold.get(i));
+                    i++;
+                    continue;
+                }
+                if(jsbidssold.getJSONArray(i).getFloat(0)==(jsbidsupdate.getJSONArray(j).getFloat(0))
+                        &&Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getFloat(1))
+                {
+                    bidsre.add(jsbidsupdate.get(j));
+                    j++;
+                }
+                else
+                {
+                    i++;
+                    j++;
+                }
 
+            }
         }
-
-        JSONArray jsbidsold=jsold.getJSONArray("bids");
+        jsre.put("symbol",jsold.getString("symbol"));
+        jsre.put("asks",asksre);
+        jsre.put("bids",bidsre);
         return  jsre;
     }
-    static  void  aa(int i,int j)
-    {
-        i++;
-        j++;
-    }
+
 }
