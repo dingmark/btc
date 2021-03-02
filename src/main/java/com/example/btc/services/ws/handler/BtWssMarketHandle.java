@@ -86,6 +86,7 @@ public class BtWssMarketHandle implements Cloneable{
                                 JSONObject js= jsall.getJSONObject(symbol);
                                 jsupdate= DealDepth.getBtDepthUpdate(js,s);
                                 callback.onReceive(jsupdate.toJSONString());
+                                jsall.put(jsupdate.getString("symbol"),jsupdate);
                             }
 
                             /*

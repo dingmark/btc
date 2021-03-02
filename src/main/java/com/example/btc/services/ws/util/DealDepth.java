@@ -159,22 +159,24 @@ public class DealDepth {
                }
                else
                {
-                   asksre.add(jsasksold.get(i));
-                   i++;
-                   continue;
+                   if(jsasksold.getJSONArray(i).getFloat(0)==(jsasksupdate.getJSONArray(j).getFloat(0)))
+                   {
+                       if(Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1))
+                       {
+                           asksre.add(jsasksupdate.get(j));
+                           j++;
+                       }else
+                       {
+                           i++;
+                           j++;
+                       }
+                   }
+                   else
+                   {
+                       asksre.add(jsasksold.get(i));//更新组处理一个数据则更新组下标加1
+                       i++;
+                   }
                }
-               if(jsasksold.getJSONArray(i).getFloat(0)==(jsasksupdate.getJSONArray(j).getFloat(0))
-                       &&Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1))
-               {
-                   asksre.add(jsasksupdate.get(j));
-                   j++;
-               }
-               else
-               {
-                   i++;
-                   j++;
-               }
-
             }
         }
         //买方深度更新
@@ -189,27 +191,29 @@ public class DealDepth {
             {
                 if(jsbidssold.getJSONArray(i).getFloat(0)<jsbidsupdate.getJSONArray(j).getFloat(0))
                 {
-                    bidsre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
+                    asksre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
                     j++;
                 }
                 else
                 {
-                    bidsre.add(jsbidssold.get(i));
-                    i++;
-                    continue;
+                    if(jsbidssold.getJSONArray(i).getFloat(0)==(jsbidsupdate.getJSONArray(j).getFloat(0)))
+                    {
+                        if(Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getFloat(1))
+                        {
+                            asksre.add(jsbidsupdate.get(j));
+                            j++;
+                        }else
+                        {
+                            i++;
+                            j++;
+                        }
+                    }
+                    else
+                    {
+                        asksre.add(jsbidssold.get(i));//更新组处理一个数据则更新组下标加1
+                        i++;
+                    }
                 }
-                if(jsbidssold.getJSONArray(i).getFloat(0)==(jsbidsupdate.getJSONArray(j).getFloat(0))
-                        &&Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getFloat(1))
-                {
-                    bidsre.add(jsbidsupdate.get(j));
-                    j++;
-                }
-                else
-                {
-                    i++;
-                    j++;
-                }
-
             }
         }
         jsre.put("symbol",jsold.getString("symbol"));
