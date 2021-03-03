@@ -70,7 +70,7 @@ public class BtWssMarketHandle implements Cloneable{
                         // logger.info("onMessage:{}", s);
 
                         try {
-                            callback.onReceive(s);
+                            //callback.onReceive(s);
                             JSONObject jsmess=JSONObject.parseObject(s);
                             JSONObject jsold=new JSONObject();
                             if(jsmess.getJSONArray("params").getBoolean(0))
@@ -85,6 +85,7 @@ public class BtWssMarketHandle implements Cloneable{
                                 String symbol=jsupdate.getJSONArray("params").getString(2);
                                 JSONObject js= jsall.getJSONObject(symbol);
                                 jsupdate= DealDepth.getBtDepthUpdate(js,s);
+                                jsupdate=DealDepth.getBtDepth(jsupdate);
                                 callback.onReceive(jsupdate.toJSONString());
                                 jsall.put(jsupdate.getString("symbol"),jsupdate);
                             }

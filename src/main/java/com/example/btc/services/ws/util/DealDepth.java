@@ -127,12 +127,25 @@ public class DealDepth {
         String symbol = params.getString(2);
         JSONArray asks = jsdata.getJSONArray("asks");
         JSONArray bids = jsdata.getJSONArray("bids");
+        List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
+        List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
         jsre.put("symbol", symbol);
-        jsre.put("asks", asks);
-        jsre.put("bids", bids);
+        jsre.put("asks", asksobject);
+        jsre.put("bids", bidsobject);
         return jsre;
     }
-
+    public static JSONObject getBtDepth(JSONObject object) {
+        JSONObject jsre = new JSONObject();
+        String symbol=object.getString("symbol");
+        JSONArray asks = object.getJSONArray("asks");
+        JSONArray bids = object.getJSONArray("bids");
+        List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
+        List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+        jsre.put("symbol", symbol);
+        jsre.put("asks", asksobject);
+        jsre.put("bids", bidsobject);
+        return jsre;
+    }
     public static JSONObject getBtDepthUpdate(JSONObject jsold,String message)
     {
         JSONObject jsre=new JSONObject();
@@ -152,32 +165,48 @@ public class DealDepth {
            // "undefined" == typeof c[e.a] ? d.push(a[e.b++]) : "undefined" == typeof a[e.b] ? d.push(c[e.a++]) : parseFloat(c[e.a][0]) > parseFloat(a[e.b][0]) ? d.push(a[e.b++]) : c[e.a][0] == a[e.b][0] ? (1e-8 < parseFloat(a[e.b][1]) ? d.push(a[e.b++]) : e.b++,e.a++) : d.push(c[e.a++]);
             for (; i < jsasksold.size() || j < jsasksupdate.size(); )
             {
-               if(jsasksold.getJSONArray(i).getFloat(0)>jsasksupdate.getJSONArray(j).getFloat(0))
-               {
-                   asksre.add(jsasksupdate.get(j));//更新组处理一个数据则更新组下标加1
-                   j++;
-               }
-               else
-               {
-                   if(jsasksold.getJSONArray(i).getFloat(0)==(jsasksupdate.getJSONArray(j).getFloat(0)))
-                   {
-                       if(Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getFloat(1))
-                       {
-                           asksre.add(jsasksupdate.get(j));
-                           j++;
-                       }else
-                       {
-                           i++;
-                           j++;
-                       }
+              if(i>=jsasksold.size()) {
+                asksre.add(jsasksupdate.get(j));
+                j++;
+              }else
+                {
+                  if(j>=jsasksupdate.size())
+                  {
+                        asksre.add(jsasksold.get(i));
+                        i++;
+                  }
+                  else
+                  {
+                      if(jsasksold.getJSONArray(i).getBigDecimal(0).compareTo(jsasksupdate.getJSONArray(j).getBigDecimal(0))==1)
+                      {
+                          asksre.add(jsasksupdate.get(j));//更新组处理一个数据则更新组下标加1
+                          j++;
+                      }
+                      else
+                      {
+                          if(jsasksold.getJSONArray(i).getBigDecimal(0).compareTo(jsasksupdate.getJSONArray(j).getBigDecimal(0))==0)
+                          {
+                              if(Math.pow(1 ,-8)<jsasksupdate.getJSONArray(j).getDouble(1))
+                              {
+                                  asksre.add(jsasksupdate.get(j));
+                                  i++;
+                                  j++;
+                              }else
+                              {
+                                  // i++;
+                                  j++;
+                              }
+                          }
+                          else
+                          {
+                              asksre.add(jsasksold.get(i));//更新组处理一个数据则更新组下标加1
+                              i++;
+                          }
+                      }
                    }
-                   else
-                   {
-                       asksre.add(jsasksold.get(i));//更新组处理一个数据则更新组下标加1
-                       i++;
-                   }
-               }
+                  }
             }
+
         }
         //买方深度更新
         if(jsdata.getJSONArray("bids")!=null)
@@ -189,36 +218,64 @@ public class DealDepth {
             // "undefined" == typeof c[e.a] ? d.push(a[e.b++]) : "undefined" == typeof a[e.b] ? d.push(c[e.a++]) : parseFloat(c[e.a][0]) > parseFloat(a[e.b][0]) ? d.push(a[e.b++]) : c[e.a][0] == a[e.b][0] ? (1e-8 < parseFloat(a[e.b][1]) ? d.push(a[e.b++]) : e.b++,e.a++) : d.push(c[e.a++]);
             for (; i < jsbidssold.size() || j < jsbidsupdate.size(); )
             {
-                if(jsbidssold.getJSONArray(i).getFloat(0)<jsbidsupdate.getJSONArray(j).getFloat(0))
-                {
-                    asksre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
+                if(i>=jsbidssold.size()) {
+                    asksre.add(jsbidsupdate.get(j));
                     j++;
-                }
-                else
+                }else
                 {
-                    if(jsbidssold.getJSONArray(i).getFloat(0)==(jsbidsupdate.getJSONArray(j).getFloat(0)))
+                    if(j>=jsbidsupdate.size())
                     {
-                        if(Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getFloat(1))
-                        {
-                            asksre.add(jsbidsupdate.get(j));
-                            j++;
-                        }else
-                        {
-                            i++;
-                            j++;
-                        }
+                        asksre.add(jsbidssold.get(i));
+                        i++;
                     }
                     else
                     {
-                        asksre.add(jsbidssold.get(i));//更新组处理一个数据则更新组下标加1
-                        i++;
+                        if(jsbidssold.getJSONArray(i).getBigDecimal(0).compareTo(jsbidsupdate.getJSONArray(j).getBigDecimal(0))==-1)
+                        {
+                            asksre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
+                            j++;
+                        }
+                        else
+                        {
+                            if(jsbidssold.getJSONArray(i).getBigDecimal(0).compareTo(jsbidsupdate.getJSONArray(j).getBigDecimal(0))==0)
+                            {
+                                if(Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getDouble(1))
+                                {
+                                    asksre.add(jsbidsupdate.get(j));
+                                    i++;
+                                    j++;
+                                }else
+                                {
+                                    // i++;
+                                    j++;
+                                }
+                            }
+                            else
+                            {
+                                asksre.add(jsbidssold.get(i));//更新组处理一个数据则更新组下标加1
+                                i++;
+                            }
+                        }
                     }
                 }
             }
         }
         jsre.put("symbol",jsold.getString("symbol"));
-        jsre.put("asks",asksre);
-        jsre.put("bids",bidsre);
+        if(asksre.isEmpty())
+        {
+            jsre.put("asks",jsold.getJSONArray("asks"));
+        }else
+        {
+            jsre.put("asks",asksre);
+        }
+
+        if(bidsre.isEmpty())
+        {
+            jsre.put("bids",jsold.getJSONArray("bids"));
+        }else
+        {
+            jsre.put("bids",bidsre);
+        }
         return  jsre;
     }
 
