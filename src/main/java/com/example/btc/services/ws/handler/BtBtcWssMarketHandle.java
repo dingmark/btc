@@ -2,6 +2,7 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.ws.SubscriptionListener;
+import com.example.btc.services.ws.util.DealDepth;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -45,6 +46,7 @@ public class BtBtcWssMarketHandle implements Cloneable{
 
 
     private void doConnect(List<String> channel, SubscriptionListener<String> callback) throws URISyntaxException {
+        JSONObject jsall=new JSONObject();
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
@@ -57,39 +59,41 @@ public class BtBtcWssMarketHandle implements Cloneable{
             }
 
             @Override
-            public void onMessage(String s) {
+            public void onMessage(String s)  {
                 //webSocketClient.close();
                 fixedThreadPool.execute(() -> {
-                   // JSONObject js = JSONObject.parseObject(s);
                     if (s.indexOf("pong") == -1) {
-                        // logger.info("onMessage:{}", s);
                         try {
-                            callback.onReceive(s);
+                            JSONObject jsmess=JSONObject.parseObject(s);
+                            JSONObject jsold;
+                            if(jsmess.getJSONArray("params").getBoolean(0))
+                            {
+                                jsold = DealDepth.getBtDepth(s);
+                                jsall.put(jsold.getString("symbol"),jsold);
+                                callback.onReceive(jsold.toJSONString());
+                            }
+                            else
+                            {
+                                JSONObject  jsupdate=JSONObject.parseObject(s);
+                                String symbol=jsupdate.getJSONArray("params").getString(2);
+                                JSONObject js= jsall.getJSONObject(symbol);
+                                jsupdate= DealDepth.getBtDepthUpdate(js,s);
+                                // callback.onReceive("更新后数据"+jsupdate.toJSONString());
+                                jsupdate=DealDepth.getBtDepth(jsupdate);
+                                callback.onReceive(jsupdate.toJSONString());
+                                jsall.put(jsupdate.getString("symbol"),jsupdate);
+                            }
+
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
+
                 });
             }
             @Override
             public void onMessage(ByteBuffer bytes) {
-               /* fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            callback.onReceive(message);
-                        }
-                        if (ping != null) {
-                            dealPing();
-                        }
-                    } catch (Exception e ) {
-                        logger.error("比特儿交易onMessage异常", e);
-                    }
-                });*/
+
             }
 
             @SneakyThrows
@@ -135,7 +139,7 @@ public class BtBtcWssMarketHandle implements Cloneable{
         //{"method":"depth.subscribe","id":6689915,"params":[["ADA_USDT",5,"0"],["BTC_USDT",5,"0"]]}
                 JSONObject sub = new JSONObject();
                 sub.put("id",6689915);
-                sub.put("method","depth.query");
+                sub.put("method","depth.subscribe");
                 List<Object[]> channels=new ArrayList<>();
                 for(String s:channel)
                 {

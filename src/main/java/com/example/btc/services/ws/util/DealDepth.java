@@ -219,20 +219,20 @@ public class DealDepth {
             for (; i < jsbidssold.size() || j < jsbidsupdate.size(); )
             {
                 if(i>=jsbidssold.size()) {
-                    asksre.add(jsbidsupdate.get(j));
+                    bidsre.add(jsbidsupdate.get(j));
                     j++;
                 }else
                 {
                     if(j>=jsbidsupdate.size())
                     {
-                        asksre.add(jsbidssold.get(i));
+                        bidsre.add(jsbidssold.get(i));
                         i++;
                     }
                     else
                     {
                         if(jsbidssold.getJSONArray(i).getBigDecimal(0).compareTo(jsbidsupdate.getJSONArray(j).getBigDecimal(0))==-1)
                         {
-                            asksre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
+                            bidsre.add(jsbidsupdate.get(j));//更新组处理一个数据则更新组下标加1
                             j++;
                         }
                         else
@@ -241,7 +241,7 @@ public class DealDepth {
                             {
                                 if(Math.pow(1 ,-8)<jsbidsupdate.getJSONArray(j).getDouble(1))
                                 {
-                                    asksre.add(jsbidsupdate.get(j));
+                                    bidsre.add(jsbidsupdate.get(j));
                                     i++;
                                     j++;
                                 }else
@@ -252,7 +252,7 @@ public class DealDepth {
                             }
                             else
                             {
-                                asksre.add(jsbidssold.get(i));//更新组处理一个数据则更新组下标加1
+                                bidsre.add(jsbidssold.get(i));//更新组处理一个数据则更新组下标加1
                                 i++;
                             }
                         }

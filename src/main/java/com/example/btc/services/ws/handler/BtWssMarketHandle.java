@@ -63,16 +63,11 @@ public class BtWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(String s) {
-                //webSocketClient.close();
                 fixedThreadPool.execute(() -> {
-                   // JSONObject js = JSONObject.parseObject(s);
                     if (s.indexOf("pong") == -1) {
-                        // logger.info("onMessage:{}", s);
-
                         try {
-                            //callback.onReceive(s);
                             JSONObject jsmess=JSONObject.parseObject(s);
-                            JSONObject jsold=new JSONObject();
+                            JSONObject jsold;
                             if(jsmess.getJSONArray("params").getBoolean(0))
                             {
                                 jsold =DealDepth.getBtDepth(s);
@@ -85,25 +80,11 @@ public class BtWssMarketHandle implements Cloneable{
                                 String symbol=jsupdate.getJSONArray("params").getString(2);
                                 JSONObject js= jsall.getJSONObject(symbol);
                                 jsupdate= DealDepth.getBtDepthUpdate(js,s);
+                               // callback.onReceive("更新后数据"+jsupdate.toJSONString());
                                 jsupdate=DealDepth.getBtDepth(jsupdate);
                                 callback.onReceive(jsupdate.toJSONString());
                                 jsall.put(jsupdate.getString("symbol"),jsupdate);
                             }
-
-                            /*
-                            List<JSONObject> listbt=new ArrayList<>();
-                            if(s.contains("true") &&JSONObject.parseObject(s).get("params")!=null)
-                            {
-                                JSONObject js=DealDepth.getBtDepth(s);
-                                listbt.add(js);
-                                callback.onReceive(js.toJSONString());
-                            }
-                            if(s.contains("false") &&JSONObject.parseObject(s).get("params")!=null)
-                            {
-                                //如果程序走到这一定是listbt里有这个交易对的完整数据，现在要在listbt里找到这个交易对并更新数据
-
-                                //callback.onReceive(js.toJSONString());
-                            }*/
 
                         } catch (InterruptedException e) {
                             e.printStackTrace();

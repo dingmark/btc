@@ -162,26 +162,26 @@ public class OnWebSocket {
                     break;
                 case "bt":
                     BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
-                   // BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl);
-                  //  BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl);
+                    BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl);
+                    BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl);
                     btWssMarketHandle.sub(reqparams,response ->
                         {
                             if(this.session.isOpen()) {
                                 AppointSending(name, response.toString());
                             }
                         });
-//                    btBtcWssMarketHandle.sub(reqparams,response ->
-//                    {
-//                        if(this.session.isOpen()) {
-//                            AppointSending(name, response.toString());
-//                        }
-//                    });
-//                    btEthWssMarketHandle.sub(reqparams,response ->
-//                    {
-//                        if(this.session.isOpen()) {
-//                            AppointSending(name, response.toString());
-//                        }
-//                    });
+                    btBtcWssMarketHandle.sub(reqparams,response ->
+                    {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
+                    btEthWssMarketHandle.sub(reqparams,response ->
+                    {
+                        if(this.session.isOpen()) {
+                            AppointSending(name, response.toString());
+                        }
+                    });
                         Thread.sleep(60000);
                     break;
                 case "bn":
@@ -299,7 +299,7 @@ public class OnWebSocket {
                         public void run() {
                             AppointSending(name, customMultiThreadingService.hbrealjs.toString());
                         }
-                    }, 0, 1, TimeUnit.SECONDS);
+                    }, 0, 500, TimeUnit.MILLISECONDS);
 
                     break;
                 default:
