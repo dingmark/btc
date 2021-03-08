@@ -81,7 +81,7 @@ public class WssMarketHandle implements Cloneable{
                         Object ping = JSONMessage.get("ping");
                         if (ch != null) {
                             JSONObject js= DealDepth.getHbDetpth(message);
-                            callback.onReceive(js.toJSONString());
+                            callback.onReceive(js.toString());
                         }
                         if (ping != null) {
                             dealPing();
