@@ -2,6 +2,7 @@
  * Created by Administrator on 2021-01-26.
  */
 var hbbtcustd, hbethustd;
+var hbvar ;
 //setInterval('gethbprice("btcusdt")', 1000);
 //setInterval('gethbprice("ethusdt")', 1000);
 if ('WebSocket' in window) {
@@ -15,8 +16,17 @@ websockethb.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.stringify(event.data);
-    if(temp.stream=="btc_usdt")
-    {bn_btc_usdt}
+    type=temp.symbol.substr(temp.symbol.length-3,temp.symbol);
+    switch (type) {
+        case'btc':
+            bz=temp.symbol.substr(0,temp.symbol.indexOf('btc'));
+            hbvar.bz={eval('temp[symbol]'):eval('temp[asks]')};
+            break;
+        case 'sdt':
+            break
+        case 'eth':
+            break
+    }
     //alert("111");
 }
 
