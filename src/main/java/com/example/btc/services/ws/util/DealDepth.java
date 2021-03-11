@@ -2,6 +2,7 @@ package com.example.btc.services.ws.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class DealDepth {
     static List<JSONObject> btlist = new ArrayList<>();
-
+    private  static CustomMultiThreadingService customMultiThreadingService;
     public static JSONObject getBnDetpth(String message) {
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);

@@ -40,8 +40,8 @@ public class HttpKbGetToken {
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
             urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
             urlConnection.setRequestMethod("POST");
-            urlConnection.setConnectTimeout(6000);
-            urlConnection.setReadTimeout(6000);
+            urlConnection.setConnectTimeout(60000);
+            urlConnection.setReadTimeout(60000);
             InputStream in = urlConnection.getInputStream();
            //GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(in, "GBK");

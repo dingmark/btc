@@ -117,13 +117,14 @@ public class McWssMarketHandle implements Cloneable{
     private void doSub(List<String> channels) {
         //{  "method":"sub.depth.full","param":{"symbol":"ETH_USDT","limit":5}} 抹茶格式
          channels.stream().forEach(e ->{
-             JSONObject sub = new JSONObject();
-             JSONObject params=new JSONObject();
-             params.put("symbol",e.toUpperCase()+"_USDT");
-             params.put("limit",5);
-             sub.put("param",params);
-             sub.put("method", "sub.depth.full");
-             webSocketClient.send(sub.toString());
+                 //String[] st={"_USDT","_BTC","_ETH"};
+                 JSONObject sub = new JSONObject();
+                 JSONObject params=new JSONObject();
+                 params.put("symbol",e.toUpperCase()+"_USDT");
+                 params.put("limit",5);
+                 sub.put("param",params);
+                 sub.put("method", "sub.depth.full");
+                 webSocketClient.send(sub.toString());
             });
 
     }
