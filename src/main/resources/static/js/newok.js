@@ -25,6 +25,7 @@ websockethb.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
+            temp=oktemprmb(temp,'BTC')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
             break;
@@ -35,6 +36,7 @@ websockethb.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
+            temp=oktemprmb(temp,'USDT')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
             break;
@@ -45,6 +47,7 @@ websockethb.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
+            temp=oktemprmb(temp,'ETH')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
             break;

@@ -1,58 +1,58 @@
 /**
  * Created by Administrator on 2021-01-26.
  */
-var hbvar={} ;
+var zbvar={} ;
 
 //setInterval('gethbprice("btcusdt")', 1000);
 //setInterval('gethbprice("ethusdt")', 1000);
 if ('WebSocket' in window) {
-    websockethb = new WebSocket("ws://localhost:8080/test/hb");
+    websocketzb = new WebSocket("ws://localhost:8080/test/zb");
 }
 else
 {
     alert('Not support websocket')
 }
-websockethb.onmessage=function(event)
+websocketzb.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
-//将出来的数据单位全部换算成人民币
- //   temp=getcnc(temp)
-    type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
+    temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
+    type=temp.symbol.substr(temp.symbol.length-2,temp.symbol.length);
     switch (type) {
-        case'btc':
+        case'tc':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('btc'));
-            if('undefined'==typeof (hbvar[bz])) {
-                hbvar[bz] = {};
+            if('undefined'==typeof (zbvar[bz])) {
+                zbvar[bz] = {};
             }
             var symbol =temp.symbol;
-            hbvar[bz][symbol]={};
+            zbvar[bz][symbol]={};
             //btc转人民币
-            temp=hbtemprmb(temp,'btc');
-            hbvar[bz][symbol].asks= temp.asks;
-            hbvar[bz][symbol].bids= temp.bids;
+            temp=zbtemprmb(temp,'btc');
+            zbvar[bz][symbol].asks= temp.asks;
+            zbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'sdt':
+        case 'dt':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('usdt'));
-            if('undefined'==typeof (hbvar[bz])) {
-                hbvar[bz] = {};
+            if('undefined'==typeof (zbvar[bz])) {
+                zbvar[bz] = {};
             }
             var symbol =temp.symbol;
-            hbvar[bz][symbol]={};
-            temp=hbtemprmb(temp,'usdt');
-            hbvar[bz][symbol].asks= temp.asks;
-            hbvar[bz][symbol].bids= temp.bids;
+            zbvar[bz][symbol]={};
+            temp=zbtemprmb(temp,'usdt');
+            zbvar[bz][symbol].asks= temp.asks;
+            zbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'eth':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('eth'));
-            if('undefined'==typeof (hbvar[bz])) {
-                hbvar[bz] = {};
+        case 'qc':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('qc'));
+            if('undefined'==typeof (zbvar[bz])) {
+                zbvar[bz] = {};
             }
             var symbol =temp.symbol;
-            hbvar[bz][symbol]={};
-            temp=hbtemprmb(temp,'eth');
-            hbvar[bz][symbol].asks= temp.asks;
-            hbvar[bz][symbol].bids= temp.bids;
+            zbvar[bz][symbol]={};
+            //当币对是qc即为人民币，不做转换
+           // temp=zbtemprmb(temp,'qc');
+            zbvar[bz][symbol].asks= temp.asks;
+            zbvar[bz][symbol].bids= temp.bids;
             break;
     }
     //alert("111");

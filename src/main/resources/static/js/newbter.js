@@ -21,6 +21,7 @@ websocketbter.onmessage=function(event)
             }
             var symbol =temp.symbol;
             btvar[bz][symbol]={};
+            temp=bttemprmb(temp,'BTC');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
             break;
@@ -31,6 +32,7 @@ websocketbter.onmessage=function(event)
             }
             var symbol =temp.symbol;
             btvar[bz][symbol]={};
+            temp=bttemprmb(temp,'USDT');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
             break;
@@ -41,6 +43,7 @@ websocketbter.onmessage=function(event)
             }
             var symbol =temp.symbol;
             btvar[bz][symbol]={};
+            temp=bttemprmb(temp,'ETH');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
             break;

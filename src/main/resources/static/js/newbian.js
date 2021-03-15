@@ -22,6 +22,7 @@ websocketbian.onmessage=function(event)
             }
             var symbol =temp.symbol;
             bnvar[bz][symbol]={};
+            temp=bntemprmb(temp,'btc');
             bnvar[bz][symbol].asks= temp.asks;
             bnvar[bz][symbol].bids= temp.bids;
             break;
@@ -32,6 +33,7 @@ websocketbian.onmessage=function(event)
             }
             var symbol =temp.symbol;
             bnvar[bz][symbol]={};
+            temp=bntemprmb(temp,'usdt');
             bnvar[bz][symbol].asks= temp.asks;
             bnvar[bz][symbol].bids= temp.bids;
             break;
@@ -42,6 +44,7 @@ websocketbian.onmessage=function(event)
             }
             var symbol =temp.symbol;
             bnvar[bz][symbol]={};
+            temp=bntemprmb(temp,'eth');
             bnvar[bz][symbol].asks= temp.asks;
             bnvar[bz][symbol].bids= temp.bids;
             break;
