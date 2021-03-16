@@ -1,5 +1,6 @@
 package com.example.btc.controller;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,4 +9,5 @@ import java.util.Map;
  */
 public class LoginCacheUtil {
     public static Map<String, User> loginUser = new HashMap<>();
+    public  static  Map<String,HttpSession> loginSession=new HashMap<>();
 }
