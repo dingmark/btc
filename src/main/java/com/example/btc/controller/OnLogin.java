@@ -1,5 +1,6 @@
 package com.example.btc.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -35,7 +37,7 @@ public class OnLogin {
         session.setAttribute("target", target);
         return  "redirect:/";
     }
-   
+
     @PostMapping("/login")
     public String doLogin(User user, HttpSession session, HttpServletResponse response
     ) {
@@ -45,7 +47,23 @@ public class OnLogin {
             // cookie.setDomain("sso.com");
             if(LoginCacheUtil.loginSession.get(user.getUname())!=null)
             {
-                LoginCacheUtil.loginSession.get(user.getUname()).invalidate();
+                //使之前session失效
+                //LoginCacheUtil.loginSession.get(user.getUname()).invalidate();
+                //登录列表移除用户
+                //LoginCacheUtil.loginSession.remove(user.getUname());
+                //找到用户对应的token
+                String token="";
+                for(String skey:LoginCacheUtil.loginUser.keySet())
+                {
+                    User us=LoginCacheUtil.loginUser.get(skey);
+                    if(us.getUname().equals(user.getUname()))
+                    {
+                        token=skey;
+                        break;
+                    }
+                }
+                //移除用户列表里的数据
+                LoginCacheUtil.loginUser.remove(token);
                 //return "";
             }
                 // 保存用户登录信息
@@ -56,7 +74,6 @@ public class OnLogin {
                 response.addCookie(cookie);
                 LoginCacheUtil.loginUser.put(token, user);
                 LoginCacheUtil.loginSession.put(user.getUname(),session);
-                System.out.println("session为空保存cookie");
                 return "redirect:/NewSocket.html";
         }else {
             session.setAttribute("msg", "用户名或密码错误");
@@ -69,6 +86,33 @@ public class OnLogin {
 //            targetUrl = "NewSocket.html";
 //        }
 //        return "redirect:" + targetUrl;
+    }
+    @RequestMapping("/check")
+    @ResponseBody
+    public String checksession(@CookieValue(required = false, value = "TOKEN")Cookie cookie)
+    {
+        HashMap<String,Object> map=new HashMap<>();
+        JSONObject js=new JSONObject();
+        if(cookie!=null)
+        {
+            String value=cookie.getValue();
+            //cookie的token 与user匹配
+            User user = LoginCacheUtil.loginUser.get(value);
+            if(user==null)
+            {
+                map.put("code","0");//有token 没找到用户
+            }
+            else
+            {
+                map.put("code","1");//有token 找到用户
+            }
+        }
+        else
+        {
+            map.put("code","2");//空白页面没有cookie
+        }
+
+        return new JSONObject(map).toJSONString();
     }
 
 }
