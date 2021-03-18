@@ -21,7 +21,7 @@
     <script src="js/newkb.js"></script>
 
     <script type="text/javascript">
-        setInterval(testsession,5000);
+        setInterval(testsession,10000);
         function testsession()
         {
             //sessionStorage
@@ -35,7 +35,9 @@
                         if(result.code=='0')
                         {
                             alert('登录失效');
+
                             self.location="\\";
+                            closeallsocket();
                         }
                     }
                 })});
