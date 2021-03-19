@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>sso-login</title>
 </head>
@@ -20,13 +21,21 @@
     <link rel="stylesheet" type="text/css" href="Login.css"/>
 </head>
 <body>
+<script type="text/javascript">
+    $(function(){
+        $('#loginbutton').click(function(){
+            $("form").ajaxSubmit(function(data){
+                alert(data);
+            })
+        })
 
+</script>
 <div id="login">
     <h1>Login</h1>
-    <form action="/login" method="post">
+    <form id="loginform" action="/login" method="post">
         <input type="text" required="required" placeholder="用户名" name="uname"></input>
         <input type="password" required="required" placeholder="密码" name="upwd"></input>
-        <button class="but" type="submit">登录</button>
+        <button id="loginbutton" class="but" type="submit">登录</button>
     </form>
 </div>
 </body>

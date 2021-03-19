@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,14 +34,56 @@ public class HttpKbGetToken {
             //Thread.sleep(500);
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
-            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Content-type", "multipart/form-data; boundary=---------------------------bbbb");
             urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
+            //urlConnection.setRequestProperty("Content-Length","298");
+            urlConnection.setRequestProperty("Connection","keep-alive");
+            urlConnection.setRequestProperty("Host","trade.kucoin.cc");
+            urlConnection.setRequestProperty("Accept","application/json");
+            urlConnection.setRequestProperty("Referer","https://trade.kucoin.cc/");
+            urlConnection.setRequestProperty("Origin","https://trade.kucoin.cc");
+            urlConnection.setRequestProperty("TE","Trailers");
+            urlConnection.setRequestProperty("Pragma","no-cache");
+            urlConnection.setRequestProperty("Cache-Control","no-cache");
+            urlConnection.setRequestProperty("Accept-Language","zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2");
             urlConnection.setRequestMethod("POST");
+            // http正文内，因此需要设为true
+            urlConnection.setDoOutput(true);
+            // Post 请求不能使用缓存
+            urlConnection.setUseCaches(false);
             urlConnection.setConnectTimeout(60000);
             urlConnection.setReadTimeout(60000);
+            OutputStream out = urlConnection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(out, "GBK"));
+//            writer.append("-----------------------------bbbb");
+//            writer.newLine();
+//            writer.append("Content-Disposition: form-data; name=\"protocol\"");
+//            writer.newLine();
+//            writer.newLine();
+//            writer.append("socket.io");
+//            writer.newLine();
+//            writer.append("-----------------------------bbbb");
+//            writer.newLine();
+//            writer.append("Content-Disposition: form-data; name=\"source\"");
+//            writer.newLine();
+//            writer.newLine();
+//            writer.append("web");
+//            writer.newLine();
+//            writer.append("-----------------------------bbbb--");
+            writer.write("-----------------------------bbbb\n" +
+                    "Content-Disposition: form-data; name=\"protocol\"\n" +
+                    "\n" +
+                    "socket.io\n" +
+                    "-----------------------------bbbb\n" +
+                    "Content-Disposition: form-data; name=\"source\"\n" +
+                    "\n" +
+                    "web\n" +
+                    "-----------------------------bbbb--");
+           // out.flush();
             InputStream in = urlConnection.getInputStream();
-           //GZIPInputStream gZipS = new GZIPInputStream(in);
-            InputStreamReader res = new InputStreamReader(in, "GBK");
+            GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
             BufferedReader reader = new BufferedReader(res);
             String line;
             List<String> charinfo = new ArrayList<String>();

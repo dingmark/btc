@@ -9,6 +9,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -40,7 +42,7 @@ public class OnLogin {
 
     @PostMapping("/login")
     public String doLogin(User user, HttpSession session, HttpServletResponse response
-    ) {
+    ) throws IOException{
         // 校验用户名密码
         if(user.getUname().equals("xiao")&&user.getUpwd().equals("123")) {
             //设置域名，实现数据共享
@@ -77,7 +79,9 @@ public class OnLogin {
                 return "redirect:/NewSocket.html";
         }else {
             session.setAttribute("msg", "用户名或密码错误");
-            return "";
+            PrintWriter out=response.getWriter();
+            out.print("<script language='javascript'>alert('UserName Wrong!!');self.location='\\';</script>");
+            return "redirect:/";
         }
         //登录信息校验成功，重定向到原来的系统
 //        String targetUrl = (String) session.getAttribute("target");
