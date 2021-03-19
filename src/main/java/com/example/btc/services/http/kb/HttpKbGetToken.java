@@ -49,10 +49,14 @@ public class HttpKbGetToken {
             urlConnection.setRequestMethod("POST");
             // http正文内，因此需要设为true
             urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            //设置本次连接是否自动重定向
+            urlConnection.setInstanceFollowRedirects(true);
             // Post 请求不能使用缓存
             urlConnection.setUseCaches(false);
             urlConnection.setConnectTimeout(60000);
             urlConnection.setReadTimeout(60000);
+            urlConnection.connect();
             OutputStream out = urlConnection.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(out, "GBK"));
@@ -80,7 +84,8 @@ public class HttpKbGetToken {
                     "\n" +
                     "web\n" +
                     "-----------------------------bbbb--");
-           // out.flush();
+            out.flush();
+            out.close();
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");
