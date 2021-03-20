@@ -22,9 +22,15 @@ public class HttpKbGetToken {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Value("${kbtoken}")
     private String kbtoken;
+    private  static String BOUNDARY ="bbbb";
+    private final static String PREFIX = "-----------------------------";// 必须存在
+    private  final static String ENDFIX="--";
+    private final static String LINE_END = "\r\n";
+
     public String getkbToken() throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         String token="";
+
         List <String> symbols=new ArrayList<>();
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
         //String hblist=hblisturl+"symbol="+para+"usdt&type=step0&depth=5";
@@ -34,7 +40,7 @@ public class HttpKbGetToken {
             //Thread.sleep(500);
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
-            urlConnection.setRequestProperty("Content-type", "multipart/form-data; boundary=---------------------------bbbb");
+            urlConnection.setRequestProperty("Content-type", "multipart/form-data; boundary="+PREFIX+BOUNDARY);
             urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
             //urlConnection.setRequestProperty("Content-Length","298");
             urlConnection.setRequestProperty("Connection","keep-alive");
@@ -56,39 +62,38 @@ public class HttpKbGetToken {
             urlConnection.setUseCaches(false);
             urlConnection.setConnectTimeout(60000);
             urlConnection.setReadTimeout(60000);
-            urlConnection.connect();
+
             OutputStream out = urlConnection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(out, "GBK"));
-//            writer.append("-----------------------------bbbb");
-//            writer.newLine();
-//            writer.append("Content-Disposition: form-data; name=\"protocol\"");
-//            writer.newLine();
-//            writer.newLine();
-//            writer.append("socket.io");
-//            writer.newLine();
-//            writer.append("-----------------------------bbbb");
-//            writer.newLine();
-//            writer.append("Content-Disposition: form-data; name=\"source\"");
-//            writer.newLine();
-//            writer.newLine();
-//            writer.append("web");
-//            writer.newLine();
-//            writer.append("-----------------------------bbbb--");
-            writer.write("-----------------------------bbbb\n" +
-                    "Content-Disposition: form-data; name=\"protocol\"\n" +
-                    "\n" +
-                    "socket.io\n" +
-                    "-----------------------------bbbb\n" +
-                    "Content-Disposition: form-data; name=\"source\"\n" +
-                    "\n" +
-                    "web\n" +
-                    "-----------------------------bbbb--");
-            out.flush();
+            //urlConnection.
+            StringBuilder writer = new StringBuilder();
+//            BufferedWriter writer = new BufferedWriter(
+//                    new OutputStreamWriter(out, "GBK"));
+            writer.append(PREFIX).append(BOUNDARY).append(LINE_END);
+            writer.append("Content-Disposition: form-data; name=\"protocol\"").append(LINE_END);
+            writer.append(LINE_END);
+            writer.append("socket.io").append(LINE_END);
+            writer.append(PREFIX).append(BOUNDARY).append(LINE_END);
+            writer.append("Content-Disposition: form-data; name=\"source\"").append(LINE_END);
+            writer.append(LINE_END);
+            writer.append("web").append(LINE_END);
+            writer.append(PREFIX).append(BOUNDARY).append(ENDFIX).append(LINE_END);
+            byte[] data=writer.toString().getBytes("GBK");
+            out.write(data);
+//            writer.write("-----------------------------bbbb\r\n" +
+//                    "Content-Disposition: form-data; name=\"protocol\"\r\n" +
+//                    "\r\n" +
+//                    "socket.io\r\n" +
+//                    "-----------------------------bbbb\r\n" +
+//                    "Content-Disposition: form-data; name=\"source\"\r\n" +
+//                    "\r\n" +
+//                    "web\r\n" +
+//                    "-----------------------------bbbb--");
+            out.flush();//发送数据
+            urlConnection.connect();
             out.close();
             InputStream in = urlConnection.getInputStream();
-            GZIPInputStream gZipS = new GZIPInputStream(in);
-            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            //GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(in, "GBK");
             BufferedReader reader = new BufferedReader(res);
             String line;
             List<String> charinfo = new ArrayList<String>();
