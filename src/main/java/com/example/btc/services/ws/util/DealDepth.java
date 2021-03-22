@@ -21,7 +21,7 @@ public class DealDepth {
         JSONObject jsdata = jsonObject.getJSONObject("data");
         JSONArray jsasks = jsdata.getJSONArray("asks");
         JSONArray jsbids = jsdata.getJSONArray("bids");
-        jsre.put("symbol", symbol);
+        jsre.put("symbol", symbol.toUpperCase());
         jsre.put("asks", jsasks);
         jsre.put("bids", jsbids);
         return jsre;
@@ -39,7 +39,6 @@ public class DealDepth {
         jsre.put("bids", jsbids);
         return jsre;
     }
-
     public static JSONObject getOkDetpth(String message) {
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
@@ -47,31 +46,39 @@ public class DealDepth {
         JSONObject js = jsdata.getJSONObject(0);
         JSONArray asks = js.getJSONArray("asks");
         JSONArray bids = js.getJSONArray("bids");
-
         String instrument_id = js.getString("instrument_id");
         jsre.put("symbol", instrument_id);
-        jsre.put("asks", asks);
-        jsre.put("bids", bids);
+        if(asks !=null&&!asks.isEmpty()) {
+            jsre.put("asks", asks);
+        }
+        if(bids !=null&&!bids.isEmpty()) {
+            jsre.put("bids", bids);
+        }
         return jsre;
     }
 
     public static JSONObject getHbDetpth(String message) {
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
-        //JSONArray jsasks=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("asks");
-        //JSONArray jsbids=(JSONArray) ((JSONObject)jsonObject.get("tick")).get("bids");
         String bz = jsonObject.getString("ch");
+
         int begin = bz.indexOf(".");
         int end = bz.indexOf(".", begin + 1);
         bz = bz.substring(begin + 1, end);
+        jsre.put("symbol", bz.toUpperCase());
         JSONObject jstick = jsonObject.getJSONObject("tick");
-        JSONArray asks = jstick.getJSONArray("asks");
-        JSONArray bids = jstick.getJSONArray("bids");
-        List<Object> asksdepth = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
-        List<Object> bidsdepth = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
-        jsre.put("symbol", bz);
-        jsre.put("asks", asksdepth);
-        jsre.put("bids", bidsdepth);
+        if(jstick!=null) {
+            JSONArray asks = jstick.getJSONArray("asks");
+            if(asks !=null&&!asks.isEmpty()) {
+                List<Object> asksdepth = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
+                jsre.put("asks", asksdepth);
+            }
+            JSONArray bids = jstick.getJSONArray("bids");
+            if(bids !=null&&!bids.isEmpty()){
+                List<Object> bidsdepth = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+                jsre.put("bids", bidsdepth);
+            }
+        }
         return jsre;
 
     }
@@ -80,14 +87,21 @@ public class DealDepth {
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONObject jsdepth = jsonObject.getJSONObject("depth");
-        JSONArray asks = jsdepth.getJSONArray("asks");
-        JSONArray bids = jsdepth.getJSONArray("bids");
-        List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
-        List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
         String symbol = jsonObject.getString("symbol");
-        jsre.put("symbol", symbol);
-        jsre.put("asks", asksobject);
-        jsre.put("bids", bidsobject);
+        jsre.put("symbol", symbol.toUpperCase());
+        if(jsdepth !=null) {
+            JSONArray asks = jsdepth.getJSONArray("asks");
+            JSONArray bids = jsdepth.getJSONArray("bids");
+            if(asks !=null&&!asks.isEmpty()) {
+                List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
+                jsre.put("asks", asksobject);
+
+            }
+            if(bids !=null&&!bids.isEmpty()){
+                List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+                jsre.put("bids", bidsobject);
+            }
+        }
         return jsre;
     }
 
@@ -97,11 +111,16 @@ public class DealDepth {
         String symbol = jsonObject.getString("channel");
         JSONArray asks = jsonObject.getJSONArray("asks");
         JSONArray bids = jsonObject.getJSONArray("bids");
-        List<Object> lisasks = asks.subList(asks.size() - 5 >= 0 ? asks.size() - 5 : 0, asks.size());
-        List<Object> lisbids = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
-        jsre.put("symbol", symbol);
-        jsre.put("asks", lisasks);
-        jsre.put("bids", lisbids);
+        jsre.put("symbol", symbol.toUpperCase());
+        if(asks !=null&&!asks.isEmpty()) {
+            List<Object> lisasks = asks.subList(asks.size() - 5 >= 0 ? asks.size() - 5 : 0, asks.size());
+            jsre.put("asks", lisasks);
+        }
+        if(bids !=null&&!bids.isEmpty())
+        {
+            List<Object> lisbids = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+            jsre.put("bids", lisbids);
+        }
         return jsre;
     }
 

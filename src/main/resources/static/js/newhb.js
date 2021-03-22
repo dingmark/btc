@@ -20,37 +20,37 @@ websockethb.onmessage=function(event)
  //   temp=getcnc(temp)
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
-        case'btc':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('btc'));
+        case'BTC':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC'));
             if('undefined'==typeof (hbvar[bz])) {
                 hbvar[bz] = {};
             }
             var symbol =temp.symbol;
             hbvar[bz][symbol]={};
             //btc转人民币
-            temp=hbtemprmb(temp,'btc');
+            temp=hbtemprmb(temp,'BTC');
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'sdt':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('usdt'));
+        case 'SDT':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT'));
             if('undefined'==typeof (hbvar[bz])) {
                 hbvar[bz] = {};
             }
             var symbol =temp.symbol;
             hbvar[bz][symbol]={};
-            temp=hbtemprmb(temp,'usdt');
+            temp=hbtemprmb(temp,'USDT');
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'eth':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('eth'));
+        case 'ETH':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH'));
             if('undefined'==typeof (hbvar[bz])) {
                 hbvar[bz] = {};
             }
             var symbol =temp.symbol;
             hbvar[bz][symbol]={};
-            temp=hbtemprmb(temp,'eth');
+            temp=hbtemprmb(temp,'ETH');
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
             break;

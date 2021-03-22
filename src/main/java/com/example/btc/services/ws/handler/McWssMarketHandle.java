@@ -67,6 +67,7 @@ public class McWssMarketHandle implements Cloneable{
                         if (s.indexOf("push")!=-1)
                         {
                             JSONObject js=DealDepth.getMcDetpth(s);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
                             callback.onReceive(js.toJSONString());
                         }
 
@@ -120,7 +121,7 @@ public class McWssMarketHandle implements Cloneable{
                  //String[] st={"_USDT","_BTC","_ETH"};
                  JSONObject sub = new JSONObject();
                  JSONObject params=new JSONObject();
-                 params.put("symbol",e.toUpperCase()+"_USDT");
+                 params.put("symbol",e.toUpperCase());
                  params.put("limit",5);
                  sub.put("param",params);
                  sub.put("method", "sub.depth.full");

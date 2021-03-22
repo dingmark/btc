@@ -19,31 +19,31 @@ websocketzb.onmessage=function(event)
     temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-2,temp.symbol.length);
     switch (type) {
-        case'tc':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('btc'));
+        case'TC':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC'));
             if('undefined'==typeof (zbvar[bz])) {
                 zbvar[bz] = {};
             }
             var symbol =temp.symbol;
             zbvar[bz][symbol]={};
             //btc转人民币
-            temp=zbtemprmb(temp,'btc');
+            temp=zbtemprmb(temp,'BTC');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'dt':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('usdt'));
+        case 'DT':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT'));
             if('undefined'==typeof (zbvar[bz])) {
                 zbvar[bz] = {};
             }
             var symbol =temp.symbol;
             zbvar[bz][symbol]={};
-            temp=zbtemprmb(temp,'usdt');
+            temp=zbtemprmb(temp,'USDT');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             break;
-        case 'qc':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('qc'));
+        case 'QC':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('QC'));
             if('undefined'==typeof (zbvar[bz])) {
                 zbvar[bz] = {};
             }

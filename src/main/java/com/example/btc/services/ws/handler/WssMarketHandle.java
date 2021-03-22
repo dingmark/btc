@@ -81,6 +81,7 @@ public class WssMarketHandle implements Cloneable{
                         Object ping = JSONMessage.get("ping");
                         if (ch != null) {
                             JSONObject js= DealDepth.getHbDetpth(message);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
                             callback.onReceive(js.toString());
                         }
                         if (ping != null) {
@@ -129,8 +130,12 @@ public class WssMarketHandle implements Cloneable{
 
 
     private void doSub(List<String> channels) {
-
         channels.stream().forEach(e -> {
+            JSONObject sub = new JSONObject();
+            sub.put("sub", "market." + e + ".depth.step0");
+            webSocketClient.send(sub.toString());
+        });
+        /*channels.stream().forEach(e -> {
             JSONObject sub = new JSONObject();
             sub.put("sub", "market." + e + "usdt.depth.step0");
             webSocketClient.send(sub.toString());
@@ -144,7 +149,7 @@ public class WssMarketHandle implements Cloneable{
             JSONObject sub = new JSONObject();
             sub.put("sub", "market." + e + "eth.depth.step0");
             webSocketClient.send(sub.toString());
-        });
+        });*/
 
     }
 

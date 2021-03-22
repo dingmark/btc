@@ -66,6 +66,7 @@ public class KbWssMarketHandle implements Cloneable{
                         if(JSONObject.parseObject(s).getString("type").equals("message"))
                         {
                             JSONObject js= DealDepth.getKbDepth(s);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
                             callback.onReceive(js.toJSONString());
                         }
 

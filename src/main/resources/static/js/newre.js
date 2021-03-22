@@ -53,7 +53,7 @@ websocketre.onmessage=function(event)
 function hbtemprmb(temp,zrmb) {
     switch (zrmb)
     {
-        case 'btc':
+        case 'BTC':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*hbbtc;
@@ -63,7 +63,7 @@ function hbtemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*hbbtc;
             }
             break;
-        case 'usdt':
+        case 'USDT':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*hbrmb;
@@ -73,7 +73,7 @@ function hbtemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
             break;
-        case 'eth':
+        case 'ETH':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*hbeth;
@@ -205,7 +205,7 @@ function bttemprmb(temp,zrmb) {
 function bntemprmb(temp,zrmb) {
     switch (zrmb)
     {
-        case 'btc':
+        case 'BTC':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*bnbtc;
@@ -215,7 +215,7 @@ function bntemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*bnbtc;
             }
             break;
-        case 'usdt':
+        case 'USDT':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*hbrmb;
@@ -225,7 +225,7 @@ function bntemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
             break;
-        case 'eth':
+        case 'ETH':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*bneth;
@@ -242,7 +242,7 @@ function bntemprmb(temp,zrmb) {
 function zbtemprmb(temp,zrmb) {
     switch (zrmb)
     {
-        case 'btc':
+        case 'BTC':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*zbbtc;
@@ -252,7 +252,7 @@ function zbtemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*zbbtc;
             }
             break;
-        case 'usdt':
+        case 'USDT':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][0]=temp.asks[i][0]*zbqc;
@@ -262,7 +262,7 @@ function zbtemprmb(temp,zrmb) {
                 temp.bids[i][0]=temp.bids[i][0]*zbqc;
             }
             break;
-        case 'qc':
+        case 'QC':
 
             break;
     }
@@ -273,7 +273,7 @@ function zbtemprmb(temp,zrmb) {
 function bstemprmb(temp,zrmb) {
     switch (zrmb)
     {
-        case 'btc':
+        case 'BTC':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][1]=temp.asks[i][1]*bsbtc;
@@ -283,7 +283,7 @@ function bstemprmb(temp,zrmb) {
                 temp.bids[i][1]=temp.bids[i][1]*bsbtc;
             }
             break;
-        case 'usdt':
+        case 'USDT':
             for(i=0;i<temp.asks.length;i++)
             {
                 temp.asks[i][1]=temp.asks[i][1]*bscnc;
@@ -293,7 +293,7 @@ function bstemprmb(temp,zrmb) {
                 temp.bids[i][1]=temp.bids[i][1]*bscnc;
             }
             break;
-        case 'cnc':
+        case 'CNC':
 
             break;
     }

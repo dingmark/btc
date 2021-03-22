@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class HttpHbGetSymbols {
+public class HttpHbGetCurrencys {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${hbsymbols}")
-    private String hbsymbols;
-    public List<String> gethbSymbols() throws MalformedURLException {
+    @Value("${hbcurrencys}")
+    private String hbcurrencys;
+    public List<String> gethbCurrencys() throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         List <String> symbols=new ArrayList<>();
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
         //String hblist=hblisturl+"symbol="+para+"usdt&type=step0&depth=5";
-        URL url=new URL(hbsymbols);
+        URL url=new URL(hbcurrencys);
         HttpURLConnection urlConnection=null;
         try {
             //Thread.sleep(500);
@@ -51,16 +51,12 @@ public class HttpHbGetSymbols {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("火币symbols数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            logger.info("火币List数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js =JSONObject.parseObject(charinfo.get(0));
 
             if(js.getString("status").equals("ok")) {
-             JSONArray jsonArray=js.getJSONArray("data");
-                for(int i=0;i<jsonArray.size();i++)
-                {
-                    JSONObject temp=(JSONObject) jsonArray.get(i);
-                    symbols.add(temp.getString("symbol"));
-                }
+               symbols=  JsToNew.castList(js.get("data"), String.class);
+               //return symbols;
             }
 
         }

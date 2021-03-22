@@ -1,28 +1,24 @@
 package com.example.btc.services.webSocket;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.btc.baseDao.UrlPara;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
-import com.example.btc.services.http.bian.biAn;
 import com.example.btc.services.http.bter.bter;
+import com.example.btc.services.http.hb.HttpHbGetCurrencys;
 import com.example.btc.services.http.hb.HttpHbGetSymbols;
-import com.example.btc.services.http.hb.HttpHbNewPrice;
 import com.example.btc.services.http.kb.HttpKbGetSymbols;
 import com.example.btc.services.http.kb.HttpKbGetToken;
+import com.example.btc.services.http.mocha.HttpMcGetSymbols;
 import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
+import com.example.btc.services.http.zb.HttpZbGetSymbols;
 import com.example.btc.services.ws.handler.*;
-import com.example.btc.services.ws.hb.Hbprice;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.unbescape.css.CssIdentifierEscapeLevel;
 
-import javax.annotation.PostConstruct;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -33,13 +29,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 
 @SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiringInspection"})
@@ -49,19 +41,35 @@ import java.util.concurrent.TimeUnit;
 public class OnWebSocket {
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
-    private  static  HttpHbGetSymbols hbsymbols;
+    private  static HttpMcGetSymbols httpMcGetSymbols;
+    private  static HttpZbGetSymbols httpZbGetSymbols;
+    private  static HttpHbGetCurrencys hbcurrencys;
+    private  static HttpHbGetSymbols hbGetSymbols;
     private  static  CustomMultiThreadingService customMultiThreadingService;
     private  static UrlPara urlPara;
     private  static  OkPrice okPrice;
     private  static bter mbter;
     private static mocha mmocha;
     private static List<String> reqparams=new ArrayList<>();
+    private static List<String> hbreqparams=new ArrayList<>();
     private static List<String> kbreqparams=new ArrayList<>();
+    private static List<String> mcreqparams=new ArrayList<>();
+    private static List<String> zbreqparams=new ArrayList<>();
     private static String token="";
     @Autowired
-    public void setRepository(HttpHbGetSymbols hbsymbols) throws MalformedURLException {
-        OnWebSocket.hbsymbols=hbsymbols;
-        reqparams=hbsymbols.gethbSymbols();
+    public void setRepository(HttpHbGetCurrencys hbcurrencys) throws MalformedURLException {
+        OnWebSocket.hbcurrencys=hbcurrencys;
+        reqparams=hbcurrencys.gethbCurrencys();
+    }
+    @Autowired
+    public void setZbsymbols(HttpZbGetSymbols httpZbGetSymbols) throws MalformedURLException {
+        OnWebSocket.httpZbGetSymbols=httpZbGetSymbols;
+        zbreqparams=httpZbGetSymbols.getZbSymbols();
+    }
+    @Autowired
+    public void setHbsymbols(HttpHbGetSymbols hbsymbols) throws MalformedURLException {
+        OnWebSocket.hbGetSymbols=hbsymbols;
+        hbreqparams=hbsymbols.gethbSymbols();
     }
     @Autowired
     public void setUrlPara(UrlPara urlPara)  {OnWebSocket.urlPara=urlPara;
@@ -74,11 +82,23 @@ public class OnWebSocket {
     public void setMocha(mocha mmocha){OnWebSocket.mmocha=mmocha;}
     @Autowired
     public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException { OnWebSocket.httpKbGetToken=httpKbGetToken;
-        token=httpKbGetToken.getkbToken();
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @SneakyThrows
+            @Override
+            public void run() {
+                token=httpKbGetToken.getkbToken();
+            }
+        }, 0, 120000, TimeUnit.MILLISECONDS);
     }
     @Autowired
     public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException { OnWebSocket.httpKbGetSymbols=httpKbGetSymbols;
         kbreqparams=httpKbGetSymbols.gethbSymbols();
+    }
+    @Autowired
+    public  void setHttpMcGetSymbols(HttpMcGetSymbols httpMcGetSymbols)throws MalformedURLException
+    {
+        OnWebSocket.httpMcGetSymbols=httpMcGetSymbols;
+        mcreqparams=httpMcGetSymbols.getmcSymbols();
     }
     @Autowired
     public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
@@ -110,7 +130,7 @@ public class OnWebSocket {
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
 
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
@@ -132,7 +152,7 @@ public class OnWebSocket {
             switch (type) {
                 case "hb":
                     WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
-                    wssMarketHandle.sub(reqparams, response -> {
+                    wssMarketHandle.sub(hbreqparams, response -> {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
@@ -207,7 +227,7 @@ public class OnWebSocket {
                     break;
                 case "mc":
                     McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl);
-                    mcWssMarketHandle.sub(reqparams,response->{
+                    mcWssMarketHandle.sub(mcreqparams,response->{
                         //logger.info(response.toString());
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -217,15 +237,15 @@ public class OnWebSocket {
                     break;
                 case "zb":
                     ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl);
-                    ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
-                    ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
-                    zbWssMarketHandle.sub(reqparams,response->{
+                   // ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
+                   // ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
+                    zbWssMarketHandle.sub(zbreqparams,response->{
                         //logger.info(response.toString());
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
                     });
-                    zbQcWssMarketHandle.sub(reqparams,response->{
+                    /*zbQcWssMarketHandle.sub(reqparams,response->{
                         //logger.info(response.toString());
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -236,7 +256,7 @@ public class OnWebSocket {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
                         }
-                    });
+                    });*/
                     Thread.sleep(60000);
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);

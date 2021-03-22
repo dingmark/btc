@@ -103,7 +103,6 @@ public class BtEthWssMarketHandle implements Cloneable{
 
             @Override
             public void onError(Exception e) {
-
                // logger.error("onError:", e);
             }
         };

@@ -65,6 +65,7 @@ public class ZbBtcWssMarketHandle implements Cloneable{
                         if(JSONObject.parseObject(s).get("code")==null)
                         {
                             JSONObject js= DealDepth.getZbDepth(s);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
                             callback.onReceive(js.toJSONString());
                         }
                     } catch (InterruptedException e) {

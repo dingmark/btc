@@ -1,8 +1,7 @@
-package com.example.btc.services.http.hb;
+package com.example.btc.services.http.mocha;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.btc.services.ws.util.JsToNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,22 +19,22 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 @Service
-public class HttpHbGetSymbols {
+public class HttpMcGetSymbols {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    @Value("${hbsymbols}")
-    private String hbsymbols;
-    public List<String> gethbSymbols() throws MalformedURLException {
+    @Value("${mcsymbols}")
+    private String mcsymbols;
+    public List<String> getmcSymbols() throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         List <String> symbols=new ArrayList<>();
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
         //String hblist=hblisturl+"symbol="+para+"usdt&type=step0&depth=5";
-        URL url=new URL(hbsymbols);
+        URL url=new URL(mcsymbols);
         HttpURLConnection urlConnection=null;
         try {
             //Thread.sleep(500);
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
-            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Content-type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
             urlConnection.setConnectTimeout(20000);
             urlConnection.setReadTimeout(20000);
@@ -51,15 +50,18 @@ public class HttpHbGetSymbols {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("火币symbols数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            logger.info("抹茶symbols数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js =JSONObject.parseObject(charinfo.get(0));
 
-            if(js.getString("status").equals("ok")) {
-             JSONArray jsonArray=js.getJSONArray("data");
+            if(js.getString("code").equals("200")) {
+              // symbols=  JsToNew.castList(js.get("data"), String.class);
+                JSONArray jsonArray=js.getJSONArray("data");
                 for(int i=0;i<jsonArray.size();i++)
                 {
-                    JSONObject temp=(JSONObject) jsonArray.get(i);
-                    symbols.add(temp.getString("symbol"));
+                    Object object=jsonArray.get(i);
+                    String symbol=((JSONObject)object).getString("symbol");
+                    symbols.add(symbol);
+                    //symbols.add(((JSONObject)js).getString("symbol"));
                 }
             }
 

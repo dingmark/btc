@@ -66,6 +66,7 @@ public class ZbWssMarketHandle implements Cloneable{
                         if(JSONObject.parseObject(s).get("code")==null)
                         {
                             JSONObject js= DealDepth.getZbDepth(s);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
                             callback.onReceive(js.toJSONString());
                         }
                     } catch (InterruptedException e) {
@@ -112,7 +113,7 @@ public class ZbWssMarketHandle implements Cloneable{
         channels.stream().forEach(e->{
             JSONObject sub = new JSONObject();
             sub.put("length",5);
-            sub.put("channel",e+"usdt_depth");
+            sub.put("channel",e+"_depth");
             sub.put("event", "addChannel");
             webSocketClient.send(sub.toString());
         });

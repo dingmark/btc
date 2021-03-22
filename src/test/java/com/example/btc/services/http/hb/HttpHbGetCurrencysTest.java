@@ -20,7 +20,7 @@ import java.util.zip.GZIPInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HttpHbGetSymbolsTest {
+class HttpHbGetCurrencysTest {
 
     @Test
     public void gethbSymbols() throws MalformedURLException {

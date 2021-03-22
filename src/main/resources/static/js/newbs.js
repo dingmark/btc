@@ -19,31 +19,31 @@ websocketbs.onmessage=function(event)
     //temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
-        case'btc':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('btc')-1);
+        case'BTC':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC')-1);
             if('undefined'==typeof (bsvar[bz])) {
                 bsvar[bz] = {};
             }
             var symbol =temp.symbol;
             bsvar[bz][symbol]={};
             //btc转人民币
-            temp=bstemprmb(temp,'btc');
+            temp=bstemprmb(temp,'BTC');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             break;
-        case 'sdt':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('usdt')-1);
+        case 'SDT':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
             if('undefined'==typeof (bsvar[bz])) {
                 bsvar[bz] = {};
             }
             var symbol =temp.symbol;
             bsvar[bz][symbol]={};
-            temp=bstemprmb(temp,'usdt');
+            temp=bstemprmb(temp,'USDT');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             break;
-        case 'cnc':
-            var bz=temp.symbol.substr(0,temp.symbol.indexOf('cnc')-1);
+        case 'CNC':
+            var bz=temp.symbol.substr(0,temp.symbol.indexOf('CNC')-1);
             if('undefined'==typeof (bsvar[bz])) {
                 bsvar[bz] = {};
             }

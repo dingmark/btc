@@ -66,7 +66,9 @@ public class BnEthWssMarketHandle implements Cloneable{
                     try {
                         if(JSONObject.parseObject(s).get("stream")!=null)
                         {
-                            callback.onReceive(DealDepth.getBnDetpth(s).toJSONString());
+                            JSONObject js=DealDepth.getBnDetpth(s);
+                            if(js.get("asks")!=null&&js.get("bids")!=null)
+                                callback.onReceive(js.toJSONString());
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
