@@ -2,20 +2,14 @@
  * Created by Administrator on 2021-03-15.
  */
 var revar={};
+var asks={};
 var hbbtc,hbeth,hbrmb;
-
 var okbtc,oketh;
-
 var mcbtc,mceth;
-
 var btbtc,bteth;
-
 var bnbtc,bneth;
-
 var zbbtc,zbeth,zbqc;
-
 var bsbtc,bscnc;
-
 var kbbtc,kbeth,kbcnc;
 
 websocketre = new WebSocket("ws://localhost:8080/test/re");
@@ -47,8 +41,6 @@ websocketre.onmessage=function(event)
     //kb
     kbbtc=revar.kbbtcusdt*revar.bsusdtcnc;
     kbeth=revar.kbethusdt*revar.bsusdtcnc;
-
-
 }
 function hbtemprmb(temp,zrmb) {
     switch (zrmb)
@@ -337,4 +329,22 @@ function kbtemprmb(temp,zrmb) {
     }
 
     return temp;
+}
+function findmaxAsk(trade,bz,symbol,ask1) {
+    if('undefined'==typeof (asks[trade]))
+    {
+        asks[trade]={};
+    }
+    if ('undefined'==typeof (asks[trade][bz]))
+    {
+        asks[trade][bz]={};
+    }
+    if('undefined'==typeof (asks[trade][bz][symbol]))
+    {
+        asks[trade][bz][symbol]=new Array();
+        //asks[trade][bz][symbol][0]=ask1[0];
+        //return;
+    }
+    //var i=asks[trade][bz][symbol].length;
+    asks[trade][bz][symbol][0]=ask1[0];
 }
