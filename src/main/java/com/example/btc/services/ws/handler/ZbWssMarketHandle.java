@@ -111,6 +111,7 @@ public class ZbWssMarketHandle implements Cloneable{
     private void doSub(List<String> channels) {
         //{"event":"addChannel","channel":"ltcbtc_depth","length":5}
         channels.stream().forEach(e->{
+            e=e.replace("_","");
             JSONObject sub = new JSONObject();
             sub.put("length",5);
             sub.put("channel",e+"_depth");

@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -52,11 +53,11 @@ public class HttpZbGetSymbols {
             long endTime = System.currentTimeMillis();
             logger.info("中币symbols数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js =JSONObject.parseObject(charinfo.get(0));
-
            //symbols=js.keySet().iterator();
-            while (js.keySet().iterator().hasNext())
+            Iterator iterator=js.keySet().iterator();
+            while (iterator.hasNext())
             {
-                String symbol=js.keySet().iterator().next();
+                String symbol=iterator.next().toString();
                 symbols.add(symbol);
             }
 
