@@ -341,7 +341,7 @@ function findmaxAsk(trade,bz,symbol,ask1) {
     }
     if('undefined'==typeof (asks[trade][bz][symbol]))
     {
-        asks[trade][bz][symbol]=new Array();
+        asks[trade][bz][symbol]={};//new Array();
         //asks[trade][bz][symbol][0]=ask1[0];
         //return;
     }
