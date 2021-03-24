@@ -82,7 +82,8 @@ public class BtWssMarketHandle implements Cloneable{
                                 jsupdate= DealDepth.getBtDepthUpdate(js,s);
                                // callback.onReceive("更新后数据"+jsupdate.toJSONString());
                                 jsupdate=DealDepth.getBtDepth(jsupdate);
-                                callback.onReceive(jsupdate.toJSONString());
+                                if(((List)jsupdate.get("asks")).size()>0&&((List)jsupdate.get("bids")).size()>0)
+                                    callback.onReceive(jsupdate.toJSONString());
                                 jsall.put(jsupdate.getString("symbol"),jsupdate);
                             }
 
