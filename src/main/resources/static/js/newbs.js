@@ -30,6 +30,7 @@ websocketbs.onmessage=function(event)
             temp=bstemprmb(temp,'BTC');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
+            putask1to('bs',bz,Number( temp.asks[0][1]));
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -41,6 +42,7 @@ websocketbs.onmessage=function(event)
             temp=bstemprmb(temp,'USDT');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
+            putask1to('bs',bz,Number(temp.asks[0][1]));
             break;
         case 'CNC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('CNC')-1);
@@ -53,6 +55,7 @@ websocketbs.onmessage=function(event)
            // temp=zbtemprmb(temp,'qc');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
+            putask1to('bs',bz,Number(temp.asks[0][1]));
             break;
     }
 }

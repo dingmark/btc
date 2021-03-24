@@ -24,6 +24,7 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'BTC');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
+            putask1to('bt',bz,temp.asks[0][0]);
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -35,6 +36,7 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'USDT');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
+            putask1to('bt',bz,temp.asks[0][0]);
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -46,6 +48,7 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'ETH');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
+            putask1to('bt',bz,temp.asks[0][0]);
             break;
     }
 };
