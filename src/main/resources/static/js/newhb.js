@@ -32,7 +32,7 @@ websockethb.onmessage=function(event)
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
 
-            putask1to('hb',bz,temp.asks[0][0]);
+            putask1to('hb',bz,'BTC',temp.asks[0][0]);
             //卖一插入数组asksvar
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
@@ -46,7 +46,8 @@ websockethb.onmessage=function(event)
             temp=hbtemprmb(temp,'USDT');
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
-            putask1to('hb',bz,temp.asks[0][0]);
+            //var symbo_ask={"symbol":symbol,"ask1":temp.asks[0][0]};
+            putask1to('hb',bz,'USDT',temp.asks[0][0]);
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
         case 'ETH':
@@ -59,7 +60,7 @@ websockethb.onmessage=function(event)
             temp=hbtemprmb(temp,'ETH');
             hbvar[bz][symbol].asks= temp.asks;
             hbvar[bz][symbol].bids= temp.bids;
-            putask1to('hb',bz,temp.asks[0][0]);
+            putask1to('hb',bz,'ETH',temp.asks[0][0]);
            // findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
     }

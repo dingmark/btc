@@ -28,7 +28,7 @@ websockethb.onmessage=function(event)
             temp=mctemprmb(temp,'BTC');
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
-            putask1to('mc',bz,temp.asks[0][0]);
+            putask1to('mc',bz,'BTC',temp.asks[0][0]);
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -40,7 +40,7 @@ websockethb.onmessage=function(event)
             temp=mctemprmb(temp,'USDT');
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
-            putask1to('mc',bz,temp.asks[0][0]);
+            putask1to('mc',bz,'USDT',temp.asks[0][0]);
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -52,7 +52,7 @@ websockethb.onmessage=function(event)
             temp=mctemprmb(temp,'ETH');
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
-            putask1to('mc',bz,temp.asks[0][0]);
+            putask1to('mc',bz,'ETH',temp.asks[0][0]);
             break;
     }
     //alert("111");

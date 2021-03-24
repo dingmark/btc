@@ -30,7 +30,7 @@ websocketzb.onmessage=function(event)
             temp=zbtemprmb(temp,'BTC');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
-            putask1to('zb',bz,temp.asks[0][0]);
+            putask1to('zb',bz,'BTC',temp.asks[0][0]);
             break;
         case 'DT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT'));
@@ -42,7 +42,7 @@ websocketzb.onmessage=function(event)
             temp=zbtemprmb(temp,'USDT');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
-            putask1to('zb',bz,temp.asks[0][0]);
+            putask1to('zb',bz,'USDT',temp.asks[0][0]);
             break;
         case 'QC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('QC'));
@@ -55,7 +55,7 @@ websocketzb.onmessage=function(event)
            // temp=zbtemprmb(temp,'qc');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
-            putask1to('zb',bz,temp.asks[0][0]);
+            putask1to('zb',bz,'QC',temp.asks[0][0]);
             break;
     }
     //alert("111");

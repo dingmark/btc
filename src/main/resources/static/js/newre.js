@@ -349,39 +349,58 @@ function findmaxAsk(trade,bz,symbol,ask1) {
     //var i=asks[trade][bz][symbol].length;
     asks[trade][bz][symbol][0]=ask1[0];
 }
-function putask1to(trade,bz,ask1)
+function putask1to(trade,bz,base,ask1)
 {
     if('undefined'==typeof (asksvar[bz]))
     {
-        asksvar[bz]=new Array();
+        asksvar[bz]={};//new Array();
+    }
+    if('undefined'==typeof (asksvar[bz][trade]))
+    {
+        asksvar[bz][trade]={};
     }
     //hb卖1价格进数组1
     switch (trade)
     {
         case 'hb':
-            asksvar[bz][0]=ask1;
+            //var i=asksvar[bz][trade].length;
+            f(trade,bz,base,ask1);
+            //asksvar[bz][trade][i]=ask1;
             break;
         case 'bn':
-            asksvar[bz][1]=ask1;
+            //asksvar[bz][1]=ask1;
+            f(trade,bz,base,ask1);
             break;
         case 'bt':
-            asksvar[bz][2]=ask1;
+           // asksvar[bz][2]=ask1;
+            f(trade,bz,base,ask1);
             break;
         case 'kb':
-            asksvar[bz][3]=ask1;
+            f(trade,bz,base,ask1);
+           // asksvar[bz][3]=ask1;
             break;
         case'mc':
-            asksvar[bz][4]=ask1;
+            //asksvar[bz][4]=ask1;
+            f(trade,bz,base,ask1);
             break;
         case'bs':
-            asksvar[bz][5]=ask1;
+            //asksvar[bz][5]=ask1;
+            f(trade,bz,base,ask1);
             break;
         case'ok':
-            asksvar[bz][6]=ask1;
+            //asksvar[bz][6]=ask1;
+            f(trade,bz,base,ask1);
             break;
         case 'zb':
-            asksvar[bz][7]=ask1;
+           // asksvar[bz][7]=ask1;
+            f(trade,bz,base,ask1);
             break
     }
-
+    function f(trade,bz,base,ask1) {
+                if('undefined'==typeof (asksvar[bz][trade][base]))
+                {
+                    asksvar[bz][trade][base]={};
+                }
+                asksvar[bz][trade][base]=ask1;
+    }
 }

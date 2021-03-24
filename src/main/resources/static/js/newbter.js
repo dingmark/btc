@@ -28,7 +28,7 @@ websocketbter.onmessage=function(event)
             {
                 console.log(symbol);
             }
-            putask1to('bt',bz,temp.asks[0][0]);
+            putask1to('bt',bz,'BTC',temp.asks[0][0]);
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -44,7 +44,7 @@ websocketbter.onmessage=function(event)
             {
                 console.log(symbol);
             }
-            putask1to('bt',bz,temp.asks[0][0]);
+            putask1to('bt',bz,'USDT',temp.asks[0][0]);
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -60,7 +60,7 @@ websocketbter.onmessage=function(event)
             {
                 console.log(symbol);
             }
-            putask1to('bt',bz,temp.asks[0][0]);
+            putask1to('bt',bz,'ETH',temp.asks[0][0]);
             break;
     }
 };

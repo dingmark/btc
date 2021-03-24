@@ -28,7 +28,7 @@ websocketok.onmessage=function(event)
             temp=oktemprmb(temp,'BTC')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
-            putask1to('ok',bz,temp.asks[0][0]);
+            putask1to('ok',bz,'BTC',temp.asks[0][0]);
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -40,7 +40,7 @@ websocketok.onmessage=function(event)
             temp=oktemprmb(temp,'USDT')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
-            putask1to('ok',bz,temp.asks[0][0]);
+            putask1to('ok',bz,'USDT',temp.asks[0][0]);
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -52,7 +52,7 @@ websocketok.onmessage=function(event)
             temp=oktemprmb(temp,'ETH')
             okvar[bz][symbol].asks= temp.asks;
             okvar[bz][symbol].bids= temp.bids;
-            putask1to('ok',bz,temp.asks[0][0]);
+            putask1to('ok',bz,'ETH',temp.asks[0][0]);
             break;
     }
     //alert("111");
