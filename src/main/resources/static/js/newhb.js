@@ -35,6 +35,11 @@ websockethb.onmessage=function(event)
             putask1to('hb',bz,'BTC',temp.asks[0][0]);
             //找到这个币种下面卖1目前最大值
             var max=findmax(bz);
+            //该币种买1与卖1最大值比较，计算利差
+            var result=cacule('hb',symbol,temp.bids[0][0],max);
+            //console.log(result);
+            //展示在页面
+
             //卖一插入数组asksvar
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
@@ -51,6 +56,11 @@ websockethb.onmessage=function(event)
             //var symbo_ask={"symbol":symbol,"ask1":temp.asks[0][0]};
             putask1to('hb',bz,'USDT',temp.asks[0][0]);
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
+            //找到这个币种下面卖1目前最大值
+            var max=findmax(bz);
+            //该币种买1与卖1最大值比较，计算利差
+            var result=cacule('hb',symbol,temp.bids[0][0],max);
+            //console.log(result);
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH'));
@@ -64,6 +74,11 @@ websockethb.onmessage=function(event)
             hbvar[bz][symbol].bids= temp.bids;
             putask1to('hb',bz,'ETH',temp.asks[0][0]);
            // findmaxAsk('hb',bz,symbol,temp.asks[0]);
+            //找到这个币种下面卖1目前最大值
+            var max=findmax(bz);
+            //该币种买1与卖1最大值比较，计算利差
+            var result=cacule('hb',symbol,temp.bids[0][0],max);
+            //sconsole.log(result);
             break;
     }
     //alert("111");

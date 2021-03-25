@@ -402,7 +402,7 @@ function putask1to(trade,bz,base,ask1) {
     //找到币种的最大值。并且返回交易对和最大值
     function findmax (bz)
     {
-        var maxvalue={"symbol":"symbol","max":0};
+        var maxvalue={"trade":"","base":"base","max":0};
         var temp=asksvar[bz];
         for (var o in temp)
         {
@@ -410,10 +410,19 @@ function putask1to(trade,bz,base,ask1) {
             {
                 if(maxvalue.max<temp[o][p])
                 {
-                    maxvalue.symbol=p;
+                    maxvalue.trade=o;
+                    maxvalue.bz=bz;
+                    maxvalue.base=p;
                     maxvalue.max=temp[o][p];
                 }
             }
         }
         return maxvalue;
+    }
+    function cacule(trade_now,symbol,symbol_now,max) {
+
+        var percent=max.max/symbol_now-1;
+        return result={"trade_now":trade_now,"symbol":symbol,"buyprice":symbol_now,
+            "percent":percent,"sell_trade":max.trade,
+            "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
