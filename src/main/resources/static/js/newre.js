@@ -349,58 +349,71 @@ function findmaxAsk(trade,bz,symbol,ask1) {
     //var i=asks[trade][bz][symbol].length;
     asks[trade][bz][symbol][0]=ask1[0];
 }
-function putask1to(trade,bz,base,ask1)
-{
-    if('undefined'==typeof (asksvar[bz]))
-    {
-        asksvar[bz]={};//new Array();
+function putask1to(trade,bz,base,ask1) {
+    if ('undefined' == typeof (asksvar[bz])) {
+        asksvar[bz] = {};//new Array();
     }
-    if('undefined'==typeof (asksvar[bz][trade]))
-    {
-        asksvar[bz][trade]={};
+    if ('undefined' == typeof (asksvar[bz][trade])) {
+        asksvar[bz][trade] = {};
     }
     //hb卖1价格进数组1
-    switch (trade)
-    {
+    switch (trade) {
         case 'hb':
             //var i=asksvar[bz][trade].length;
-            f(trade,bz,base,ask1);
+            f(trade, bz, base, ask1);
             //asksvar[bz][trade][i]=ask1;
             break;
         case 'bn':
             //asksvar[bz][1]=ask1;
-            f(trade,bz,base,ask1);
+            f(trade, bz, base, ask1);
             break;
         case 'bt':
-           // asksvar[bz][2]=ask1;
-            f(trade,bz,base,ask1);
+            // asksvar[bz][2]=ask1;
+            f(trade, bz, base, ask1);
             break;
         case 'kb':
-            f(trade,bz,base,ask1);
-           // asksvar[bz][3]=ask1;
+            f(trade, bz, base, ask1);
+            // asksvar[bz][3]=ask1;
             break;
         case'mc':
             //asksvar[bz][4]=ask1;
-            f(trade,bz,base,ask1);
+            f(trade, bz, base, ask1);
             break;
         case'bs':
             //asksvar[bz][5]=ask1;
-            f(trade,bz,base,ask1);
+            f(trade, bz, base, ask1);
             break;
         case'ok':
             //asksvar[bz][6]=ask1;
-            f(trade,bz,base,ask1);
+            f(trade, bz, base, ask1);
             break;
         case 'zb':
-           // asksvar[bz][7]=ask1;
-            f(trade,bz,base,ask1);
+            // asksvar[bz][7]=ask1;
+            f(trade, bz, base, ask1);
             break
     }
-    function f(trade,bz,base,ask1) {
-                if('undefined'==typeof (asksvar[bz][trade][base]))
-                {
-                    asksvar[bz][trade][base]={};
-                }
-                asksvar[bz][trade][base]=ask1;
+    function f(trade, bz, base, ask1) {
+        if ('undefined' == typeof (asksvar[bz][trade][base])) {
+            asksvar[bz][trade][base] = {};
+        }
+        asksvar[bz][trade][base] = ask1;
     }
 }
+    //找到币种的最大值。并且返回交易对和最大值
+    function findmax (bz)
+    {
+        var maxvalue={"symbol":"symbol","max":0};
+        var temp=asksvar[bz];
+        for (var o in temp)
+        {
+            for(var p in temp[o])
+            {
+                if(maxvalue.max<temp[o][p])
+                {
+                    maxvalue.symbol=p;
+                    maxvalue.max=temp[o][p];
+                }
+            }
+        }
+        return maxvalue;
+    }

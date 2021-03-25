@@ -33,6 +33,8 @@ websockethb.onmessage=function(event)
             hbvar[bz][symbol].bids= temp.bids;
 
             putask1to('hb',bz,'BTC',temp.asks[0][0]);
+            //找到这个币种下面卖1目前最大值
+            var max=findmax(bz);
             //卖一插入数组asksvar
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
