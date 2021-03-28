@@ -62,14 +62,20 @@ public class KbWssMarketHandle implements Cloneable{
             @Override
             public void onMessage(String s) {
                 fixedThreadPool.execute(()->{
-                    try {
-                        if(JSONObject.parseObject(s).getString("type").equals("message"))
+                   try {
+                        if(s.indexOf("42")!=-1)
                         {
-                            JSONObject js= DealDepth.getKbDepth(s);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                            callback.onReceive(js.toJSONString());
+                            String temp=s.substring(2,s.length()-1).replaceFirst(",","#");
+                            String[]strarr=temp.split("#");
+                            temp=strarr[1].replace("\\\"","\"");
+                            temp=temp.substring(1,temp.length()-1);
+                            if(JSONObject.parseObject(temp).getString("type").equals("message"))
+                            {
+                                JSONObject js= DealDepth.getKbDepth(temp);
+                                if(js.get("asks")!=null&&js.get("bids")!=null)
+                                    callback.onReceive(js.toJSONString());
+                            }
                         }
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -117,7 +123,7 @@ public class KbWssMarketHandle implements Cloneable{
 
     private void doSub(List<String> channels) {
         //42["bullet","{\"id\":\"_event__subscribe_z2jmuey8f_1612922846807\",\"type\":\"subscribe\",\"topic\":\"/market/level2web:BTC-USDT,ETH-USDT\",\"privateChannel\":false,\"response\":true}"]
-       // List<String> params=new ArrayList<>();
+        //42["bullet","{\"id\":\"_event__subscribe_bgbiejqfj_1616849498445\",\"type\":\"subscribe\",\"topic\":\"/spotMarket/level2Depth5:BTC-USDT,ETH-USDT\",\"privateChannel\":false,\"response\":true}"]
         String str="";
         for (String e:channels)
         {
@@ -125,18 +131,17 @@ public class KbWssMarketHandle implements Cloneable{
         }
         str=str.substring(0,str.length()-1);
         JSONObject sub = new JSONObject();
-        sub.put("id","1545910660740");
+        sub.put("id","_event__subscribe_bgbiejqfj_1616849498445");
         sub.put("type","subscribe");
         sub.put("topic", "/spotMarket/level2Depth5:"+str);///market/level2web
-        //sub.put("privateChannel",false);
+        sub.put("privateChannel",false);
         sub.put("response",true);
-       // String[] finalestr=new String[2];
-        //List<String> finalestr=new ArrayList<>();
-        //finalestr.add("bullet");
-        //finalestr.add(sub.toString());
-            //sub.put("id","id7");
-            //webSocketClient.send("42"+ JsToNew.listToJson(finalestr));
-        webSocketClient.send(sub.toString());
+       List<String> finalestr=new ArrayList<>();
+
+        finalestr.add("bullet");
+        finalestr.add(sub.toString());
+        webSocketClient.send("42"+ JsToNew.listToJson(finalestr));
+      //  webSocketClient.send(sub.toString());
     }
     private void dealPing() {
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {

@@ -108,12 +108,13 @@ public class OnWebSocket {
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
     private  String bturl="wss://ws.gateio.ws/v3/";//"wss://webws.gateio.live/v3/?v=647320";//wss://ws.gateio.ws/v3/
     private  String bnurl="wss://stream.yshyqxx.com/stream";
-    private  String mcurl="wss://contract.mxc.me/ws";
-    private  String zburl="wss://api.zb.center/websocket/";
+    private  String mcurl="wss://contract.mxc.la/ws";
+    private  String zburl="wss://api.zb.today/websocket/";
     private  String bsurl="wss://api.aex.zone/wsv3";
     //库币前端socket地址
-    private  String kburl="wss://push-private.kucoin.cc/endpoint?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
-
+    //private  String kburl="wss://push-private.kucoin.top/endpoint?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+    private  String kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+                           //wss://push-socketio.kucoin.top:6443/socket.io/?token=2neAiuYvAU5cbMXpmsXD5OJlewXCKryg8dSpDCgag8ZwbZpn3uIHi0A1AOtpCibAwoXOiOG0Q0HlWqc0mj_AuJgz6ICvaHRuf0iDWNXQnz1oMsZw9f5kiaqRyqznCVt1whuoNZhpWWHFgngN8ujUTdrmHVEfUL8Z.oBR0kcfynzKDxwR7ys-Hfw%3D%3D&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket
 
    // List<String> reqparams=urlPara.getHbpara();
     /**

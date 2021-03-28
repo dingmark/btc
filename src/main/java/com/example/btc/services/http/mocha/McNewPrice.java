@@ -39,11 +39,11 @@ public class McNewPrice {
              urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setConnectTimeout(1000);
-            urlConnection.setReadTimeout(1000);
+            urlConnection.setConnectTimeout(20000);
+            urlConnection.setReadTimeout(20000);
             InputStream in = urlConnection.getInputStream();
-            GZIPInputStream gZipS = new GZIPInputStream(in);
-            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            //GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(in, "GBK");
             BufferedReader reader = new BufferedReader(res);
             String line;
             List<String> charinfo = new ArrayList<String>();
@@ -59,6 +59,7 @@ public class McNewPrice {
         }
         catch (IOException  e)
         {
+            e.printStackTrace();
             return 0;
         }
         finally {

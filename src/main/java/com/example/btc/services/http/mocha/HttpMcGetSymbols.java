@@ -36,8 +36,8 @@ public class HttpMcGetSymbols {
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/json;charset=UTF-8");
             urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0");
-            urlConnection.setConnectTimeout(20000);
-            urlConnection.setReadTimeout(20000);
+            urlConnection.setConnectTimeout(200000);
+            urlConnection.setReadTimeout(200000);
             InputStream in = urlConnection.getInputStream();
             GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(gZipS, "GBK");

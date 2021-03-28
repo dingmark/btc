@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,15 +29,15 @@ public class OkNewPrice {
     public float getOKprice(String para)  {
         long startTime = System.currentTimeMillis();
         float price = 0;
-        HttpURLConnection urlConnection=null;
+        HttpsURLConnection urlConnection=null;
         try {
            // Thread.sleep(500);
             URL url = new URL(oknewprice + para + "/trades?limit=1");
-             urlConnection = (HttpURLConnection) url.openConnection();
+             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setConnectTimeout(1000);
-            urlConnection.setReadTimeout(1000);
+            urlConnection.setConnectTimeout(60000);
+            urlConnection.setReadTimeout(60000);
             InputStream in = urlConnection.getInputStream();
             //GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(in, "GBK");
@@ -58,7 +59,7 @@ public class OkNewPrice {
         }
         catch (IOException  e)
         {
-            //e.printStackTrace();
+            e.printStackTrace();
             logger.info("OK获取实时价格超时");
             return price=0;
         }
