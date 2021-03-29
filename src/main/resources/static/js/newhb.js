@@ -39,7 +39,9 @@ websockethb.onmessage=function(event)
             var result=cacule('hb',symbol,temp.bids[0][0],max);
             //console.log(result);
             //展示在页面
-
+            if(result.sell_symbol.replace("-","")!=symbol){
+                newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             //卖一插入数组asksvar
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
@@ -61,6 +63,9 @@ websockethb.onmessage=function(event)
             //该币种买1与卖1最大值比较，计算利差
             var result=cacule('hb',symbol,temp.bids[0][0],max);
             //console.log(result);
+            if(result.sell_symbol.replace("-","")!=symbol) {
+                newedrawtable(bz, 'hb', symbol, temp.bids[0][0], result.percent, result.sell_trade, result.sell_symbol, result.sellprice)
+            }
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH'));
@@ -78,7 +83,10 @@ websockethb.onmessage=function(event)
             var max=findmax(bz);
             //该币种买1与卖1最大值比较，计算利差
             var result=cacule('hb',symbol,temp.bids[0][0],max);
-            //sconsole.log(result);
+            if(result.sell_symbol.replace("-","")!=symbol)
+            {
+            newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
     }
     //alert("111");

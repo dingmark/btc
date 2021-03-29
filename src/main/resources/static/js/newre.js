@@ -426,8 +426,36 @@ function putask1to(trade,bz,base,ask1) {
             "percent":percent,"sell_trade":max.trade,
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
-    function newedrawtable(bz,buytrade,buysymbol,percent,selltrade,sellsymbol) {
+    function newedrawtable(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
-        $('table_content').bootstrap-table
+            if(!isExsit(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice))
+            {
+                var html="";
+                html+='<tr class="warning"><td>'+bz+'</td><td>'+percent+'</td><td>' +buytrade+
+                    '</td><td>'+buysymbol+'</td><td>'+buyprice+'</td><td>'+selltrade+'</td>' +
+                    '<td>'+sellsymbol+'</td><td>'+sellprice+'</td></tr>';
+                $("tbody").append(html);
+            }
         //2不存在的买入卖出交易对你 新数据过来要追加
+    }
+    function isExsit(bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
+        //第0列币种 2买入机构 3买入交易对 5卖出机构 6卖出交易对
+            for(var i=0;$("tr").children.length;i++)
+        {
+            if($("tr")[i].children[0].innerText==bz&&$("tr")[i].children[2].innerText==buytrad
+            &&$("tr")[i].children[3].innerText==buysymbol&&$("tr")[i].children[5].innerText==selltrade
+                &&$("tr")[i].children[6].innerText==sellsymbol
+            )
+            {
+                //改1获利比率 4买入单价 7卖出单价
+                $("tr")[i].children[1].innerText=percent;
+                $("tr")[i].children[4].innerText=buyprice;
+                $("tr")[i].children[7].innerText=sellprice;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }

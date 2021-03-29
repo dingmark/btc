@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.OnClose;
@@ -39,6 +40,8 @@ import java.util.concurrent.*;
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
+    @Value("${sockettime}")
+    private static String sockettime;
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
     private  static HttpMcGetSymbols httpMcGetSymbols;
@@ -158,7 +161,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "ok":
                     OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl);
@@ -179,7 +182,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bt":
                     BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
@@ -203,7 +206,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                        Thread.sleep(60000);
+                        Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bn":
                     BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl);
@@ -224,7 +227,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "mc":
                     McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl);
@@ -234,7 +237,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "zb":
                     ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl);
@@ -258,7 +261,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });*/
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                 case "bs":
                     BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
                     BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl);
@@ -280,7 +283,7 @@ public class OnWebSocket {
                         }
                     });
 
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "kb":
                     KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl);
@@ -311,7 +314,7 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    Thread.sleep(60000);
+                    Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "re":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {

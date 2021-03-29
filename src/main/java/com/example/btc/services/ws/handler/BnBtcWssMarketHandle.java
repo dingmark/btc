@@ -8,6 +8,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,7 +32,8 @@ public class BnBtcWssMarketHandle implements Cloneable{
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
-    private int trytime=0;
+    @Value("${sockettime}")
+    private String sockettime;
 
     public BnBtcWssMarketHandle() {
 
@@ -178,7 +180,7 @@ public class BnBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

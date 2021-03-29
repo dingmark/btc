@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="60">
+    <meta http-equiv="refresh" content="300">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -13,12 +13,14 @@
 
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
+    <!--<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.css">
     <!-- Latest compiled and minified JavaScript -->
+    <!--
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/bootstrap-table.min.js"></script>
     <!-- Latest compiled and minified Locales -->
+    <!--
     <script src="https://unpkg.com/bootstrap-table@1.15.3/dist/locale/bootstrap-table-zh-CN.min.js"></script>
-
+    -->
 
     <script src="js/newre.js"></script>
     <script src="js/newhb.js"></script>
@@ -58,7 +60,7 @@
 <body>
 <input type="text" id="hbbtcprice"></input>
 <input type="text" id="hbethprice"></input>
-<table  data-toggle="table" id="tbody" data-search="true">
+<table class="table table-striped table-hover" data-toggle="table" id="tbody" data-search="true">
     <tr class="active">
         <th>币种</th>
         <th>获利比率</th>
@@ -70,7 +72,7 @@
         <th>卖出单价</th>
     </tr>
     <tbody id="table_content">
-    <tr class="success">
+    <!--<tr class="success">
         <td>产品2</td>
         <td>10/11/2013</td>
         <td>发货中</td></tr>
@@ -82,6 +84,7 @@
         <td>产品4</td>
         <td>20/10/2013</td>
         <td>已退货</td></tr>
+        -->
     </tbody>
 </table>
 </body>
