@@ -36,8 +36,8 @@ public class OkNewPrice {
              urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setConnectTimeout(60000);
-            urlConnection.setReadTimeout(60000);
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(10000);
             InputStream in = urlConnection.getInputStream();
             //GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(in, "GBK");
@@ -59,7 +59,7 @@ public class OkNewPrice {
         }
         catch (IOException  e)
         {
-            e.printStackTrace();
+          //  e.printStackTrace();
             logger.info("OK获取实时价格超时");
             return price=0;
         }

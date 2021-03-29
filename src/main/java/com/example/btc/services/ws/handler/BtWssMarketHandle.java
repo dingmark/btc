@@ -64,7 +64,7 @@ public class BtWssMarketHandle implements Cloneable{
             @Override
             public void onMessage(String s) {
                 fixedThreadPool.execute(() -> {
-                    if (s.indexOf("pong") == -1) {
+                    if (s.indexOf("params") != -1) {
                         try {
                             JSONObject jsmess=JSONObject.parseObject(s);
                             JSONObject jsold;

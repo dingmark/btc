@@ -63,7 +63,7 @@ public class KbWssMarketHandle implements Cloneable{
             public void onMessage(String s) {
                 fixedThreadPool.execute(()->{
                    try {
-                        if(s.indexOf("42")!=-1)
+                        if(s.indexOf("42")!=-1&&s.indexOf("pingInterval")==-1)
                         {
                             String temp=s.substring(2,s.length()-1).replaceFirst(",","#");
                             String[]strarr=temp.split("#");

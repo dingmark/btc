@@ -63,7 +63,7 @@ public class ZbWssMarketHandle implements Cloneable{
             public void onMessage(String s) {
                 fixedThreadPool.execute(()->{
                     try {
-                        if(JSONObject.parseObject(s).get("code")==null)
+                        if(s.indexOf("channel")!=-1)
                         {
                             JSONObject js= DealDepth.getZbDepth(s);
                             if(js.get("asks")!=null&&js.get("bids")!=null)

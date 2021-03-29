@@ -422,7 +422,12 @@ function putask1to(trade,bz,base,ask1) {
     function cacule(trade_now,symbol,symbol_now,max) {
 
         var percent=max.max/symbol_now-1;
-        return result={"trade_now":trade_now,"symbol":symbol,"buyprice":symbol_now,
+        return result={"bz":max.bz,"trade_now":trade_now,"symbol":symbol,"buyprice":symbol_now,
             "percent":percent,"sell_trade":max.trade,
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
+    }
+    function newedrawtable(bz,buytrade,buysymbol,percent,selltrade,sellsymbol) {
+        //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
+        $('table_content').bootstrap-table
+        //2不存在的买入卖出交易对你 新数据过来要追加
     }

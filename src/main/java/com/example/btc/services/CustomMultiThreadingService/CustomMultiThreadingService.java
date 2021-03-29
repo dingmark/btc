@@ -74,7 +74,7 @@ public class CustomMultiThreadingService {
         bsNewPriceWssMarketHandle.sub(para,response->{
                //response.toString();
                JSONObject js=JSONObject.parseObject(response);
-               if(js.getInteger("cmd")==1)
+               if(js.getInteger("cmd")==1&& js.get("trade")!=null)
                {
                String type=js.getString("symbol");
                    JSONArray obarray=(JSONArray)js.get("trade");

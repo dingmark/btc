@@ -62,7 +62,7 @@ public class BtBtcWssMarketHandle implements Cloneable{
             public void onMessage(String s)  {
                 //webSocketClient.close();
                 fixedThreadPool.execute(() -> {
-                    if (s.indexOf("pong") == -1) {
+                    if (s.indexOf("params") != -1) {
                         try {
                             JSONObject jsmess=JSONObject.parseObject(s);
                             JSONObject jsold;

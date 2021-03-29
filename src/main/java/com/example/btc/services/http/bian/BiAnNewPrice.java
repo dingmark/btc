@@ -34,8 +34,8 @@ public class BiAnNewPrice {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setConnectTimeout(20000);
-            urlConnection.setReadTimeout(20000);
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(10000);
             InputStream in = urlConnection.getInputStream();
             //GZIPInputStream gZipS = new GZIPInputStream(in);
             InputStreamReader res = new InputStreamReader(in, "GBK");
