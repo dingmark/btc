@@ -19,9 +19,9 @@ public class WssMarketSubTest {
 
     private String URL = "wss://api.huobiasia.vip/ws";//"wss://www.btcgateway.pro/ws";//合约站行情请求以及订阅地址
     private  String OKURL="wss://real.coinall.ltd:8443/ws/v3";
-    WssMarketHandle wssMarketHandle = new WssMarketHandle(URL);
+    WssMarketHandle wssMarketHandle = new WssMarketHandle(URL,"");
 
-    OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(OKURL);
+    OkWssMarketHandle OkwssMarketHandle = new OkWssMarketHandle(OKURL,"");
 
 
     /**

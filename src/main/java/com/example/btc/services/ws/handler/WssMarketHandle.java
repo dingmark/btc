@@ -38,13 +38,14 @@ public class WssMarketHandle implements Cloneable{
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
-
+    private String sockettime;
     public WssMarketHandle() {
 
     }
 
-    public WssMarketHandle(String pushUrl) {
+    public WssMarketHandle(String pushUrl,String sockettime) {
         this.pushUrl = pushUrl;
+        this.sockettime=sockettime;
     }
 
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
@@ -200,7 +201,7 @@ public class WssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

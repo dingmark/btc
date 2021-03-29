@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,15 +36,15 @@ public class BnBtcWssMarketHandle implements Cloneable{
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
-
-   // private String sockettime;
-    @Autowired private SocketTime sockettime;
+    public String socketTime;
     public BnBtcWssMarketHandle() {
 
     }
 
-    public BnBtcWssMarketHandle(String pushUrl) {
+    public BnBtcWssMarketHandle(String pushUrl,String SocketTime) {
         this.pushUrl = pushUrl;
+        socketTime=SocketTime;
+
     }
 
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
@@ -112,11 +114,6 @@ public class BnBtcWssMarketHandle implements Cloneable{
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
         logger.info("币安关闭线程");
-        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
-            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
-            scheduledExecutorService.shutdownNow();
-            logger.info("币安关闭线程");
-        }
     }
 
     private void doSub(List<String> channels) {
@@ -182,7 +179,7 @@ public class BnBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime.sockettime)/1000, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(socketTime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

@@ -77,7 +77,7 @@ public class Hbprice {
         long startTime=System.currentTimeMillis();
         AtomicReference<Float> price = new AtomicReference<>((float) 0);
 
-        WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+        WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl,"");
         List<String> channels = new ArrayList<>();
         //reqparam="market.btcusdt.trade.detail";
         for(String para:reqparams)

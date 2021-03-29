@@ -36,9 +36,10 @@ public class McWssMarketHandle implements Cloneable{
     public McWssMarketHandle() {
 
     }
-
-    public McWssMarketHandle(String pushUrl) {
+    private String sockettime;
+    public McWssMarketHandle(String pushUrl,String sockettime) {
         this.pushUrl = pushUrl;
+        this.sockettime=sockettime;
     }
 
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
@@ -180,7 +181,7 @@ public class McWssMarketHandle implements Cloneable{
                     //每隔60秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("close scheduledExecutorService异常", e);
         }

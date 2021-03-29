@@ -40,6 +40,7 @@ import java.util.concurrent.*;
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
     private  static String sockettime;
+    private  static BnWssMarketHandle bnWssMarketHandle;
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
     private  static HttpMcGetSymbols httpMcGetSymbols;
@@ -58,7 +59,9 @@ public class OnWebSocket {
     private static List<String> zbreqparams=new ArrayList<>();
     private static String token="";
     @Autowired
-    public void setSockettime(SocketTime sockettime){OnWebSocket.sockettime=sockettime.sockettime;}
+    public void setSockettime(SocketTime sockettime){
+        OnWebSocket.sockettime=sockettime.sockettime;
+    }
     @Autowired
     public void setRepository(HttpHbGetCurrencys hbcurrencys) throws MalformedURLException {
         OnWebSocket.hbcurrencys=hbcurrencys;
@@ -105,6 +108,12 @@ public class OnWebSocket {
     }
     @Autowired
     public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
+//    @Autowired  //=new BnWssMarketHandle(bnurl);
+//    public void setBn(BnWssMarketHandle bnWssMarketHandle){
+//        bnWssMarketHandle.pushUrl=bnurl;
+//        bnWssMarketHandle.socketTime=sockettime;
+//        this.bnWssMarketHandle=bnWssMarketHandle;
+//    }
 
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     String hburl="wss://api.huobiasia.vip/ws";
@@ -117,12 +126,8 @@ public class OnWebSocket {
     //库币前端socket地址
     //private  String kburl="wss://push-private.kucoin.top/endpoint?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
     private  String kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
-                           //wss://push-socketio.kucoin.top:6443/socket.io/?token=2neAiuYvAU5cbMXpmsXD5OJlewXCKryg8dSpDCgag8ZwbZpn3uIHi0A1AOtpCibAwoXOiOG0Q0HlWqc0mj_AuJgz6ICvaHRuf0iDWNXQnz1oMsZw9f5kiaqRyqznCVt1whuoNZhpWWHFgngN8ujUTdrmHVEfUL8Z.oBR0kcfynzKDxwR7ys-Hfw%3D%3D&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket
 
-   // List<String> reqparams=urlPara.getHbpara();
-    /**
-     *  与某个客户端的连接对话，需要通过它来给客户端发送消息
-     */
+
     private Session session;
 
     /**
@@ -155,7 +160,7 @@ public class OnWebSocket {
         try {
             switch (type) {
                 case "hb":
-                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl);
+                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl,sockettime);
                     wssMarketHandle.sub(hbreqparams, response -> {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -164,9 +169,9 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "ok":
-                    OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl);
-                    OkBtcWssMarketHandle okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl);
-                    OkEthWssMarketHandle okEthwssMarketHandle = new OkEthWssMarketHandle(okurl);
+                    OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl,sockettime);
+                    OkBtcWssMarketHandle okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,sockettime);
+                    OkEthWssMarketHandle okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,sockettime);
                     okwssMarketHandle.sub(reqparams, response -> {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -185,9 +190,9 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bt":
-                    BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl);
-                    BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl);
-                    BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl);
+                    BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl,sockettime);
+                    BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,sockettime);
+                    BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,sockettime);
                     btWssMarketHandle.sub(reqparams,response ->
                         {
                             if(this.session.isOpen()) {
@@ -209,9 +214,9 @@ public class OnWebSocket {
                         Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bn":
-                    BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl);
-                    BnBtcWssMarketHandle bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl);
-                    BnEthWssMarketHandle bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl);
+                    BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl,sockettime);
+                   BnBtcWssMarketHandle bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,sockettime);
+                   BnEthWssMarketHandle bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,sockettime);
                     bnWssMarketHandle.sub(reqparams,response ->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -230,7 +235,7 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "mc":
-                    McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl);
+                    McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl,sockettime);
                     mcWssMarketHandle.sub(mcreqparams,response->{
                         //logger.info(response.toString());
                         if(this.session.isOpen()) {
@@ -240,7 +245,7 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "zb":
-                    ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl);
+                    ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl,sockettime);
                    // ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
                    // ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
                     zbWssMarketHandle.sub(zbreqparams,response->{
@@ -263,9 +268,9 @@ public class OnWebSocket {
                     });*/
                     Thread.sleep(Integer.parseInt(sockettime));
                 case "bs":
-                    BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl);
-                    BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl);
-                    BsCncWssMarketHandle bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl);
+                    BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl,sockettime);
+                    BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,sockettime);
+                    BsCncWssMarketHandle bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,sockettime);
 
                     bsWssMarketHandle.sub(reqparams,response->{
                         if(this.session.isOpen()) {
@@ -286,10 +291,10 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "kb":
-                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl);
-                    KbWssMarketHandle kb2WssMarketHandle=new KbWssMarketHandle(kburl);
-                    KbWssMarketHandle kb3WssMarketHandle=new KbWssMarketHandle(kburl);
-                    KbWssMarketHandle kb4WssMarketHandle=new KbWssMarketHandle(kburl);
+                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                    KbWssMarketHandle kb2WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                    KbWssMarketHandle kb3WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                    KbWssMarketHandle kb4WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
                     List<String> kb1=kbreqparams.subList(0,99);
                     kbWssMarketHandle.sub(kb1,response->{
                         if(this.session.isOpen()) {

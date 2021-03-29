@@ -40,9 +40,10 @@ public class OkBtcWssMarketHandle implements Cloneable{
     public OkBtcWssMarketHandle() {
 
     }
-
-    public OkBtcWssMarketHandle(String pushUrl) {
+    private String sockettime;
+    public OkBtcWssMarketHandle(String pushUrl,String sockettime) {
         this.pushUrl = pushUrl;
+        this.sockettime=sockettime;
     }
 
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
@@ -192,7 +193,7 @@ public class OkBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

@@ -35,9 +35,10 @@ public class ZbWssMarketHandle implements Cloneable{
     public ZbWssMarketHandle() {
 
     }
-
-    public ZbWssMarketHandle(String pushUrl) {
+    private String sockettime;
+    public ZbWssMarketHandle(String pushUrl,String sockettime) {
         this.pushUrl = pushUrl;
+        this.sockettime=sockettime;
     }
 
     public  void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
@@ -163,7 +164,7 @@ public class ZbWssMarketHandle implements Cloneable{
                     }
 
                 }
-            }, 30, 10, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 10, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

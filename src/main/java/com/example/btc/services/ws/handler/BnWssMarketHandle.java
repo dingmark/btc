@@ -2,6 +2,7 @@ package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.webSocket.SocketTime;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.DealDepth;
 import com.example.btc.services.ws.util.ZipUtil;
@@ -10,6 +11,8 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,36 +24,33 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-
+@Service
 public class BnWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
     //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
              //scheduledExecutorService.allowCoreThreadTimeOut(true);
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
     private WebSocketClient webSocketClient;
-    private String pushUrl = "";//合约站行情请求以及订阅地址
+    public String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
 
+    public String socketTime;
     public BnWssMarketHandle() {
 
     }
 
-    public BnWssMarketHandle(String pushUrl) {
+    public BnWssMarketHandle(String pushUrl,String socketTime) {
         this.pushUrl = pushUrl;
+        this.socketTime=socketTime;
     }
 
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
         doConnect(channels, callback);
     }
-
-
     private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
-
-
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
@@ -178,7 +178,7 @@ public class BnWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(socketTime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

@@ -32,12 +32,13 @@ public class BnEthWssMarketHandle implements Cloneable{
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
-
+    private String sockettime;
     public BnEthWssMarketHandle() {
 
     }
 
-    public BnEthWssMarketHandle(String pushUrl) {
+    public BnEthWssMarketHandle(String pushUrl,String sockettime) {
+        this.sockettime=sockettime;
         this.pushUrl = pushUrl;
     }
 
@@ -176,7 +177,7 @@ public class BnEthWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, 60, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
