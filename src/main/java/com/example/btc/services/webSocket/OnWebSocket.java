@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.OnClose;
@@ -40,8 +39,7 @@ import java.util.concurrent.*;
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
-    @Value("${sockettime}")
-    private static String sockettime;
+    private  static String sockettime;
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
     private  static HttpMcGetSymbols httpMcGetSymbols;
@@ -59,6 +57,8 @@ public class OnWebSocket {
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
     private static String token="";
+    @Autowired
+    public void setSockettime(SocketTime sockettime){OnWebSocket.sockettime=sockettime.sockettime;}
     @Autowired
     public void setRepository(HttpHbGetCurrencys hbcurrencys) throws MalformedURLException {
         OnWebSocket.hbcurrencys=hbcurrencys;

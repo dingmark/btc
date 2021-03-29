@@ -1,6 +1,7 @@
 package com.example.btc.services.ws.handler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.btc.services.webSocket.SocketTime;
 import com.example.btc.services.ws.SubscriptionListener;
 import com.example.btc.services.ws.util.DealDepth;
 import lombok.SneakyThrows;
@@ -8,6 +9,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
@@ -32,9 +34,9 @@ public class BnBtcWssMarketHandle implements Cloneable{
     private String pushUrl = "";//合约站行情请求以及订阅地址
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
-    @Value("${sockettime}")
-    private String sockettime;
 
+   // private String sockettime;
+    @Autowired private SocketTime sockettime;
     public BnBtcWssMarketHandle() {
 
     }
@@ -180,7 +182,7 @@ public class BnBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime.sockettime)/1000, 60, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
