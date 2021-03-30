@@ -39,9 +39,7 @@ websockethb.onmessage=function(event)
             var result=cacule('hb',symbol,temp.bids[0][0],max);
             //console.log(result);
             //展示在页面
-            if(result.sell_symbol.replace("-","")!=symbol){
-                newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
-            }
+            newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             //卖一插入数组asksvar
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
