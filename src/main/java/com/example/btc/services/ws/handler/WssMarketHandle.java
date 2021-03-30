@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,7 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class WssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
     private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
 
     private WebSocketClient webSocketClient;
@@ -55,15 +56,16 @@ public class WssMarketHandle implements Cloneable{
 
     private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
 
-
-        webSocketClient = new WebSocketClient(new URI(pushUrl)) {
-
+        HashMap<String,String> httpheader=new HashMap<>();
+        httpheader.put("Sec-Websocket-Protocol","TLSv1,TLSv1.1,TLSv1.2,SSLv3");
+        webSocketClient = new WebSocketClient(new URI(pushUrl),httpheader) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
                 logger.debug("onOpen Success");
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
+                dealPing();
                 doClose();
             }
             @Override
@@ -101,8 +103,6 @@ public class WssMarketHandle implements Cloneable{
                 closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
-
-
             @Override
             public void onError(Exception e) {
                 logger.error("onError:", e);
@@ -156,14 +156,20 @@ public class WssMarketHandle implements Cloneable{
 
 
     private void dealPing() {
-        try {
-            JSONObject jsonMessage = new JSONObject();
-            jsonMessage.put("pong", pong.incrementAndGet());
-            logger.debug("发送pong:{}", jsonMessage.toString());
-            webSocketClient.send(jsonMessage.toString());
-        } catch (Throwable t) {
-            logger.error("dealPing出现了异常");
-        }
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    long lSysTime2 = System.currentTimeMillis();
+                    JSONObject jsonMessage = new JSONObject();
+                    jsonMessage.put("pong", lSysTime2);
+                    logger.debug("发送pong:{}", jsonMessage.toString());
+                    webSocketClient.send(jsonMessage.toString());
+                } catch (Throwable t) {
+                    logger.error("dealPing出现了异常");
+                }
+            }
+        },5,5,TimeUnit.SECONDS);
     }
 
 
@@ -187,7 +193,7 @@ public class WssMarketHandle implements Cloneable{
                     }
 
                 }
-            }, 60, 10, TimeUnit.SECONDS);
+            }, 10, 10, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

@@ -40,21 +40,15 @@ public class BnBtcWssMarketHandle implements Cloneable{
     public BnBtcWssMarketHandle() {
 
     }
-
     public BnBtcWssMarketHandle(String pushUrl,String SocketTime) {
         this.pushUrl = pushUrl;
         socketTime=SocketTime;
 
     }
-
     public void sub(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
         doConnect(channels, callback);
     }
-
-
     private void doConnect(List<String> channels, SubscriptionListener<String> callback) throws URISyntaxException {
-
-
         webSocketClient = new WebSocketClient(new URI(pushUrl)) {
             @Override
             public void onOpen(ServerHandshake serverHandshake) {
