@@ -1,6 +1,7 @@
 /**
  * Created by Administrator on 2021-03-15.
  */
+var percent=0.03;
 var revar={};
 var asksvar={};
 var asks={};
@@ -429,7 +430,7 @@ function putask1to(trade,bz,base,ask1) {
     function newedrawtable(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
             if(!isExsit(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice))
-            {   if((buytrade!=selltrade||(buytrade==selltrade&&buysymbol!=sellsymbol.replace("-","")))&&percent>0.03)
+            {   if(buytrade!=selltrade||(buytrade==selltrade&&buysymbol!=sellsymbol.replace("-","")))
                 {
                 var html="";
                 html+='<tr class="warning"><td>'+bz+'</td><td>'+percent+'</td><td>' +buytrade+
