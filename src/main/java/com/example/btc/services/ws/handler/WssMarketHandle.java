@@ -65,7 +65,7 @@ public class WssMarketHandle implements Cloneable{
                 doSub(channels);
                 //禁止火币交易重连3次退出
                 dealReconnect();
-                dealPing();
+
                 doClose();
             }
             @Override
@@ -88,7 +88,7 @@ public class WssMarketHandle implements Cloneable{
                             callback.onReceive(js.toString());
                         }
                         if (ping != null) {
-                            dealPing();
+                            dealPing(JSONMessage.getLong("ping"));
                         }
                     } catch (Throwable e) {
                         logger.error("onMessage异常", e);
@@ -155,21 +155,16 @@ public class WssMarketHandle implements Cloneable{
     }
 
 
-    private void dealPing() {
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
+    private void dealPing(Long pongs) {
                 try {
-                    long lSysTime2 = System.currentTimeMillis();
+                    //long lSysTime2 = System.currentTimeMillis();
                     JSONObject jsonMessage = new JSONObject();
-                    jsonMessage.put("pong", lSysTime2);
+                    jsonMessage.put("pong",  pong.incrementAndGet());
                     logger.debug("发送pong:{}", jsonMessage.toString());
                     webSocketClient.send(jsonMessage.toString());
                 } catch (Throwable t) {
                     logger.error("dealPing出现了异常");
                 }
-            }
-        },5,5,TimeUnit.SECONDS);
     }
 
 
