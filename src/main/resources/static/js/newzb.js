@@ -31,6 +31,13 @@ websocketzb.onmessage=function(event)
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             putask1to('zb',bz,'BTC',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('zb',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'DT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT'));
@@ -43,6 +50,13 @@ websocketzb.onmessage=function(event)
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             putask1to('zb',bz,'USDT',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('zb',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'QC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('QC'));
@@ -56,6 +70,13 @@ websocketzb.onmessage=function(event)
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             putask1to('zb',bz,'QC',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('zb',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
     }
     //alert("111");

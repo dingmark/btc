@@ -31,6 +31,13 @@ websocketbs.onmessage=function(event)
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             putask1to('bs',bz,'BTC',Number( temp.asks[0][1]));
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bs',symbol,temp.bids[0][1],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -43,6 +50,13 @@ websocketbs.onmessage=function(event)
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             putask1to('bs',bz,'USDT',Number(temp.asks[0][1]));
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bs',symbol,temp.bids[0][1],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'CNC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('CNC')-1);
@@ -56,6 +70,13 @@ websocketbs.onmessage=function(event)
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             putask1to('bs',bz,'CNC',Number(temp.asks[0][1]));
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bs',symbol,temp.bids[0][1],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
     }
 }

@@ -29,6 +29,13 @@ websocketbter.onmessage=function(event)
                 console.log(symbol);
             }
             putask1to('bt',bz,'BTC',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bt',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bt',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -45,6 +52,13 @@ websocketbter.onmessage=function(event)
                 console.log(symbol);
             }
             putask1to('bt',bz,'USDT',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bt',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bt',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -61,6 +75,13 @@ websocketbter.onmessage=function(event)
                 console.log(symbol);
             }
             putask1to('bt',bz,'ETH',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('bt',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'bt',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
     }
 };

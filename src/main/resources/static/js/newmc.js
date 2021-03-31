@@ -29,6 +29,13 @@ websockethb.onmessage=function(event)
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
             putask1to('mc',bz,'BTC',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('mc',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'mc',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'SDT':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('USDT')-1);
@@ -41,6 +48,13 @@ websockethb.onmessage=function(event)
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
             putask1to('mc',bz,'USDT',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('mc',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'mc',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
         case 'ETH':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('ETH')-1);
@@ -53,6 +67,13 @@ websockethb.onmessage=function(event)
             mcvar[bz][symbol].asks= temp.asks;
             mcvar[bz][symbol].bids= temp.bids;
             putask1to('mc',bz,'ETH',temp.asks[0][0]);
+            var max=findmax(bz);
+            symbol=symbol.replace('_','');
+            var result=cacule('mc',symbol,temp.bids[0][0],max);
+            if(result.percent>=percent_base)
+            {
+                newedrawtable(bz,'mc',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            }
             break;
     }
     //alert("111");

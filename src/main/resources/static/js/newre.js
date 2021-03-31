@@ -428,7 +428,11 @@ function putask1to(trade,bz,base,ask1) {
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
     function newedrawtable(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
-        //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
+            if(bz=='')
+            {
+                return;
+            }
+            //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
             if(!isExsit(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice))
             {   if(buytrade!=selltrade||(buytrade==selltrade&&buysymbol!=sellsymbol.replace("-","")))
                 {
