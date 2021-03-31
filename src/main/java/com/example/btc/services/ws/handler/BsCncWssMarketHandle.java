@@ -103,11 +103,6 @@ public class BsCncWssMarketHandle extends BsWssMarketHandle implements Cloneable
         scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
         logger.info("比特时代关闭线程");
-        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
-            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
-            scheduledExecutorService.shutdownNow();
-            logger.info("比特时代关闭线程");
-        }
     }
 
 

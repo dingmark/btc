@@ -399,6 +399,9 @@ public class OnWebSocket {
                  kb3WssMarketHandle.closechannel();//=new KbWssMarketHandle(kburl,sockettime);
                  kb4WssMarketHandle.closechannel();
                 break;
+            case "re":
+                scheduledExecutorService.shutdownNow();
+                break;
             default:
                 break;
         }
