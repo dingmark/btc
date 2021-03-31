@@ -40,7 +40,7 @@ import java.util.concurrent.*;
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
     private  static String sockettime;
-    private  static BnWssMarketHandle bnWssMarketHandle;
+    //private  static BnWssMarketHandle bnWssMarketHandle;
     private  static HttpKbGetToken httpKbGetToken;
     private  static  HttpKbGetSymbols httpKbGetSymbols;
     private  static HttpMcGetSymbols httpMcGetSymbols;
@@ -140,7 +140,32 @@ public class OnWebSocket {
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private WssMarketHandle wssMarketHandle;
 
+    OkWssMarketHandle okwssMarketHandle;
+    OkBtcWssMarketHandle okBtcwssMarketHandle;
+    OkEthWssMarketHandle okEthwssMarketHandle;
+
+    BtWssMarketHandle btWssMarketHandle;//=new BtWssMarketHandle(bturl,sockettime);
+    BtBtcWssMarketHandle btBtcWssMarketHandle;//=new BtBtcWssMarketHandle(bturl,sockettime);
+    BtEthWssMarketHandle btEthWssMarketHandle;
+
+    BnWssMarketHandle bnWssMarketHandle;//=new BnWssMarketHandle(bnurl,sockettime);
+    BnBtcWssMarketHandle bnBtcWssMarketHandle;//=new BnBtcWssMarketHandle(bnurl,sockettime);
+    BnEthWssMarketHandle bnEthWssMarketHandle;
+
+    BsWssMarketHandle bsWssMarketHandle;//=new BsWssMarketHandle(bsurl,sockettime);
+    BsBtcWssMarketHandle bsBtcWssMarketHandle;///=new BsBtcWssMarketHandle(bsurl,sockettime);
+    BsCncWssMarketHandle bsCncWssMarketHandle;
+
+    KbWssMarketHandle kbWssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
+    KbWssMarketHandle kb2WssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
+    KbWssMarketHandle kb3WssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
+    KbWssMarketHandle kb4WssMarketHandle;//=
+
+    ZbWssMarketHandle zbWssMarketHandle;
+
+    McWssMarketHandle mcWssMarketHandle;
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
         this.session = session;
@@ -160,7 +185,7 @@ public class OnWebSocket {
         try {
             switch (type) {
                 case "hb":
-                    WssMarketHandle wssMarketHandle = new WssMarketHandle(hburl,sockettime);
+                    wssMarketHandle = new WssMarketHandle(hburl,sockettime);
                     wssMarketHandle.sub(hbreqparams, response -> {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -169,9 +194,9 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "ok":
-                    OkWssMarketHandle okwssMarketHandle = new OkWssMarketHandle(okurl,sockettime);
-                    OkBtcWssMarketHandle okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,sockettime);
-                    OkEthWssMarketHandle okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,sockettime);
+                     okwssMarketHandle = new OkWssMarketHandle(okurl,sockettime);
+                     okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,sockettime);
+                     okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,sockettime);
                     okwssMarketHandle.sub(reqparams, response -> {
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -190,9 +215,9 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bt":
-                    BtWssMarketHandle btWssMarketHandle=new BtWssMarketHandle(bturl,sockettime);
-                    BtBtcWssMarketHandle btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,sockettime);
-                    BtEthWssMarketHandle btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,sockettime);
+                     btWssMarketHandle=new BtWssMarketHandle(bturl,sockettime);
+                     btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,sockettime);
+                     btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,sockettime);
                     btWssMarketHandle.sub(reqparams,response ->
                         {
                             if(this.session.isOpen()) {
@@ -214,9 +239,9 @@ public class OnWebSocket {
                         Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "bn":
-                    BnWssMarketHandle bnWssMarketHandle=new BnWssMarketHandle(bnurl,sockettime);
-                   BnBtcWssMarketHandle bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,sockettime);
-                   BnEthWssMarketHandle bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,sockettime);
+                    bnWssMarketHandle=new BnWssMarketHandle(bnurl,sockettime);
+                    bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,sockettime);
+                    bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,sockettime);
                     bnWssMarketHandle.sub(reqparams,response ->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -235,7 +260,7 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "mc":
-                    McWssMarketHandle mcWssMarketHandle=new McWssMarketHandle(mcurl,sockettime);
+                     mcWssMarketHandle=new McWssMarketHandle(mcurl,sockettime);
                     mcWssMarketHandle.sub(mcreqparams,response->{
                         //logger.info(response.toString());
                         if(this.session.isOpen()) {
@@ -245,7 +270,7 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "zb":
-                    ZbWssMarketHandle zbWssMarketHandle=new ZbWssMarketHandle(zburl,sockettime);
+                     zbWssMarketHandle=new ZbWssMarketHandle(zburl,sockettime);
                    // ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
                    // ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
                     zbWssMarketHandle.sub(zbreqparams,response->{
@@ -254,23 +279,11 @@ public class OnWebSocket {
                             AppointSending(name, response.toString());
                         }
                     });
-                    /*zbQcWssMarketHandle.sub(reqparams,response->{
-                        //logger.info(response.toString());
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    zbBtcWssMarketHandle.sub(reqparams,response->{
-                        //logger.info(response.toString());
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });*/
                     Thread.sleep(Integer.parseInt(sockettime));
                 case "bs":
-                    BsWssMarketHandle bsWssMarketHandle=new BsWssMarketHandle(bsurl,sockettime);
-                    BsBtcWssMarketHandle bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,sockettime);
-                    BsCncWssMarketHandle bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,sockettime);
+                     bsWssMarketHandle=new BsWssMarketHandle(bsurl,sockettime);
+                     bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,sockettime);
+                     bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,sockettime);
 
                     bsWssMarketHandle.sub(reqparams,response->{
                         if(this.session.isOpen()) {
@@ -291,11 +304,13 @@ public class OnWebSocket {
                     Thread.sleep(Integer.parseInt(sockettime));
                     break;
                 case "kb":
-                    KbWssMarketHandle kbWssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                    KbWssMarketHandle kb2WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                    KbWssMarketHandle kb3WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                    KbWssMarketHandle kb4WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+
+                     kbWssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                     kb2WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                     kb3WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
+                     kb4WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
                     List<String> kb1=kbreqparams.subList(0,99);
+
                     kbWssMarketHandle.sub(kb1,response->{
                         if(this.session.isOpen()) {
                             AppointSending(name, response.toString());
@@ -346,6 +361,47 @@ public class OnWebSocket {
         scheduledExecutorService.shutdownNow();
         webSocketSet.remove(name);
         log.info("[WebSocket] 退出成功，当前连接人数为：={}",webSocketSet.size());
+        String type=name.substring(0,2);
+        switch (type)
+        {
+            case "hb":
+                 wssMarketHandle.closechannel();
+                break;
+            case "bn":
+                 bnWssMarketHandle.closechannel();//=new BnWssMarketHandle(bnurl,sockettime);
+                 bnBtcWssMarketHandle.closechannel();//=new BnBtcWssMarketHandle(bnurl,sockettime);
+                 bnEthWssMarketHandle.closechannel();
+                break;
+            case "bt":
+                 btWssMarketHandle.closechannel();//=new BtWssMarketHandle(bturl,sockettime);
+                 btBtcWssMarketHandle.closechannel();//=new BtBtcWssMarketHandle(bturl,sockettime);
+                 btEthWssMarketHandle.closechannel();
+                break;
+            case "bs":
+                 bsWssMarketHandle.closechannel();//=new BsWssMarketHandle(bsurl,sockettime);
+                 bsBtcWssMarketHandle.closechannel();///=new BsBtcWssMarketHandle(bsurl,sockettime);
+                 bsCncWssMarketHandle.closechannel();
+                break;
+            case "ok":
+                 okwssMarketHandle.closechannel();
+                 okBtcwssMarketHandle.closechannel();
+                 okEthwssMarketHandle.closechannel();
+                break;
+            case "mc":
+                 mcWssMarketHandle.closechannel();
+                break;
+            case "zb":
+                 zbWssMarketHandle.closechannel();
+                break;
+            case "kb":
+                 kbWssMarketHandle.closechannel();//=new KbWssMarketHandle(kburl,sockettime);
+                 kb2WssMarketHandle.closechannel();//=new KbWssMarketHandle(kburl,sockettime);
+                 kb3WssMarketHandle.closechannel();//=new KbWssMarketHandle(kburl,sockettime);
+                 kb4WssMarketHandle.closechannel();
+                break;
+            default:
+                break;
+        }
     }
 
     @OnMessage
@@ -378,8 +434,6 @@ public class OnWebSocket {
 //            //GroupSending(message);
 //            GroupSending(String.valueOf(i));
 //        }
-
-
     }
 
     /**
