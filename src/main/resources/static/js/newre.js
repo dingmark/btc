@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2021-03-15.
  */
-var percent=0.03;
+var percent_base=0.09;
 var revar={};
 var asksvar={};
 var asks={};

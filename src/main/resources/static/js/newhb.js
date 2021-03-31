@@ -35,8 +35,9 @@ websockethb.onmessage=function(event)
             putask1to('hb',bz,'BTC',temp.asks[0][0]);
             //找到这个币种下面卖1目前最大值
             var max=findmax(bz);
+            var result=cacule('hb',symbol,temp.bids[0][0],max);
             //该币种买1与卖1最大值比较，计算利差
-            if(result.percent>=0.03)
+            if(result.percent>=percent_base)
             {
                 newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
@@ -60,7 +61,7 @@ websockethb.onmessage=function(event)
             //该币种买1与卖1最大值比较，计算利差
             var result=cacule('hb',symbol,temp.bids[0][0],max);
             //console.log(result);
-            if(result.percent>=0.03)
+            if(result.percent>=percent_base)
             {
                 newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
@@ -81,7 +82,7 @@ websockethb.onmessage=function(event)
             var max=findmax(bz);
             //该币种买1与卖1最大值比较，计算利差
             var result=cacule('hb',symbol,temp.bids[0][0],max);
-            if(result.percent>=0.03)
+            if(result.percent>=percent_base)
             {
             newedrawtable(bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
