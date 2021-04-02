@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="300">
+    <meta http-equiv="refresh" content="180">
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -61,11 +61,23 @@
             //清理页面数据
             $("#table_content")[0].innerHTML="";
             percent_base=value;
+        };
+        function buttonclick() {
+            $("[data-toggle='popover']").popover();
         }
+        $(function () {
+
+        });
+        $("button").click(function () {
+            alert(1111);
+        });
     </script>
 </head>
 <body>
 <div class="dropdown">
+    <div style="width:150px;float:left;">
+    <h4>获利比率选择 <span class="label label-default"></span></h4></div>
+    <div style="width: 100px ;float: left">
     <select class="selectpicker" onchange="changepercent(this.value)">
         <option value="0.03">3%</option>
         <option value="0.04">4%</option>
@@ -81,6 +93,7 @@
         <option value="0.14">14%</option>
         <option value="0.15">15%</option>
     </select>
+    </div>
 </div>
 <table class="table table-striped table-hover" data-toggle="table" id="tbody" data-search="true">
     <tr class="active">

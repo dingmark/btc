@@ -437,7 +437,13 @@ function putask1to(trade,bz,base,ask1) {
             {   if(buytrade!=selltrade||(buytrade==selltrade&&buysymbol!=sellsymbol.replace("-","")))
                 {
                 var html="";
-                html+='<tr class="warning"><td>'+bz+'</td><td>'+percent+'</td><td>' +buytrade+
+                var buttonhtml="";
+                buttonhtml='<button type="button" class="btn btn-warning" title="Popover title"'+
+                    'data-container="body" data-toggle="popover" data-placement="right"'+
+                    'data-content="<html><table boder=1><tr><td>11</td></tr><tr>222</tr></table></html>">'+
+                        bz+
+                '</button>';
+                html+='<tr class="warning"><td>'+buttonhtml+'</td><td>'+percent+'</td><td>' +buytrade+
                     '</td><td>'+buysymbol+'</td><td>'+buyprice+'</td><td>'+selltrade+'</td>' +
                     '<td>'+sellsymbol+'</td><td>'+sellprice+'</td></tr>';
                 $("#table_content").append(html);}
@@ -462,3 +468,4 @@ function putask1to(trade,bz,base,ask1) {
         }
         return false;
     }
+

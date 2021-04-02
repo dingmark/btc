@@ -66,7 +66,7 @@ public class WssMarketHandle implements Cloneable{
                 //禁止火币交易重连3次退出
                 dealReconnect();
 
-                doClose();
+                //doClose();
             }
             @Override
             public void onMessage(String s) {
@@ -115,11 +115,9 @@ public class WssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
-        fixedThreadPool.shutdown();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("火币关闭线程");
     }
 
@@ -196,7 +194,7 @@ public class WssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

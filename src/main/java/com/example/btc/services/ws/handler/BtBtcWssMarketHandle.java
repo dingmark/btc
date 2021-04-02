@@ -211,7 +211,7 @@ public class BtBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime)/1000, 60, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 5, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
