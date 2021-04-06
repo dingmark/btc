@@ -65,12 +65,22 @@
         function buttonclick() {
             $("[data-toggle='popover']").popover();
         }
-        $(function () {
 
+        $(document).ready(function(){
+            $("#table_content").on('click','button',function (e) {
+               // alert(e);
+               // $(this)[0].attributes[7].textContent='aaaa';
+                //$("[data-toggle='popover']").popover();
+                f1(this,f2);
+            });
         });
-        $("button").click(function () {
-            alert(1111);
-        });
+        function f1(aa,callback) {
+            $(aa)[0].attributes[7].textContent='aaaa';
+            callback();
+        }
+        function f2() {
+            $("[data-toggle='popover']").popover();
+        }
     </script>
 </head>
 <body>

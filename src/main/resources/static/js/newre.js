@@ -439,7 +439,7 @@ function putask1to(trade,bz,base,ask1) {
                 var html="";
                 var buttonhtml="";
                 buttonhtml='<button type="button" class="btn btn-warning" title="Popover title"'+
-                    'data-container="body" data-toggle="popover" data-placement="right"'+
+                    'data-container="body" data-toggle="popover" data-placement="right" data-html="true"'+
                     'data-content="<html><table boder=1><tr><td>11</td></tr><tr>222</tr></table></html>">'+
                         bz+
                 '</button>';
@@ -452,8 +452,10 @@ function putask1to(trade,bz,base,ask1) {
     }
     function isExsit(bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //第0列币种 2买入机构 3买入交易对 5卖出机构 6卖出交易对
-            for(var i=0;i<$("tr").length;i++)
+        //console.log(i+"----bz"+bz+"-----buytrade"+buytrad);
+        for(var i=0;i<$("tr").length;i++)
         {
+
             if($("tr")[i].children[0].innerText==bz&&$("tr")[i].children[2].innerText==buytrad
             &&$("tr")[i].children[3].innerText==buysymbol&&$("tr")[i].children[5].innerText==selltrade
                 &&$("tr")[i].children[6].innerText==sellsymbol
