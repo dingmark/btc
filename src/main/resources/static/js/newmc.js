@@ -6,13 +6,13 @@ var mcvar={} ;
 //setInterval('gethbprice("btcusdt")', 1000);
 //setInterval('gethbprice("ethusdt")', 1000);
 if ('WebSocket' in window) {
-    websockethb = new WebSocket("ws://localhost:8080/test/mc");
+    websocketmc = new WebSocket("ws://localhost:8080/test/mc");
 }
 else
 {
     alert('Not support websocket')
 }
-websockethb.onmessage=function(event)
+websocketmc.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
@@ -79,7 +79,7 @@ websockethb.onmessage=function(event)
     //alert("111");
 }
 
-websockethb.onclose=function () {
+websocketmc.onclose=function () {
 
 }
 window.onload=function () {

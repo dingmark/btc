@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -66,6 +68,7 @@ public class OnLogin {
                 }
                 //移除用户列表里的数据
                 LoginCacheUtil.loginUser.remove(token);
+                LoginCacheUtil.loginTime.remove(token);
                 //return "";
             }
                 // 保存用户登录信息
@@ -74,7 +77,10 @@ public class OnLogin {
                 Cookie cookie = new Cookie("TOKEN", token);
                 // 把cookie写到客户端
                 response.addCookie(cookie);
+            SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateStr = dateformat.format(System.currentTimeMillis());
                 LoginCacheUtil.loginUser.put(token, user);
+                LoginCacheUtil.loginTime.put(token,dateStr);
                 LoginCacheUtil.loginSession.put(user.getUname(),session);
                 return "redirect:/NewSocket.html";
         }else {
@@ -118,5 +124,26 @@ public class OnLogin {
 
         return new JSONObject(map).toJSONString();
     }
-
+    @RequestMapping("/GetUser")
+    @ResponseBody
+    public String getuser()
+    {
+         String str="";
+         Map<String,User> map=LoginCacheUtil.loginUser;
+         Map<String,String> maptime=LoginCacheUtil.loginTime;
+        str=JSONObject.toJSONString(map)+JSONObject.toJSONString(maptime);
+         return str;
+    }
+    @RequestMapping("/deleteUser")
+    @ResponseBody
+    public  String deleteUser(@RequestParam(value ="token") String token)
+    {
+        //String key=cookie.getValue();
+        LoginCacheUtil.loginUser.remove(token);
+        LoginCacheUtil.loginTime.remove(token);
+        JSONObject js=new JSONObject();
+        js.put("code","0");
+        js.put("msg","删除成功");
+        return js.toJSONString();
+    }
 }
