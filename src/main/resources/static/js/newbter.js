@@ -24,9 +24,10 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'BTC');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
-            if('undefined'==typeof (temp.asks[0]))
+            if(temp.asks.length==0||temp.bids.length==0)
             {
                 console.log(symbol);
+                return;
             }
             putask1to('bt',bz,'BTC',temp.asks[0][0]);
             var max=findmax(bz);
@@ -47,9 +48,10 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'USDT');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
-            if('undefined'==typeof (temp.asks[0]))
+            if(temp.asks.length==0||temp.bids.length==0)
             {
                 console.log(symbol);
+                return;
             }
             putask1to('bt',bz,'USDT',temp.asks[0][0]);
             var max=findmax(bz);
@@ -70,9 +72,10 @@ websocketbter.onmessage=function(event)
             temp=bttemprmb(temp,'ETH');
             btvar[bz][symbol].asks= temp.asks;
             btvar[bz][symbol].bids= temp.bids;
-            if('undefined'==typeof (temp.asks[0]))
+            if(temp.asks.length==0||temp.bids.length==0)
             {
                 console.log(symbol);
+                return;
             }
             putask1to('bt',bz,'ETH',temp.asks[0][0]);
             var max=findmax(bz);
