@@ -151,7 +151,7 @@ public class WssMarketHandle implements Cloneable{
                 try {
                     //long lSysTime2 = System.currentTimeMillis();
                     JSONObject jsonMessage = new JSONObject();
-                    jsonMessage.put("pong",  pong.incrementAndGet());
+                    jsonMessage.put("pong", System.currentTimeMillis());
                     logger.debug("发送pong:{}", jsonMessage.toString());
                     webSocketClient.send(jsonMessage.toString());
                 } catch (Throwable t) {

@@ -123,8 +123,7 @@ public class WssMarketReqHandle {
         }
 
     }
-
-
+    
     private void dealPing() {
         try {
             JSONObject jsonMessage = new JSONObject();
