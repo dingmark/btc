@@ -99,11 +99,9 @@ public class BsWssMarketHandle implements Cloneable{
     }
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
-        fixedThreadPool.shutdown();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("比特时代关闭线程");
     }
 

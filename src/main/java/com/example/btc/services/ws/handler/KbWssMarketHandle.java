@@ -111,9 +111,8 @@ public class KbWssMarketHandle implements Cloneable{
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("库币关闭线程");
     }
 

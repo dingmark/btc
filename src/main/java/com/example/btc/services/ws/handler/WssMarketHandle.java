@@ -66,7 +66,7 @@ public class WssMarketHandle implements Cloneable{
                 //禁止火币交易重连3次退出
                 dealReconnect();
 
-                //doClose();
+                doClose();
             }
             @Override
             public void onMessage(String s) {

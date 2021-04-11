@@ -57,7 +57,7 @@ public class BnWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channels);
                 //禁止火币交易重连3次退出
-                dealReconnect();
+                //dealReconnect();
                // dealPing();
                 doClose();
             }
@@ -104,15 +104,10 @@ public class BnWssMarketHandle implements Cloneable{
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("币安关闭线程");
-        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
-            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
-            scheduledExecutorService.shutdownNow();
-            logger.info("币安关闭线程");
-        }
+
     }
 
     private void doSub(List<String> channels) {

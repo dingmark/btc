@@ -55,8 +55,8 @@ public class BnBtcWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channels);
                 //禁止火币交易重连3次退出
-                dealReconnect();
-               // dealPing();
+               // dealReconnect();
+                //dealPing();
                 doClose();
             }
             @SneakyThrows
@@ -104,9 +104,8 @@ public class BnBtcWssMarketHandle implements Cloneable{
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("币安关闭线程");
     }
 

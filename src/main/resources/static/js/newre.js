@@ -428,27 +428,36 @@ function putask1to(trade,bz,base,ask1) {
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
     function newedrawtable(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
-            if(bz=='')
-            {
-                return;
+        if (bz == '') {
+            return;
+        }
+        //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
+        if (!isExsit(bz, buytrade, buysymbol, buyprice, percent, selltrade, sellsymbol, sellprice)) {
+            if (buytrade != selltrade || (buytrade == selltrade && buysymbol != sellsymbol.replace("-", ""))) {
+                var htmlstr = "";
+                var buttonhtml = "";
+                buttonhtml = '<button type="button" class="btn btn-warning" title="Popover title"' +
+                    'data-container="body" data-toggle="popover" data-placement="right" data-html="true"' +
+                    'data-content="<html><table boder=1><tr><td>11</td></tr><tr>222</tr></table></html>">' +
+                    bz +
+                    '</button>';
+                htmlstr += '<tr class="warning"><td>' + buttonhtml + '</td><td>' + percent + '</td><td>' + buytrade +
+                    '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td>' + selltrade + '</td>' +
+                    '<td>' + sellsymbol + '</td><td>' + sellprice + '</td></tr>';
+                /* if($("#table_content tr").length>0)
+                 {
+                     var index = findposition($("#table_content tr"), percent);
+                     $("#table_content tr")[index].prepend(htmlstr);
+                 }
+                 else
+                 {
+                     $("#table_content").append(htmlstr);}
+                 }*/
+                //没有找到在指定位置添加行的操作。
+                $("#table_content").append(htmlstr);
             }
-            //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
-            if(!isExsit(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice))
-            {   if(buytrade!=selltrade||(buytrade==selltrade&&buysymbol!=sellsymbol.replace("-","")))
-                {
-                var html="";
-                var buttonhtml="";
-                buttonhtml='<button type="button" class="btn btn-warning" title="Popover title"'+
-                    'data-container="body" data-toggle="popover" data-placement="right" data-html="true"'+
-                    'data-content="<html><table boder=1><tr><td>11</td></tr><tr>222</tr></table></html>">'+
-                        bz+
-                '</button>';
-                html+='<tr class="warning"><td>'+buttonhtml+'</td><td>'+percent+'</td><td>' +buytrade+
-                    '</td><td>'+buysymbol+'</td><td>'+buyprice+'</td><td>'+selltrade+'</td>' +
-                    '<td>'+sellsymbol+'</td><td>'+sellprice+'</td></tr>';
-                $("#table_content").append(html);}
-            }
-        //2不存在的买入卖出交易对你 新数据过来要追加
+            //2不存在的买入卖出交易对你 新数据过来要追加
+        }
     }
     function isExsit(bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //第0列币种 2买入机构 3买入交易对 5卖出机构 6卖出交易对
@@ -470,4 +479,17 @@ function putask1to(trade,bz,base,ask1) {
         }
         return false;
     }
+function findposition(trs,percent)
+{
+    for (index=0;index<trs.length-1;index++)
+    {
+        if(trs[index].children[1].innerText<=percent)
+        {
+            return index;
+            break;
+        }
+    }
+    return index;
+}
+
 

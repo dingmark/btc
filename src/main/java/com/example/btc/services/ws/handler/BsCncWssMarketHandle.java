@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class BsCncWssMarketHandle extends BsWssMarketHandle implements Cloneable{
+public class BsCncWssMarketHandle   implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
@@ -99,9 +99,8 @@ public class BsCncWssMarketHandle extends BsWssMarketHandle implements Cloneable
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("比特时代关闭线程");
     }
 

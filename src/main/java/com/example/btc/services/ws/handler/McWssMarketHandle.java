@@ -104,9 +104,8 @@ public class McWssMarketHandle implements Cloneable{
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
+        webSocketClient.close();
         logger.info("抹茶关闭线程");
     }
 

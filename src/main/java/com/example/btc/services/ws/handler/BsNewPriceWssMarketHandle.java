@@ -96,15 +96,9 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
         fixedThreadPool.shutdownNow();
-        webSocketClient.close();
-        scheduledExecutorService.shutdown();
         scheduledExecutorService.shutdownNow();
-        logger.info("比特时代关闭线程");
-        if(!scheduledExecutorService.awaitTermination(1000, TimeUnit.MILLISECONDS)){
-            // 超时的时候向线程池中所有的线程发出中断(interrupted)。
-            scheduledExecutorService.shutdownNow();
-            logger.info("比特时代关闭线程");
-        }
+        webSocketClient.close();
+        logger.info("比特时代获取最新价格关闭线程");
     }
 
 
@@ -172,7 +166,7 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
                     //获取实时价格每隔20秒销毁
                     closechannel();
                 }
-            }, 20, 20, TimeUnit.SECONDS);
+            }, 20, 1, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
