@@ -358,40 +358,42 @@ function putask1to(trade,bz,base,ask1) {
         asksvar[bz][trade] = {};
     }
     //hb卖1价格进数组1
-    switch (trade) {
-        case 'hb':
-            //var i=asksvar[bz][trade].length;
-            f(trade, bz, base, ask1);
-            //asksvar[bz][trade][i]=ask1;
-            break;
-        case 'bn':
-            //asksvar[bz][1]=ask1;
-            f(trade, bz, base, ask1);
-            break;
-        case 'bt':
-            // asksvar[bz][2]=ask1;
-            f(trade, bz, base, ask1);
-            break;
-        case 'kb':
-            f(trade, bz, base, ask1);
-            // asksvar[bz][3]=ask1;
-            break;
-        case'mc':
-            //asksvar[bz][4]=ask1;
-            f(trade, bz, base, ask1);
-            break;
-        case'bs':
-            //asksvar[bz][5]=ask1;
-            f(trade, bz, base, ask1);
-            break;
-        case'ok':
-            //asksvar[bz][6]=ask1;
-            f(trade, bz, base, ask1);
-            break;
-        case 'zb':
-            // asksvar[bz][7]=ask1;
-            f(trade, bz, base, ask1);
-            break
+    f(trade, bz, base, ask1);
+    /*switch (trade) {
+     case 'hb':
+     //var i=asksvar[bz][trade].length;
+     f(trade, bz, base, ask1);
+     //asksvar[bz][trade][i]=ask1;
+     break;
+     case 'bn':
+     //asksvar[bz][1]=ask1;
+     f(trade, bz, base, ask1);
+     break;
+     case 'bt':
+     // asksvar[bz][2]=ask1;
+     f(trade, bz, base, ask1);
+     break;
+     case 'kb':
+     f(trade, bz, base, ask1);
+     // asksvar[bz][3]=ask1;
+     break;
+     case'mc':
+     //asksvar[bz][4]=ask1;
+     f(trade, bz, base, ask1);
+     break;
+     case'bs':
+     //asksvar[bz][5]=ask1;
+     f(trade, bz, base, ask1);
+     break;
+     case'ok':
+     //asksvar[bz][6]=ask1;
+     f(trade, bz, base, ask1);
+     break;
+     case 'zb':
+     // asksvar[bz][7]=ask1;
+     f(trade, bz, base, ask1);
+     break
+     }*/
     }
     function f(trade, bz, base, ask1) {
         if ('undefined' == typeof (asksvar[bz][trade][base])) {
@@ -399,7 +401,7 @@ function putask1to(trade,bz,base,ask1) {
         }
         asksvar[bz][trade][base] = ask1;
     }
-}
+
     //找到币种的最大值。并且返回交易对和最大值
     function findmax (bz)
     {
@@ -427,18 +429,21 @@ function putask1to(trade,bz,base,ask1) {
             "percent":percent,"sell_trade":max.trade,
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
-    function newedrawtable(bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
+    function newedrawtable(old,bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         if (bz == '') {
             return;
         }
         //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
-        if (!isExsit(bz, buytrade, buysymbol, buyprice, percent, selltrade, sellsymbol, sellprice)) {
+        if (!isExsit(old,bz, buytrade, buysymbol, buyprice, percent, selltrade, sellsymbol, sellprice)) {
             if (buytrade != selltrade || (buytrade == selltrade && buysymbol != sellsymbol.replace("-", ""))) {
                 var htmlstr = "";
                 var buttonhtml = "";
+                var pophtml="";
+                //生成pophtml
+                pophtml=drawpop(old,buytrade,buysymbol,selltrade,sellsymbol);
                 buttonhtml = '<button type="button" class="btn btn-warning" title="Popover title"' +
                     'data-container="body" data-toggle="popover" data-placement="right" data-html="true"' +
-                    'data-content="<html><table boder=1><tr><td>11</td></tr><tr>222</tr></table></html>">' +
+                    'data-content="'+pophtml+'">' +
                     bz +
                     '</button>';
                 htmlstr += '<tr class="warning"><td>' + buttonhtml + '</td><td>' + percent + '</td><td>' + buytrade +
@@ -459,7 +464,7 @@ function putask1to(trade,bz,base,ask1) {
             //2不存在的买入卖出交易对你 新数据过来要追加
         }
     }
-    function isExsit(bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
+    function isExsit(old,bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //第0列币种 2买入机构 3买入交易对 5卖出机构 6卖出交易对
         //console.log(i+"----bz"+bz+"-----buytrade"+buytrad);
         for(var i=0;i<$("tr").length;i++)
@@ -470,6 +475,8 @@ function putask1to(trade,bz,base,ask1) {
                 &&$("tr")[i].children[6].innerText==sellsymbol
             )
             {
+                //如果已经存在则更新 买 卖明细
+                $("tr")[i].children[0].attributes[7].textContent=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
                 //改1获利比率 4买入单价 7卖出单价
                 $("tr")[i].children[1].innerText=percent;
                 $("tr")[i].children[4].innerText=buyprice;
@@ -479,6 +486,7 @@ function putask1to(trade,bz,base,ask1) {
         }
         return false;
     }
+    //找到table行插入的位置
 function findposition(trs,percent)
 {
     for (index=0;index<trs.length-1;index++)
@@ -491,5 +499,29 @@ function findposition(trs,percent)
     }
     return index;
 }
+
+//画popovertable
+function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
+{
+  var html="";
+  var askhtml="";
+  var bidhtml="";
+  var oldasks=old.asks;
+  var oldbids=old.bids;
+  var traskhtml="";
+  var trbidhtml="";
+  for(i=0;i<5;i++)
+  {
+
+      traskhtml+="<tr><td>"+i+"</td><td>+oldasks[i][0]+</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]*oldasks[i][1]+"</td><tr>";
+      trbidhtml+="<tr><td>"+i+"</td><td>+oldbids[i][0]+</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]*oldbids[i][1]+"</td><tr>";
+  }
+  html="<html><div>"+buytrade+"</div><div>"+buysymbol+"</div><table>"+traskhtml+"</table><div>"+selltrade+"</div><div>"+sellsymbol+"</div><table>"+trbidhtml+"</table></html>";
+  return html;
+}
+
+
+
+
 
 
