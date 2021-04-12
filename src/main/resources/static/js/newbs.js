@@ -16,6 +16,9 @@ websocketbs.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
+    var old=temp;
+    saveasksdo('bs',temp);
+    savebidsdo('bs',temp);
     //temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
@@ -36,7 +39,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'SDT':
@@ -55,7 +58,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'CNC':
@@ -75,7 +78,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }

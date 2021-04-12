@@ -13,6 +13,9 @@ websocketbian.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
+    var old=temp;
+    saveasksdo('bn',temp);
+    savebidsdo('bn',temp);
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
         case'BTC':
@@ -33,7 +36,7 @@ websocketbian.onmessage=function(event)
             //该币种买1与卖1最大值比较，计算利差
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'bn',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'bn',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'SDT':
@@ -53,7 +56,7 @@ websocketbian.onmessage=function(event)
             //该币种买1与卖1最大值比较，计算利差
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'bn',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'bn',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'ETH':
@@ -69,7 +72,7 @@ websocketbian.onmessage=function(event)
             putask1to('bn',bz,'ETH',temp.asks[0][0]);
             //找到这个币种下面卖1目前最大值
             var max=findmax(bz);
-            var result=cacule('bn',symbol,temp.bids[0][0],max);
+            var result=cacule(old,'bn',symbol,temp.bids[0][0],max);
             //该币种买1与卖1最大值比较，计算利差
             if(result.percent>=percent_base)
             {

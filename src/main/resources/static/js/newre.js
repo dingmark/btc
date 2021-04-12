@@ -358,42 +358,33 @@ function putask1to(trade,bz,base,ask1) {
         asksvar[bz][trade] = {};
     }
     //hb卖1价格进数组1
-    f(trade, bz, base, ask1);
-    /*switch (trade) {
+    //f(trade, bz, base, ask1);
+    switch (trade) {
      case 'hb':
-     //var i=asksvar[bz][trade].length;
      f(trade, bz, base, ask1);
-     //asksvar[bz][trade][i]=ask1;
      break;
      case 'bn':
-     //asksvar[bz][1]=ask1;
      f(trade, bz, base, ask1);
      break;
      case 'bt':
-     // asksvar[bz][2]=ask1;
      f(trade, bz, base, ask1);
      break;
      case 'kb':
      f(trade, bz, base, ask1);
-     // asksvar[bz][3]=ask1;
      break;
      case'mc':
-     //asksvar[bz][4]=ask1;
      f(trade, bz, base, ask1);
      break;
      case'bs':
-     //asksvar[bz][5]=ask1;
      f(trade, bz, base, ask1);
      break;
      case'ok':
-     //asksvar[bz][6]=ask1;
      f(trade, bz, base, ask1);
      break;
      case 'zb':
-     // asksvar[bz][7]=ask1;
      f(trade, bz, base, ask1);
      break
-     }*/
+     }
     }
     function f(trade, bz, base, ask1) {
         if ('undefined' == typeof (asksvar[bz][trade][base])) {
@@ -476,7 +467,8 @@ function putask1to(trade,bz,base,ask1) {
             )
             {
                 //如果已经存在则更新 买 卖明细
-                $("tr")[i].children[0].attributes[7].textContent=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
+                //$("tr")[i].children[0].attributes[7].textContent=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
+                $("tr")[i].children[0].children[0].dataset.content=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
                 //改1获利比率 4买入单价 7卖出单价
                 $("tr")[i].children[1].innerText=percent;
                 $("tr")[i].children[4].innerText=buyprice;
@@ -506,20 +498,128 @@ function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
   var html="";
   var askhtml="";
   var bidhtml="";
-  var oldasks=old.asks;
+  var oldasks=saveasks[selltrade][sellsymbol];
   var oldbids=old.bids;
   var traskhtml="";
   var trbidhtml="";
-  for(i=0;i<5;i++)
-  {
-
-      traskhtml+="<tr><td>"+i+"</td><td>+oldasks[i][0]+</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]*oldasks[i][1]+"</td><tr>";
-      trbidhtml+="<tr><td>"+i+"</td><td>+oldbids[i][0]+</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]*oldbids[i][1]+"</td><tr>";
+  switch (buytrade) {
+      case 'bn':
+          for(i=0;i<oldbids.length;i++)
+          {
+              traskhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][0].toPrecision(3)+"</td><td>"+oldbids[i][1]+"</td><td>"+(oldbids[i][0]*oldbids[i][1]).toPrecision(3)+"</td><tr>";
+          }
+          break;
+      case 'bs':
+          for(i=0;i<oldbids.length;i++)
+          {
+          traskhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][1].toPrecision(3)+"</td><td>"+oldbids[i][0]+"</td><td>"+(oldbids[i][0]*oldbids[i][1]).toPrecision(3)+"</td><tr>";
+          }
+          break;
+      case 'bt':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
+      case 'hb':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
+      case 'kb':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
+      case 'mc':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
+      case 'ok':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
+      case 'zb':
+          for(i=0;i<oldbids.length;i++) {
+              traskhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0].toPrecision(3) + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]).toPrecision(3) + "</td><tr>";
+          }
+          break;
   }
-  html="<html><div>"+buytrade+"</div><div>"+buysymbol+"</div><table>"+traskhtml+"</table><div>"+selltrade+"</div><div>"+sellsymbol+"</div><table>"+trbidhtml+"</table></html>";
+    switch (selltrade) {
+        case 'bn':
+            for(i=0;i<oldasks.length;i++)
+            {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'bs':
+            for(i=0;i<oldasks.length;i++)
+            {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][1].toPrecision(3)+"</td><td>"+oldasks[i][0]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'bt':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'hb':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'kb':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'mc':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'ok':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+        case 'zb':
+            for(i=0;i<oldasks.length;i++) {
+                trbidhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0].toPrecision(3)+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1]).toPrecision(3)+"</td><tr>";
+            }
+            break;
+    }
+
+  html="<html><div>"+buytrade+"</div><div>"+buysymbol+"</div><table cellpadding='0' border='1'>"+traskhtml+"</table><div>"+selltrade+"</div><div>"+sellsymbol+"</div><table cellpadding='0' border='1'>"+trbidhtml+"</table></html>";
   return html;
 }
-
+var saveasks={};
+var savebids={};
+function  saveasksdo(trade,temp) {
+    if(typeof(saveasks[trade])=='undefined')
+    {
+        saveasks[trade]={};
+    }
+    symbol=temp.symbol.replace('_','-');
+    if(typeof(saveasks[trade][symbol])=='undefined')
+    {
+        saveasks[trade][symbol]={};
+    }
+    saveasks[trade][symbol]=temp.asks;
+}
+function savebidsdo(trade,temp) {
+    if(typeof(savebids[trade])=='undefined')
+    {
+        savebids[trade]={};
+    }
+    symbol=temp.symbol.replace('_','-');
+    if(typeof(savebids[trade][symbol])=='undefined')
+    {
+        savebids[trade][symbol]={};
+    }
+    savebids[trade][symbol]=temp.bids;
+}
 
 
 
