@@ -16,9 +16,10 @@ websocketmc.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
-    var old=temp;
-    saveasksdo('mc',temp);
-    savebidsdo('mc',temp);
+    var template = JSON.stringify(temp);
+    var old = JSON.parse(template);
+    saveasksdo('mc',old);
+    savebidsdo('mc',old);
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
         case'BTC':

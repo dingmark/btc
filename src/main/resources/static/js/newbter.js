@@ -12,9 +12,10 @@ else
 websocketbter.onmessage=function(event)
 {
     var temp=JSON.parse(event.data.replace('\\',''));
-    var old=temp;
-    saveasksdo('bt',temp);
-    savebidsdo('bt',temp);
+    var template = JSON.stringify(temp);
+    var old = JSON.parse(template);
+    saveasksdo('bt',old);
+    savebidsdo('bt',old);
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
         case'BTC':

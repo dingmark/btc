@@ -16,9 +16,10 @@ websockethb.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
-    var old=temp;
-    saveasksdo('hb',temp);
-    savebidsdo('hb',temp);
+    var template = JSON.stringify(temp);
+    var old = JSON.parse(template);
+    saveasksdo('hb',old);
+    savebidsdo('hb',old);
 //将出来的数据单位全部换算成人民币
  //   temp=getcnc(temp)
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);

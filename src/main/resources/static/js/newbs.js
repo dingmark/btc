@@ -16,9 +16,10 @@ websocketbs.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
-    var old=temp;
-    saveasksdo('bs',temp);
-    savebidsdo('bs',temp);
+    var template = JSON.stringify(temp);
+    var old = JSON.parse(template);
+    saveasksdo('bs',old);
+    savebidsdo('bs',old);
     //temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
     switch (type) {
