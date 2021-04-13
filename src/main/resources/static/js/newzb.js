@@ -16,6 +16,7 @@ websocketzb.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
+    var old=temp;
     saveasksdo('zb',temp);
     savebidsdo('zb',temp);
     temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
@@ -38,7 +39,7 @@ websocketzb.onmessage=function(event)
             var result=cacule('zb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'DT':
@@ -57,7 +58,7 @@ websocketzb.onmessage=function(event)
             var result=cacule('zb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'QC':
@@ -77,7 +78,7 @@ websocketzb.onmessage=function(event)
             var result=cacule('zb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'zb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }

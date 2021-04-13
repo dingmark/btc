@@ -16,6 +16,7 @@ websocketkb.onmessage=function(event)
 {
    // locateposition('bian',event.data);
     var temp=JSON.parse(event.data.replace('\\',''));
+    var old=temp;
     saveasksdo('kb',temp);
     savebidsdo('kb',temp);
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
@@ -36,7 +37,7 @@ websocketkb.onmessage=function(event)
             var result=cacule('kb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'SDT':
@@ -55,7 +56,7 @@ websocketkb.onmessage=function(event)
             var result=cacule('kb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'ETH':
@@ -74,7 +75,7 @@ websocketkb.onmessage=function(event)
             var result=cacule('kb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,bz,'kb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }

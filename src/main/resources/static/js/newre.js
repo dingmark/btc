@@ -498,6 +498,7 @@ function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
   var html="";
   var askhtml="";
   var bidhtml="";
+    sellsymbol=getasksymbol(selltrade,sellsymbol);
   var oldasks=saveasks[selltrade][sellsymbol];
   var oldbids=old.bids;
   var traskhtml="";
@@ -621,7 +622,36 @@ function savebidsdo(trade,temp) {
     savebids[trade][symbol]=temp.bids;
 }
 
-
+function getasksymbol(trade,symbol)
+{
+ switch (trade)
+ {
+     case 'hb':
+         return symbol.replace('-','');
+         break;
+     case 'bn':
+        return symbol.replace('-','');
+         break;
+     case 'zb':
+        return symbol.replace('-','')+'-DEPTH';
+        break;
+     case 'kb':
+         return symbol;
+         break;
+     case 'mc':
+         return symbol;
+         break;
+     case 'bt':
+         return symbol;
+         break;
+     case 'bs':
+         return symbol;
+         break;
+     case 'ok':
+         return symbol;
+         break;
+ }
+}
 
 
 
