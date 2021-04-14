@@ -43,7 +43,7 @@ websockethb.onmessage=function(event)
             //该币种买1与卖1最大值比较，计算利差
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             //findmaxAsk('hb',bz,symbol,temp.asks[0]);
             break;
@@ -67,7 +67,7 @@ websockethb.onmessage=function(event)
             //console.log(result);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'ETH':
@@ -88,7 +88,7 @@ websockethb.onmessage=function(event)
             var result=cacule('hb',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-            newedrawtable(old,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+            newedrawtable(old,temp,bz,'hb',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }

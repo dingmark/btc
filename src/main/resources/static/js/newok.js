@@ -32,16 +32,16 @@ websocketok.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
-            tempok=oktemprmb(temp,'BTC')
-            okvar[bz][symbol].asks= tempok.asks;
-            okvar[bz][symbol].bids= tempok.bids;
-            putask1to('ok',bz,'BTC',tempok.asks[0][0]);
+            temp=oktemprmb(temp,'BTC');
+            okvar[bz][symbol].asks= temp.asks;
+            okvar[bz][symbol].bids= temp.bids;
+            putask1to('ok',bz,'BTC',temp.asks[0][0]);
             var max=findmax(bz);
             symbol=symbol.replace('-','');
-            var result=cacule('ok',symbol,tempok.bids[0][0],max);
+            var result=cacule('ok',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'ok',symbol,tempok.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'ok',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'SDT':
@@ -51,16 +51,16 @@ websocketok.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
-            tempok=oktemprmb(temp,'USDT')
-            okvar[bz][symbol].asks= tempok.asks;
-            okvar[bz][symbol].bids= tempok.bids;
-            putask1to('ok',bz,'USDT',tempok.asks[0][0]);
+            temp=oktemprmb(temp,'USDT')
+            okvar[bz][symbol].asks= temp.asks;
+            okvar[bz][symbol].bids= temp.bids;
+            putask1to('ok',bz,'USDT',temp.asks[0][0]);
             var max=findmax(bz);
             symbol=symbol.replace('-','');
-            var result=cacule('ok',symbol,tempok.bids[0][0],max);
+            var result=cacule('ok',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'ok',symbol,tempok.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'ok',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'ETH':
@@ -70,16 +70,16 @@ websocketok.onmessage=function(event)
             }
             var symbol =temp.symbol;
             okvar[bz][symbol]={};
-            tempok=oktemprmb(temp,'ETH')
-            okvar[bz][symbol].asks= tempok.asks;
-            okvar[bz][symbol].bids= tempok.bids;
-            putask1to('ok',bz,'ETH',tempok.asks[0][0]);
+            temp=oktemprmb(temp,'ETH')
+            okvar[bz][symbol].asks= temp.asks;
+            okvar[bz][symbol].bids= temp.bids;
+            putask1to('ok',bz,'ETH',temp.asks[0][0]);
             var max=findmax(bz);
             symbol=symbol.replace('-','');
-            var result=cacule('ok',symbol,tempok.bids[0][0],max);
+            var result=cacule('ok',symbol,temp.bids[0][0],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'ok',symbol,tempok.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'ok',symbol,temp.bids[0][0],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }

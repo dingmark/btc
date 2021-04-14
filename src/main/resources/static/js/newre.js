@@ -56,6 +56,8 @@ function hbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbbtc;
             }
+            temp.rate={};
+            temp.rate=hbbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -66,6 +68,8 @@ function hbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -76,6 +80,8 @@ function hbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbeth;
             }
+            temp.rate={};
+            temp.rate=hbeth;
             break;
     }
 
@@ -94,6 +100,8 @@ function oktemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*okbtc;
             }
+            temp.rate={};
+            temp.rate=okbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -104,6 +112,8 @@ function oktemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -114,6 +124,8 @@ function oktemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*oketh;
             }
+            temp.rate={};
+            temp.rate=oketh;
             break;
     }
 
@@ -132,6 +144,8 @@ function mctemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*mcbtc;
             }
+            temp.rate={};
+            temp.rate=mcbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -142,6 +156,8 @@ function mctemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -152,6 +168,8 @@ function mctemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*mceth;
             }
+            temp.rate={};
+            temp.rate=mceth;
             break;
     }
 
@@ -170,6 +188,8 @@ function bttemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*btbtc;
             }
+            temp.rate={};
+            temp.rate=btbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -180,6 +200,8 @@ function bttemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -190,6 +212,8 @@ function bttemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*bteth;
             }
+            temp.rate={};
+            temp.rate=bteth;
             break;
     }
 
@@ -208,6 +232,8 @@ function bntemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*bnbtc;
             }
+            temp.rate={};
+            temp.rate=bnbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -218,6 +244,8 @@ function bntemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -228,6 +256,8 @@ function bntemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*bneth;
             }
+            temp.rate={};
+            temp.rate=bneth;
             break;
     }
 
@@ -245,6 +275,8 @@ function zbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*zbbtc;
             }
+            temp.rate={};
+            temp.rate=zbbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -255,9 +287,12 @@ function zbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*zbqc;
             }
+            temp.rate={};
+            temp.rate=zbqc;
             break;
         case 'QC':
-
+            temp.rate={};
+            temp.rate=1;
             break;
     }
 
@@ -276,6 +311,8 @@ function bstemprmb(temp,zrmb) {
             {
                 temp.bids[i][1]=temp.bids[i][1]*bsbtc;
             }
+            temp.rate={};
+            temp.rate=bsbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -286,6 +323,8 @@ function bstemprmb(temp,zrmb) {
             {
                 temp.bids[i][1]=temp.bids[i][1]*bscnc;
             }
+            temp.rate={};
+            temp.rate=bscnc;
             break;
         case 'CNC':
 
@@ -307,6 +346,8 @@ function kbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*kbbtc;
             }
+            temp.rate={};
+            temp.rate=kbbtc;
             break;
         case 'USDT':
             for(i=0;i<temp.asks.length;i++)
@@ -317,6 +358,8 @@ function kbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*hbrmb;
             }
+            temp.rate={};
+            temp.rate=hbrmb;
             break;
         case 'ETH':
             for(i=0;i<temp.asks.length;i++)
@@ -327,6 +370,8 @@ function kbtemprmb(temp,zrmb) {
             {
                 temp.bids[i][0]=temp.bids[i][0]*kbeth;
             }
+            temp.rate={};
+            temp.rate=kbeth;
             break;
     }
 
@@ -420,18 +465,18 @@ function putask1to(trade,bz,base,ask1) {
             "percent":percent,"sell_trade":max.trade,
             "sell_symbol":max.bz+'-'+max.base,"sellprice":max.max};
     }
-    function newedrawtable(old,bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
+    function newedrawtable(old,rmbnew,bz,buytrade,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         if (bz == '') {
             return;
         }
         //1已经存在对应的买入卖出交易对 新数据过来要替换原来的数据
-        if (!isExsit(old,bz, buytrade, buysymbol, buyprice, percent, selltrade, sellsymbol, sellprice)) {
+        if (!isExsit(old,rmbnew,bz, buytrade, buysymbol, buyprice, percent, selltrade, sellsymbol, sellprice)) {
             if (buytrade != selltrade || (buytrade == selltrade && buysymbol != sellsymbol.replace("-", ""))) {
                 var htmlstr = "";
                 var buttonhtml = "";
                 var pophtml="";
                 //生成pophtml
-                pophtml=drawpop(old,buytrade,buysymbol,selltrade,sellsymbol);
+                pophtml=drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol);
                 buttonhtml = '<button type="button" class="btn btn-warning" title="Popover title"' +
                     'data-container="body" data-toggle="popover" data-placement="right" data-html="true"' +
                     'data-content="'+pophtml+'">' +
@@ -455,7 +500,7 @@ function putask1to(trade,bz,base,ask1) {
             //2不存在的买入卖出交易对你 新数据过来要追加
         }
     }
-    function isExsit(old,bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
+    function isExsit(old,rmbnew,bz,buytrad,buysymbol,buyprice,percent,selltrade,sellsymbol,sellprice) {
         //第0列币种 2买入机构 3买入交易对 5卖出机构 6卖出交易对
         //console.log(i+"----bz"+bz+"-----buytrade"+buytrad);
         for(var i=0;i<$("tr").length;i++)
@@ -468,7 +513,7 @@ function putask1to(trade,bz,base,ask1) {
             {
                 //如果已经存在则更新 买 卖明细
                 //$("tr")[i].children[0].attributes[7].textContent=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
-                $("tr")[i].children[0].children[0].dataset.content=drawpop(old,buytrad,buysymbol,selltrade,sellsymbol);
+                $("tr")[i].children[0].children[0].dataset.content=drawpop(old,rmbnew,buytrad,buysymbol,selltrade,sellsymbol);
                 //改1获利比率 4买入单价 7卖出单价
                 $("tr")[i].children[1].innerText=percent;
                 $("tr")[i].children[4].innerText=buyprice;
@@ -493,7 +538,7 @@ function findposition(trs,percent)
 }
 
 //画popovertable
-function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
+function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
 {
   var html="";
   var askhtml="";
@@ -501,49 +546,70 @@ function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
     sellsymbol=getasksymbol(selltrade,sellsymbol);
   var oldasks=saveasks[selltrade][sellsymbol];
   var oldbids=old.bids;
+  var newasks=rmbnew.asks;
+  var  newbids=rmbnew.bids;
+
   var traskhtml="";
   var trbidhtml="";
+  //buyrate=GetBuyrate(buytrade,buysymbol);
+ /// sellrate=GetSellrate(selltrade,buysymbol);
   switch (buytrade) {
       case 'bn':
           for(i=0;i<oldbids.length;i++)
           {
-              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][0]+"</td><td>"+oldbids[i][1]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td><tr>";
+              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][0]+"</td><td>"+oldbids[i][1]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
+                      +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'bs':
           for(i=0;i<oldbids.length;i++)
           {
-              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td><tr>";
+              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][1]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'bt':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'hb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'kb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'mc':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'ok':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
       case 'zb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td><tr>";
+              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+                  +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
+                  "<tr>";
           }
           break;
   }
@@ -596,7 +662,7 @@ function drawpop(old,buytrade,buysymbol,selltrade,sellsymbol)
       + "<tr><td>序号</td><td>卖出价格</td><td>卖出数量</td><td>总价</td></tr>"
       +traskhtml+
       "</table><div>"+buytrade+"</div><div>"+buysymbol+"</div><table cellpadding='0' border='1'>"
-      + "<tr><td>序号</td><td>买入价格</td><td>买入数量</td><td>总价</td></tr>"
+      + "<tr><td>序号</td><td>买入价格</td><td>买入数量</td><td>总价</td><td>买入人民币总价</td><td>买入人民币单价</td><td>汇率</td></tr>"
       +trbidhtml+"</table></html>";
   return html;
 }
@@ -657,6 +723,14 @@ function getasksymbol(trade,symbol)
          break;
  }
 }
+// function GetBuyrate(buytrade,buysymbol) {
+//
+//     buysymbol.substr(buysymbol.length-2)
+//     switch (buytrade)
+//     {
+//         case
+//     }
+// }
 
 
 

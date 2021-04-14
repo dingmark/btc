@@ -40,7 +40,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'SDT':
@@ -59,7 +59,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
         case 'CNC':
@@ -79,7 +79,7 @@ websocketbs.onmessage=function(event)
             var result=cacule('bs',symbol,temp.bids[0][1],max);
             if(result.percent>=percent_base)
             {
-                newedrawtable(old,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
+                newedrawtable(old,temp,bz,'bs',symbol,temp.bids[0][1],result.percent,result.sell_trade,result.sell_symbol,result.sellprice)
             }
             break;
     }
