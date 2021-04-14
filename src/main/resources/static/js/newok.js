@@ -17,13 +17,11 @@ websocketok.onmessage=function(event)
     var template = JSON.stringify(temp);
     var old = JSON.parse(template);
     //var old=temp;
-    if(temp.symbol=="MCO-BTC")
-    {
-        console.log("1111");
-    }
-    saveasksdo('ok',old);
-    savebidsdo('ok',old);
+
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
+    var rate=Getrate('ok',type);
+    saveasksdo('ok',old,rate);
+    savebidsdo('ok',old,rate);
     switch (type) {
         case'BTC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC')-1);

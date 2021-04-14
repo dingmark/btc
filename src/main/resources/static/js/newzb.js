@@ -18,10 +18,11 @@ websocketzb.onmessage=function(event)
     var temp=JSON.parse(event.data.replace('\\',''));
     var template = JSON.stringify(temp);
     var old = JSON.parse(template);
-    saveasksdo('zb',old);
-    savebidsdo('zb',old);
     temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-2,temp.symbol.length);
+    var rate=Getrate('zb',type);
+    saveasksdo('zb',old,rate);
+    savebidsdo('zb',old,rate);
     switch (type) {
         case'TC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC'));
@@ -70,7 +71,7 @@ websocketzb.onmessage=function(event)
             var symbol =temp.symbol;
             zbvar[bz][symbol]={};
             //当币对是qc即为人民币，不做转换
-           // temp=zbtemprmb(temp,'qc');
+            temp=zbtemprmb(temp,'QC');
             zbvar[bz][symbol].asks= temp.asks;
             zbvar[bz][symbol].bids= temp.bids;
             putask1to('zb',bz,'QC',temp.asks[0][0]);

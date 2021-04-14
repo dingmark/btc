@@ -15,9 +15,11 @@ websocketbian.onmessage=function(event)
     var temp=JSON.parse(event.data.replace('\\',''));
     var template = JSON.stringify(temp);
     var old = JSON.parse(template);
-    saveasksdo('bn',old);
-    savebidsdo('bn',old);
+
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
+    var rate=Getrate('bn',type);
+    saveasksdo('bn',old,rate);
+    savebidsdo('bn',old,rate);
     switch (type) {
         case'BTC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC'));

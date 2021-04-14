@@ -18,10 +18,12 @@ websocketbs.onmessage=function(event)
     var temp=JSON.parse(event.data.replace('\\',''));
     var template = JSON.stringify(temp);
     var old = JSON.parse(template);
-    saveasksdo('bs',old);
-    savebidsdo('bs',old);
+
     //temp.symbol=temp.symbol.substr(0,temp.symbol.indexOf("_"));
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
+    var rate=Getrate('bs',type);
+    saveasksdo('bs',old,rate);
+    savebidsdo('bs',old,rate);
     switch (type) {
         case'BTC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC')-1);
@@ -70,7 +72,7 @@ websocketbs.onmessage=function(event)
             var symbol =temp.symbol;
             bsvar[bz][symbol]={};
             //当币对是cnc即为人民币，不做转换
-           // temp=zbtemprmb(temp,'qc');
+            temp=bstemprmb(temp,'CNC');
             bsvar[bz][symbol].asks= temp.asks;
             bsvar[bz][symbol].bids= temp.bids;
             putask1to('bs',bz,'CNC',Number(temp.asks[0][1]));

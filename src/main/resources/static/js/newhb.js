@@ -18,11 +18,13 @@ websockethb.onmessage=function(event)
     var temp=JSON.parse(event.data.replace('\\',''));
     var template = JSON.stringify(temp);
     var old = JSON.parse(template);
-    saveasksdo('hb',old);
-    savebidsdo('hb',old);
+
 //将出来的数据单位全部换算成人民币
  //   temp=getcnc(temp)
     type=temp.symbol.substr(temp.symbol.length-3,temp.symbol.length);
+    var rate=Getrate('hb',type);
+    saveasksdo('hb',old,rate);
+    savebidsdo('hb',old,rate);
     switch (type) {
         case'BTC':
             var bz=temp.symbol.substr(0,temp.symbol.indexOf('BTC'));

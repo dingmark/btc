@@ -327,7 +327,8 @@ function bstemprmb(temp,zrmb) {
             temp.rate=bscnc;
             break;
         case 'CNC':
-
+            temp.rate={};
+            temp.rate=1;
             break;
     }
 
@@ -617,49 +618,65 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
         case 'bn':
             for(i=0;i<oldasks.length;i++)
             {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'bs':
             for(i=0;i<oldasks.length;i++)
             {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'bt':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'hb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>\<" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "tr>";
             }
             break;
         case 'kb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'mc':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'ok':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
         case 'zb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td><tr>";
+                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                    "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
+                    "<tr>";
             }
             break;
     }
 
   html="<html><div>"+selltrade+"</div><div>"+sellsymbol+"</div><table cellpadding='0' border='1'>"
-      + "<tr><td>序号</td><td>卖出价格</td><td>卖出数量</td><td>总价</td></tr>"
+      + "<tr><td>序号</td><td>卖出价格</td><td>卖出数量</td><td>总价</td><td>卖出人民币总价</td><td>卖出人民币单价</td><td>汇率</td></tr>"
       +traskhtml+
       "</table><div>"+buytrade+"</div><div>"+buysymbol+"</div><table cellpadding='0' border='1'>"
       + "<tr><td>序号</td><td>买入价格</td><td>买入数量</td><td>总价</td><td>买入人民币总价</td><td>买入人民币单价</td><td>汇率</td></tr>"
@@ -668,7 +685,7 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
 }
 var saveasks={};
 var savebids={};
-function  saveasksdo(trade,temp) {
+function  saveasksdo(trade,temp,rate) {
     if(typeof(saveasks[trade])=='undefined')
     {
         saveasks[trade]={};
@@ -679,8 +696,10 @@ function  saveasksdo(trade,temp) {
         saveasks[trade][symbol]={};
     }
     saveasks[trade][symbol]=temp.asks;
+    saveasks[trade][symbol].rate={};
+    saveasks[trade][symbol].rate=rate;
 }
-function savebidsdo(trade,temp) {
+function savebidsdo(trade,temp,rate) {
     if(typeof(savebids[trade])=='undefined')
     {
         savebids[trade]={};
@@ -691,6 +710,8 @@ function savebidsdo(trade,temp) {
         savebids[trade][symbol]={};
     }
     savebids[trade][symbol]=temp.bids;
+    savebids[trade][symbol].rate={};
+    savebids[trade][symbol].rate=rate;
 }
 
 function getasksymbol(trade,symbol)
@@ -723,14 +744,83 @@ function getasksymbol(trade,symbol)
          break;
  }
 }
-// function GetBuyrate(buytrade,buysymbol) {
-//
-//     buysymbol.substr(buysymbol.length-2)
-//     switch (buytrade)
-//     {
-//         case
-//     }
-// }
+function Getrate(buytrade,type) {
+    switch (buytrade+type)
+    {
+        case'bnBTC':
+            return bnbtc;
+            break;
+        case'bnSDT':
+            return hbrmb;
+            break;
+        case'bnETH':
+            return bneth;
+            break;
+        case'bsBTC':
+            return  bsbtc;
+            break;
+        case'bsSDT':
+            return bscnc;
+            break;
+        case'bsCNC':
+            return 1;
+            break;
+        case'btBTC':
+            return btbtc;
+            break;
+        case'btSDT':
+            return  hbrmb;
+            break;
+        case'btETH':
+            return  bteth;
+            break;
+        case'hbBTC':
+            return  hbbtc;
+            break;
+        case'hbSDT':
+            return hbrmb;
+            break;
+        case'hbETH':
+            return  hbeth;
+            break;
+        case'kbBTC':
+            return  kbbtc;
+            break;
+        case'kbSDT':
+            return  kbcnc;
+            break;
+        case'kbETH':
+            return kbeth;
+            break;
+        case'mcBTC':
+            return mcbtc;
+            break;
+        case'mcSDT':
+            return hbrmb;
+            break;
+        case'mcETH':
+            return mceth;
+            break;
+        case'okBTC':
+            return okbtc;
+            break;
+        case'okSDT':
+            return hbrmb;
+            break;
+        case'okETH':
+            return oketh;
+            break;
+        case'zbTC':
+            return zbbtc;
+            break;
+        case'zbDT':
+            return zbqc;
+            break;
+        case'zbQC':
+            return 1;
+            break;
+    }
+}
 
 
 
