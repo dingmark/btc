@@ -47,27 +47,13 @@
                         if(result.code=='0'||result.code=='2')//0未找到 2空白页
                         {
                             alert('登录失效');
-
                             self.location="\\";
                             //closeallsocket();
                         }
                     }
                 })});
         }
-        /*function deleteuser()
-        {
-            $(document).ready ( function() {
-                $.ajax({
-                    type: "GET",
-                    url: "/deleteUser",
-                    async: false,
-                    dataType: 'json',
-                    success: function (result) {
-                        alert(result.code);
-                    }
-                });
-            });
-        }*/
+
     </script>
     <title>NewSocket</title>
     <script type="text/javascript">
@@ -87,6 +73,18 @@
                 $("[data-toggle='popover']").popover();
                // f1(this,f2);
             });
+            $("#selectbuy").on('change',function (e) {
+                switch (this.value)
+                {
+                    case'ok':
+                        $(".warning").hide();
+                        $(".ok").show();
+                        break;
+                    case 'all':
+                        $(".warning").show();
+                        break;
+                }
+            });
         });
         function f1(aa,callback) {
            // $(aa)[0].attributes[7].textContent='aaaa';
@@ -95,15 +93,22 @@
         function f2() {
             $("[data-toggle='popover']").popover();
         }
+
+
     </script>
+    <style>
+        div {
+            float: left;
+        }
+    </style>
 </head>
 <body>
-<div>
-    <div style="width:150px;display: inline">
-    <h4>获利比率选择 <span class="label label-default"></span></h4>
+<div style="width: 100%">
+    <div style="width:25%;">
+    <h4 style="float: right ;line-height:1px;">获利比率选择: <span class="label label-default"></span></h4>
     </div>
-    <div style="width: 100px ;display: inline">
-    <select class="selectpicker" onchange="changepercent(this.value)">
+    <div style="width:25% ;">
+    <select style="width: 50%; text-align: center" class="selectpicker" onchange="changepercent(this.value)">
         <option value="0.03">3%</option>
         <option value="0.04">4%</option>
         <option value="0.05">5%</option>
@@ -119,6 +124,13 @@
         <option value="0.15">15%</option>
     </select>
     </div>
+    <div width="25%">
+        <select id="selectbuy"class="selectpicker" onchange="" >
+            <option value="all">all</option>
+            <option value="ok">ok</option>
+        </select>
+    </div>
+    <div width="25%"></div>
     <div style="display: inline">
         <div style="display: block">
         <p>火币</p>

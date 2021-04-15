@@ -483,7 +483,7 @@ function putask1to(trade,bz,base,ask1) {
                     'data-content="'+pophtml+'">' +
                     bz +
                     '</button>';
-                htmlstr += '<tr class="warning"><td>' + buttonhtml + '</td><td>' + percent + '</td><td>' + buytrade +
+                htmlstr += '<tr class="warning '+buytrade+' '+selltrade+'"><td>' + buttonhtml + '</td><td>' + percent + '</td><td>' + buytrade +
                     '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td>' + selltrade + '</td>' +
                     '<td>' + sellsymbol + '</td><td>' + sellprice + '</td></tr>';
                 /* if($("#table_content tr").length>0)
@@ -558,7 +558,7 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
       case 'bn':
           for(i=0;i<oldbids.length;i++)
           {
-              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][0]+"</td><td>"+oldbids[i][1]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
+              trbidhtml+="<tr class='buy'><td>"+i+"</td><td>"+oldbids[i][0]+"</td><td>"+oldbids[i][1]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
                       +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
@@ -566,49 +566,49 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
       case 'bs':
           for(i=0;i<oldbids.length;i++)
           {
-              trbidhtml+="<tr><td>"+i+"</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
+              trbidhtml+="<tr class='buy'><td>"+i+"</td><td>"+oldbids[i][1]+"</td><td>"+oldbids[i][0]+"</td><td>"+(oldbids[i][0]*oldbids[i][1])+"</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][1]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'bt':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'hb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'kb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'mc':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'ok':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
           break;
       case 'zb':
           for(i=0;i<oldbids.length;i++) {
-              trbidhtml += "<tr><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
+              trbidhtml += "<tr class='buy'><td>" + i + "</td><td>" + oldbids[i][0] + "</td><td>" + oldbids[i][1] + "</td><td>" + (oldbids[i][0] * oldbids[i][1]) + "</td>"
                   +"<td>"+newbids[i][0]*newbids[i][1]+"</td><td>"+newbids[i][0]+"</td><td>"+rmbnew.rate+"</td>"+
                   "<tr>";
           }
@@ -618,7 +618,7 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
         case 'bn':
             for(i=0;i<oldasks.length;i++)
             {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
@@ -626,49 +626,49 @@ function drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol)
         case 'bs':
             for(i=0;i<oldasks.length;i++)
             {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][1]+"</td><td>"+oldasks[i][0]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
             break;
         case 'bt':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
             break;
         case 'hb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>\<" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>\<" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "tr>";
             }
             break;
         case 'kb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
             break;
         case 'mc':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
             break;
         case 'ok':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
             break;
         case 'zb':
             for(i=0;i<oldasks.length;i++) {
-                traskhtml+="<tr><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
+                traskhtml+="<tr class='sell'><td>"+i+"</td><td>"+oldasks[i][0]+"</td><td>"+oldasks[i][1]+"</td><td>"+(oldasks[i][0]*oldasks[i][1])+"</td>" +
                     "<td>"+oldasks[i][0]*oldasks[i][1]*oldasks.rate+"</td><td>"+oldasks[i][0]*oldasks.rate+"</td><td>"+oldasks.rate+"</td>"+
                     "<tr>";
             }
