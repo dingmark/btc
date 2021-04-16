@@ -22,17 +22,17 @@
 </head>
 <body>
 <script type="text/javascript">
-    $(function(){
+
         $('#loginbutton').click(function(){
-            $("form").ajaxSubmit(function(data){
+            $("#loginform").ajaxSubmit(function(data){
                 alert(data);
             })
         })
-
+    //action="/login"
 </script>
 <div id="login">
     <h1>Login</h1>
-    <form id="loginform" action="/login" method="post">
+    <form id="loginform" action="/login"  method="post">
         <input type="text" required="required" placeholder="用户名" name="uname"></input>
         <input type="password" required="required" placeholder="密码" name="upwd"></input>
         <button id="loginbutton" class="but" type="submit">登录</button>

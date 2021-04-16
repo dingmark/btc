@@ -98,16 +98,19 @@
     </script>
     <style>
         div {
-            float: left;
+            /*float: left;*/
+        }
+        .front{
+            float:left
         }
     </style>
 </head>
 <body>
 <div style="width: 100%">
-    <div style="width:25%;">
+    <div class="front" style="width:25%;">
     <h4 style="float: right ;line-height:1px;">获利比率选择: <span class="label label-default"></span></h4>
     </div>
-    <div style="width:25% ;">
+    <div class="front" style="width:25% ;">
     <select style="width: 50%; text-align: center" class="selectpicker" onchange="changepercent(this.value)">
         <option value="0.03">3%</option>
         <option value="0.04">4%</option>
@@ -124,14 +127,13 @@
         <option value="0.15">15%</option>
     </select>
     </div>
-    <div width="25%">
+    <div class="front" width="25%">
         <select id="selectbuy"class="selectpicker" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
         </select>
     </div>
-    <div width="25%"></div>
-    <div style="display: inline">
+    <div class="front" width="25%">
         <div style="display: block">
         <p>火币</p>
         </div>
