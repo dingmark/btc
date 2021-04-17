@@ -33,7 +33,7 @@
     <script src="js/newkb.js"></script>
 
     <script type="text/javascript">
-        setInterval(testsession,10000);
+        setInterval(testsession,15000);
         function testsession()
         {
             //sessionStorage
@@ -103,6 +103,11 @@
         .front{
             float:left
         }
+        .timevalue{
+            float: left;
+            padding-right: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -135,10 +140,15 @@
     </div>
     <div class="front" width="25%">
         <div style="display: block">
-        <p>火币</p>
+        <p class="timevalue">火币</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="hbbtcusdt"></p>
+            <p class="timevalue">eth-usdt</p><p class="timevalue" id="hbethusdt"></p>
+            <p class="timevalue">usdt-rmb</p><p class="timevalue" id="hbusdtrmb"></p>
         </div>
         <div style="display: block">
-            <p>币安</p>
+            <p class="timevalue">币安</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="bnbtcusdt"></p>
+            <p class="timevalue">eth-usdt</p><p class="timevalue" id="bnethusdt"></p>
+            <p class="timevalue">usdt-rmb</p><p class="timevalue" id="bnusdtrmb"></p>
+        </div>
         </div>
     </div>
 </div>

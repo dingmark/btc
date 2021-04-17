@@ -18,6 +18,14 @@ websocketre = new WebSocket("ws://localhost:8080/test/re");
 websocketre.onmessage=function(event)
 {
     revar=JSON.parse(event.data);
+    $("#hbbtcusdt").html(revar.hbbtcusdt);
+    $("#hbethusdt").html(revar.hbethusdt);
+    $("#hbusdtrmb").html(revar.bsusdtcnc);
+
+    $("#bnbtcusdt").html(revar.bnbtcusdt);
+    $("#bnethusdt").html(revar.bnethusdt);
+    $("#bnusdtrmb").html(revar.bsusdtcnc);
+    
      hbbtc=revar.hbbtcusdt*revar.bsusdtcnc;
      hbeth=revar.hbethusdt*revar.bsusdtcnc;
      hbrmb=revar.bsusdtcnc;
@@ -43,7 +51,7 @@ websocketre.onmessage=function(event)
     //kb
     kbbtc=revar.kbbtcusdt*revar.bsusdtcnc;
     kbeth=revar.kbethusdt*revar.bsusdtcnc;
-}
+};
 function hbtemprmb(temp,zrmb) {
     switch (zrmb)
     {
