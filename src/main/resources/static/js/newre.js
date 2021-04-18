@@ -25,7 +25,15 @@ websocketre.onmessage=function(event)
     $("#bnbtcusdt").html(revar.bnbtcusdt);
     $("#bnethusdt").html(revar.bnethusdt);
     $("#bnusdtrmb").html(revar.bsusdtcnc);
-    
+
+    $("#bsbtcusdt").html(revar.bsbtcusdt);
+    $("#bsethusdt").html(revar.bsethusdt);
+    $("#bsusdtrmb").html(revar.bsusdtcnc);
+
+    $("#btbtcusdt").html(revar.bterbtcusdt);
+    $("#btethusdt").html(revar.bterethusdt);
+    $("#btusdtrmb").html(revar.bsusdtcnc);
+
      hbbtc=revar.hbbtcusdt*revar.bsusdtcnc;
      hbeth=revar.hbethusdt*revar.bsusdtcnc;
      hbrmb=revar.bsusdtcnc;
