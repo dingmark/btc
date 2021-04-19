@@ -34,7 +34,23 @@ websocketre.onmessage=function(event)
     $("#btethusdt").html(revar.bterethusdt);
     $("#btusdtrmb").html(revar.bsusdtcnc);
 
-     hbbtc=revar.hbbtcusdt*revar.bsusdtcnc;
+    $("#kbbtcusdt").html(revar.kbbtcusdt);
+    $("#kbethusdt").html(revar.kbethusdt);
+    $("#kbusdtrmb").html(revar.bsusdtcnc);
+
+    $("#mcbtcusdt").html(revar.mcbtcusdt);
+    $("#mcethusdt").html(revar.mcethusdt);
+    $("#mcusdtrmb").html(revar.bsusdtcnc);
+
+    $("#okbtcusdt").html(revar.okbtcusdt);
+    $("#okethusdt").html(revar.okethusdt);
+    $("#okusdtrmb").html(revar.bsusdtcnc);
+
+    $("#zbbtcusdt").html(revar.zbbtcusdt);
+    $("#zbethusdt").html(revar.zbethusdt);
+    $("#zbusdtrmb").html(revar.zbusdtqc);
+
+    hbbtc=revar.hbbtcusdt*revar.bsusdtcnc;
      hbeth=revar.hbethusdt*revar.bsusdtcnc;
      hbrmb=revar.bsusdtcnc;
      //ok实时价格
