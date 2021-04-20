@@ -515,8 +515,8 @@ function putask1to(trade,bz,base,ask1) {
                     'data-content="'+pophtml+'">' +
                     bz + '</button>';
                 htmlstr += '<tr class="warning"><td>' + buttonhtml + '</td><td>' + percent +
-                    '</td><td class="'+ buytrade +'">' + buytrade +
-                    '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td class="'+selltrade+'">' + selltrade + '</td>' +
+                    '</td><td class="buy'+ buytrade +'">' + buytrade +
+                    '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td class="sell'+selltrade+'">' + selltrade + '</td>' +
                     '<td>' + sellsymbol + '</td><td>' + sellprice + '</td></tr>';
                 /* if($("#table_content tr").length>0)
                  {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="180">
+    <meta http-equiv="refresh" content="1800">
     <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -78,11 +78,13 @@
                 {
                     case'ok':
                         $(".warning").hide();
-                        $(".ok").parent().show();
+                        //$(".buyok").parent().show();
+                        $("tr").find(".buyok").parent().show()
                         break;
                     case'hb':
                         $(".warning").hide();
-                        $(".hb").parent().show();
+                        //$(".buyhb").parent().show();
+                        $("tr").find(".buyhb").parent().show()
                         break;
                     case 'all':
                         $(".warning").show();
