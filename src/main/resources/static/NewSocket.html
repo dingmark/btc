@@ -78,7 +78,11 @@
                 {
                     case'ok':
                         $(".warning").hide();
-                        $(".ok").show();
+                        $(".ok").parent().show();
+                        break;
+                    case'hb':
+                        $(".warning").hide();
+                        $(".hb").parent().show();
                         break;
                     case 'all':
                         $(".warning").show();
@@ -136,6 +140,7 @@
         <select id="selectbuy"class="selectpicker" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
+            <option value="hb">hb</option>
         </select>
     </div>
     <div class="front" width="30%">

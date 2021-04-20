@@ -513,10 +513,10 @@ function putask1to(trade,bz,base,ask1) {
                 buttonhtml = '<button type="button" class="btn btn-warning" title="Popover title"' +
                     'data-container="body" data-toggle="popover" data-placement="right" data-html="true"' +
                     'data-content="'+pophtml+'">' +
-                    bz +
-                    '</button>';
-                htmlstr += '<tr class="warning '+buytrade+' '+selltrade+'"><td>' + buttonhtml + '</td><td>' + percent + '</td><td>' + buytrade +
-                    '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td>' + selltrade + '</td>' +
+                    bz + '</button>';
+                htmlstr += '<tr class="warning"><td>' + buttonhtml + '</td><td>' + percent +
+                    '</td><td class="'+ buytrade +'">' + buytrade +
+                    '</td><td>' + buysymbol + '</td><td>' + buyprice + '</td><td class="'+selltrade+'">' + selltrade + '</td>' +
                     '<td>' + sellsymbol + '</td><td>' + sellprice + '</td></tr>';
                 /* if($("#table_content tr").length>0)
                  {
