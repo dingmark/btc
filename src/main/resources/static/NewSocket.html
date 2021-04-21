@@ -91,6 +91,24 @@
                         break;
                 }
             });
+            $("#selectsell").on('change',function (e) {
+                switch (this.value)
+                {
+                    case'ok':
+                       // $(".warning").hide();
+                        //$(".buyok").parent().show();
+                        $("tr").find(".sellok").parent().show();
+                        break;
+                    case'hb':
+                      //  $(".warning").hide();
+                        //$(".buyhb").parent().show();
+                        $("tr").find(".sellhb").parent().show();
+                        break;
+                    case 'all':
+                        $(".warning").show();
+                        break;
+                }
+            });
         });
         function f1(aa,callback) {
            // $(aa)[0].attributes[7].textContent='aaaa';
@@ -138,8 +156,15 @@
         <option value="0.15">15%</option>
     </select>
     </div>
-    <div class="front" width="15%">
-        <select id="selectbuy"class="selectpicker" onchange="" >
+    <div class="front" style="width:15%" >
+        <p >买入机构筛选</p>
+        <select id="selectbuy"class="selectpicker" style="width: 80%" onchange="" >
+            <option value="all">all</option>
+            <option value="ok">ok</option>
+            <option value="hb">hb</option>
+        </select>
+        <p>卖出机构筛选</p>
+        <select id="selectsell"class="selectpicker" style="width: 80%" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
             <option value="hb">hb</option>
