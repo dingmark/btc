@@ -43,8 +43,10 @@ public class OnLogin {
     }
 
     @PostMapping("/login")
+    @ResponseBody
     public String doLogin(User user, HttpSession session, HttpServletResponse response
     ) throws IOException{
+        Map<String,Object> map=new HashMap<>();
         // 校验用户名密码
         if(user.getUname().equals("xiao")&&user.getUpwd().equals("123")) {
             //设置域名，实现数据共享
@@ -82,13 +84,20 @@ public class OnLogin {
                 LoginCacheUtil.loginUser.put(token, user);
                 LoginCacheUtil.loginTime.put(token,dateStr);
                 LoginCacheUtil.loginSession.put(user.getUname(),session);
-                return "redirect:/NewSocket.html";
+                map.put("code","0");
+                map.put("msg","登录成功");
+                map.put("url","/NewSocket.html");
+                //return "redirect:/NewSocket.html";
         }else {
-            session.setAttribute("msg", "用户名或密码错误");
-            PrintWriter out=response.getWriter();
-            out.print("<script language='javascript'>alert('UserName Wrong!!');self.location='\\';</script>");
-            return "redirect:/";
+            //session.setAttribute("msg", "用户名或密码错误");
+            //PrintWriter out=response.getWriter();
+            //out.print("<script language='javascript'>alert('UserName Wrong!!');self.location='\\';</script>");
+            map.put("code","1");
+            map.put("msg","用户名或者密码错误");
+            // return "redirect:/";
         }
+        JSONObject jsonObj = new JSONObject(map);
+        return  jsonObj.toString();
         //登录信息校验成功，重定向到原来的系统
 //        String targetUrl = (String) session.getAttribute("target");
 //        //如果是直接从登录系统登录的，校验成功后默认跳转到主系统 sys1 的首页

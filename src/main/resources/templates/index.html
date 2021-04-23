@@ -9,7 +9,7 @@
 <html>
 <head>
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="../js/jquery.form.min.js"></script>
+    <!--<script src="../js/jquery.form.js"></script>-->
     <meta charset="UTF-8">
     <title>sso-login</title>
 </head>
@@ -23,20 +23,32 @@
 </head>
 <body>
 <script type="text/javascript">
-         $('#loginbutton').click(function(){
-             $("#loginform").ajaxSubmit(function(data){
-                 alert(data);
-             })
-         })
-    // //action="/login"
+    $( document ).ready(function() {
+        $("#form").load(function () {
+            var text = $(this).contents().find("body").text(); //获取到的是json的字符串
+            var j = $.parseJSON(text);  //json字符串转换成json对象
+            console.log(j)
+            switch (j.code)
+            {
+                case '0':
+                    self.location.href=j.url;
+                    break;
+                case '1':
+                    alert(j.msg);
+                    break;
+            }
+        })
+    });
 </script>
 <div id="login">
     <h1>Login</h1>
-    <form id="loginform" action="/login"  method="post">
+    <form  target="form" id="loginform" action="/login"  method="post">
         <input type="text" required="required" placeholder="用户名" name="uname"></input>
         <input type="password" required="required" placeholder="密码" name="upwd"></input>
         <button id="loginbutton" class="but" type="submit">登录</button>
+       <!-- <input class="sub-btn fl" type="button" id="sub" name="Submit" value="提交"> -->
     </form>
+    <iframe name="form" id="form" style="display:none"></iframe>
 </div>
 </body>
 </html>
