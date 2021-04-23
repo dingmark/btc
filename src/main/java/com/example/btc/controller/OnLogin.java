@@ -148,11 +148,17 @@ public class OnLogin {
     public  String deleteUser(@RequestParam(value ="token") String token)
     {
         //String key=cookie.getValue();
-        LoginCacheUtil.loginUser.remove(token);
-        LoginCacheUtil.loginTime.remove(token);
+        //LoginCacheUtil.loginUser.remove(token);
         JSONObject js=new JSONObject();
-        js.put("code","0");
-        js.put("msg","删除成功");
+        if(LoginCacheUtil.loginUser.remove(token)!=null) {
+            LoginCacheUtil.loginTime.remove(token);
+            js.put("code", "0");
+            js.put("msg", "删除成功");
+        }else
+        {
+            js.put("code", "1");
+            js.put("msg", "删除失败");
+        }
         return js.toJSONString();
     }
 }
