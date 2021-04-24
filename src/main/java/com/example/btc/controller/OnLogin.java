@@ -1,7 +1,8 @@
 package com.example.btc.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
+import com.example.btc.services.baseDaoService.UrlParaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ import java.util.UUID;
  */
 @Controller
 public class OnLogin {
+    @Autowired
+    UrlParaService urlParaService;
     @RequestMapping("/login")
     public String getLogin(@RequestParam(required = false, defaultValue = "")String target,
                            HttpServletRequest request,HttpSession session, @CookieValue(required = false, value = "TOKEN")Cookie cookie)
@@ -48,7 +51,12 @@ public class OnLogin {
     ) throws IOException{
         Map<String,Object> map=new HashMap<>();
         // 校验用户名密码
-        if(user.getUname().equals("xiao")&&user.getUpwd().equals("123")) {
+
+        //if(user.getUname().equals("xiao")&&user.getUpwd().equals("123"))
+       User usercheck= urlParaService.getuser(user);
+        if(usercheck!=null)
+        {
+            usercheck.end;
             //设置域名，实现数据共享
             // cookie.setDomain("sso.com");
             if(LoginCacheUtil.loginSession.get(user.getUname())!=null)

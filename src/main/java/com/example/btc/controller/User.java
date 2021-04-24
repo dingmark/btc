@@ -6,6 +6,23 @@ package com.example.btc.controller;
 public class User  {
     private String uname;
     private String upwd;
+    String start;
+    String end;
+    public String getStart() {
+        return start;
+    }
+    public void setStart(String start) {
+        this.start = start;
+    }
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+
     public User(String uname, String upwd) {
         super();
         this.uname = uname;

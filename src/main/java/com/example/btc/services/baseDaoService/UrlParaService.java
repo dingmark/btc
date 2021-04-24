@@ -1,6 +1,7 @@
 package com.example.btc.services.baseDaoService;
 
 import com.example.btc.baseDao.UrlPara;
+import com.example.btc.controller.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +18,5 @@ public class UrlParaService {
     {
         return urlPara.getHbpara();
     }
+    public User getuser(User user){return urlPara.getuser(user);}
 }
