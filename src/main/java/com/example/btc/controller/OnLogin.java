@@ -56,7 +56,7 @@ public class OnLogin {
        User usercheck= urlParaService.getuser(user);
         if(usercheck!=null)
         {
-            usercheck.end;
+            //usercheck.end;
             //设置域名，实现数据共享
             // cookie.setDomain("sso.com");
             if(LoginCacheUtil.loginSession.get(user.getUname())!=null)

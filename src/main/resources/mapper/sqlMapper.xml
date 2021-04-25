@@ -7,7 +7,7 @@
     'FIS','FOR','AVAX','KAVA','TRB','SOL','BAND','OXT','CRE','ELF','ACH','IRIS','WICC','DOCK','NBS'
     ,'ELA','RING','AR','GXC','NEXO','DTA','HC','FIRO','BTS','YEE') limit 50
 </select>
-<select id="getuser" parameterType="com.example.btc.controller.User" resultMap="com.example.btc.controller.User">
-    select * from userinfo where uname=#{uname} and upwd=#{upwd}
+<select id="getuser"  resultType="com.example.btc.controller.User">
+    select  uname,upwd,start,end,modifynum,telno from userinfo where uname=#{uname} and upwd=#{upwd}
 </select>
 </mapper>

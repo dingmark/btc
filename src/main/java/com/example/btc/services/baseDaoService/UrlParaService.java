@@ -18,5 +18,7 @@ public class UrlParaService {
     {
         return urlPara.getHbpara();
     }
-    public User getuser(User user){return urlPara.getuser(user);}
+    public User getuser(User user){
+        return urlPara.getuser(user.getUname(),user.getUpwd());
+    }
 }
