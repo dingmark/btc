@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -59,6 +62,16 @@ public class OnLogin {
             //usercheck.end;
             //设置域名，实现数据共享
             // cookie.setDomain("sso.com");
+            Timestamp time1 = new Timestamp(System.currentTimeMillis());
+            Date createDate=usercheck.end;
+            Date nowDate = new Date();
+            if(createDate.before(nowDate))
+            {
+                map.put("code","2");
+                map.put("msg","该账号已经过期请续费");
+                JSONObject jsonObj = new JSONObject(map);
+                return jsonObj.toJSONString();
+            }
             if(LoginCacheUtil.loginSession.get(user.getUname())!=null)
             {
                 //使之前session失效
