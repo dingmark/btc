@@ -123,6 +123,7 @@
     <style>
         div {
             /*float: left;*/
+            margin: 5px;
         }
         .front{
             float:left
@@ -132,7 +133,9 @@
             padding-right: 5px;
         }
         p{
-            margin: 0 0 0px;
+            margin:0px;
+            padding: 0px;
+            border: 0px;
         }
 
     </style>
@@ -161,24 +164,22 @@
     </div>
     <div class="front" style="width:15%" >
         <div style="width: 100%">
-        <p style="float: left">买入机构筛选</p>
-        <select id="selectbuy"class="selectpicker" style="float:left;width: 30%" onchange="" >
+        <p style="width: 49%;float: left;line-height: 15px">买入机构筛选</p>
+        <select id="selectbuy"class="selectpicker" style="float:left;width: 50%;line-height: 15px" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
             <option value="hb">hb</option>
         </select>
         </div>
-        <div style="width:100%">
-        <p style="float: left;">卖出机构筛选</p>
-        <select id="selectsell"class="selectpicker" style="float: left;width: 30% " onchange="" >
+        <div style="width: 100%">
+        <p style="float: left;width: 49%;line-height: 10px">卖出机构筛选</p>
+        <select id="selectsell"class="selectpicker" style="float: left;width: 50%;line-height: 10px" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
             <option value="hb">hb</option>
         </select>
         </div>
-        <div >
-            币种选择
-        </div>
+
     </div>
     <div class="front" width="30%">
         <div style="width:100%;display: block">
