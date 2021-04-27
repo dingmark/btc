@@ -131,6 +131,9 @@
             float: left;
             padding-right: 5px;
         }
+        p{
+            margin: 0 0 0px;
+        }
 
     </style>
 </head>
@@ -157,18 +160,25 @@
     </select>
     </div>
     <div class="front" style="width:15%" >
-        <p >买入机构筛选</p>
-        <select id="selectbuy"class="selectpicker" style="width: 80%" onchange="" >
+        <div style="width: 100%">
+        <p style="float: left">买入机构筛选</p>
+        <select id="selectbuy"class="selectpicker" style="float:left;width: 30%" onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
             <option value="hb">hb</option>
         </select>
-        <p>卖出机构筛选</p>
-        <select id="selectsell"class="selectpicker" style="width: 80%" onchange="" >
+        </div>
+        <div style="width:100%">
+        <p style="float: left;">卖出机构筛选</p>
+        <select id="selectsell"class="selectpicker" style="float: left;width: 30% " onchange="" >
             <option value="all">all</option>
             <option value="ok">ok</option>
             <option value="hb">hb</option>
         </select>
+        </div>
+        <div >
+            币种选择
+        </div>
     </div>
     <div class="front" width="30%">
         <div style="width:100%;display: block">
