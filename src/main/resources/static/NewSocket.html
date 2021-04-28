@@ -109,6 +109,10 @@
                         break;
                 }
             });
+
+            $("#bz").on('change',function (e) {
+                alert("1111");
+            });
         });
         function f1(aa,callback) {
            // $(aa)[0].attributes[7].textContent='aaaa';
@@ -142,11 +146,11 @@
 </head>
 <body>
 <div style="width: 100%">
-    <div class="front" style="width:10%;">
-    <h4 style="float: right ;line-height:1px;">获利比率选择: <span class="label label-default"></span></h4>
+    <div class="front" style="width:10%;margin-top:10px">
+    <h4 style="float: right ;line-height:15px;margin:0px">获利比率选择: <span class="label label-default"></span></h4>
     </div>
-    <div class="front" style="width:10% ;">
-    <select style="width: 50%; text-align: center" class="selectpicker" onchange="changepercent(this.value)">
+    <div class="front" style="width:10% ;margin-top:10px">
+    <select style="width: 50%; text-align: center;line-height:15px;" class="selectpicker" onchange="changepercent(this.value)">
         <option value="0.03">3%</option>
         <option value="0.04">4%</option>
         <option value="0.05">5%</option>
@@ -179,24 +183,26 @@
             <option value="hb">hb</option>
         </select>
         </div>
-
+        <div style="width: 100%">
+            <p style="float:left;width: 49%">币种筛选</p> <input style="float: left; width:45% " type="text" id="bz">
+        </div>
     </div>
     <div class="front" width="30%">
         <div style="width:100%;display: block">
         <p class="timevalue">火币</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="hbbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="hbethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="hbusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block">
             <p class="timevalue">币安</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="bnbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="bnethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="bnusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block">
             <p class="timevalue">比特时代</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="bsbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="bsethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="bsusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block">
             <p class="timevalue">比特儿</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="btbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="btethusdt"></p>
@@ -208,18 +214,18 @@
             <p class="timevalue">库币</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="kbbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="kbethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="kbusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block;">
             <p class="timevalue">抹茶</p>
             <p class="timevalue">btc-usdt</p><p class="timevalue" id="mcbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="mcethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="mcusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block">
             <p class="timevalue">欧易</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="okbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="okethusdt"></p>
             <p class="timevalue">usdt-rmb</p><p class="timevalue" id="okusdtrmb"></p>
-        </div>
+        </div></br>
         <div style="width:100%;display: block">
             <p class="timevalue">中币</p><p class="timevalue">btc-usdt</p><p class="timevalue" id="zbbtcusdt"></p>
             <p class="timevalue">eth-usdt</p><p class="timevalue" id="zbethusdt"></p>
