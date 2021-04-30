@@ -510,7 +510,7 @@ function putask1to(trade,bz,base,ask1) {
                 var pophtml="";
                 //生成pophtml
                 pophtml=drawpop(old,rmbnew,buytrade,buysymbol,selltrade,sellsymbol);
-                buttonhtml = '<button type="button" class="btn btn-warning" title="Popover title"' +
+                buttonhtml = '<button type="button" class="btn btn-warning '+bz+' " title="Popover title"' +
                     'data-container="body" data-toggle="popover" data-placement="right" data-html="true"' +
                     'data-content="'+pophtml+'">' +
                     bz + '</button>';
