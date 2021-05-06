@@ -119,8 +119,11 @@ $(document).ready(function(){
     });
 
     $("#bz").on('change',function (e) {
-        alert(1111);
-        $("tr").find(".sellhb").parent().show();
+        //alert(1111);
+        $('tr :visible').find(".btn-warning").not("."+this.value)
+            .parent().parent().hide();
+        //$('tr:visible').find("."+this.value).parent().show();
+       // $("tr").find(".sellhb").parent().show();
     });
 });
 function f1(aa,callback) {
