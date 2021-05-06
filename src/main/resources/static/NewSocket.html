@@ -97,13 +97,31 @@
                     case'ok':
                        // $(".warning").hide();
                         //$(".buyok").parent().show();
-                        $("tr").find(".sellok").parent().show();
+                        $('tr:visible').find(".sellhb").parent.hide();
+                        $('tr:visible').find(".sellbn").parent.hide();
+                        $('tr:visible').find(".sellbt").parent.hide();
+                       // $('tr:visible').find(".sellok").parent.hide();
+                        $('tr:visible').find(".sellmc").parent.hide();
+                        $('tr:visible').find(".sellzb").parent.hide();
+                        $('tr:visible').find(".sellbs").parent.hide();
+                        $('tr:visible').find(".sellkb").parent.hide();
+                        //$("tr").find(".sellok").parent().show();
                         break;
                     case'hb':
-                      //  $(".warning").hide();
-                        //$(".buyhb").parent().show();
-                        $("tr").find(".sellhb").parent().show();
+                        //$('tr:visible').find(".sellhb").parent.hide();
+                        $('tr:visible').find(".sellbn").parent.hide();
+                        $('tr:visible').find(".sellbt").parent.hide();
+                        $('tr:visible').find(".sellok").parent.hide();
+                        $('tr:visible').find(".sellmc").parent.hide();
+                        $('tr:visible').find(".sellzb").parent.hide();
+                        $('tr:visible').find(".sellbs").parent.hide();
+                        $('tr:visible').find(".sellkb").parent.hide();
                         break;
+                    case 'bn':
+                        break;
+                    case 'bt':
+                        break;
+                        
                     case 'all':
                         $(".warning").show();
                         break;
