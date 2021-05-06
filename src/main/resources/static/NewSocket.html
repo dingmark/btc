@@ -31,7 +31,7 @@
     <script src="js/newzb.js"></script>
     <script src="js/newbs.js"></script>
     <script src="js/newkb.js"></script>
-
+    <script src="js/newchose.js"></script>
     <script type="text/javascript">
         setInterval(testsession,15000);
         function testsession()
@@ -65,83 +65,6 @@
         function buttonclick() {
             $("[data-toggle='popover']").popover();
         }
-
-        $(document).ready(function(){
-            $("#table_content").on('click','button',function (e) {
-               // alert(e);
-               // $(this)[0].attributes[7].textContent='aaaa';
-                $("[data-toggle='popover']").popover();
-               // f1(this,f2);
-            });
-            $("#selectbuy").on('change',function (e) {
-                switch (this.value)
-                {
-                    case'ok':
-                        $(".warning").hide();
-                        //$(".buyok").parent().show();
-                        $("tr").find(".buyok").parent().show();
-                        break;
-                    case'hb':
-                        $(".warning").hide();
-                        //$(".buyhb").parent().show();
-                        $("tr").find(".buyhb").parent().show();
-                        break;
-                    case 'all':
-                        $(".warning").show();
-                        break;
-                }
-            });
-            $("#selectsell").on('change',function (e) {
-                switch (this.value)
-                {
-                    case'ok':
-                       // $(".warning").hide();
-                        //$(".buyok").parent().show();
-                        $('tr:visible').find(".sellhb").parent.hide();
-                        $('tr:visible').find(".sellbn").parent.hide();
-                        $('tr:visible').find(".sellbt").parent.hide();
-                       // $('tr:visible').find(".sellok").parent.hide();
-                        $('tr:visible').find(".sellmc").parent.hide();
-                        $('tr:visible').find(".sellzb").parent.hide();
-                        $('tr:visible').find(".sellbs").parent.hide();
-                        $('tr:visible').find(".sellkb").parent.hide();
-                        //$("tr").find(".sellok").parent().show();
-                        break;
-                    case'hb':
-                        //$('tr:visible').find(".sellhb").parent.hide();
-                        $('tr:visible').find(".sellbn").parent.hide();
-                        $('tr:visible').find(".sellbt").parent.hide();
-                        $('tr:visible').find(".sellok").parent.hide();
-                        $('tr:visible').find(".sellmc").parent.hide();
-                        $('tr:visible').find(".sellzb").parent.hide();
-                        $('tr:visible').find(".sellbs").parent.hide();
-                        $('tr:visible').find(".sellkb").parent.hide();
-                        break;
-                    case 'bn':
-                        break;
-                    case 'bt':
-                        break;
-                        
-                    case 'all':
-                        $(".warning").show();
-                        break;
-                }
-            });
-
-            $("#bz").on('change',function (e) {
-                alert(1111);
-                $("tr").find(".sellhb").parent().show();
-            });
-        });
-        function f1(aa,callback) {
-           // $(aa)[0].attributes[7].textContent='aaaa';
-            callback();
-        }
-        function f2() {
-            $("[data-toggle='popover']").popover();
-        }
-
-
     </script>
     <style>
         div {
@@ -198,8 +121,14 @@
         <p style="float: left;width: 49%;line-height: 10px">卖出机构筛选</p>
         <select id="selectsell"class="selectpicker" style="float: left;width: 50%;line-height: 10px" onchange="" >
             <option value="all">all</option>
-            <option value="ok">ok</option>
-            <option value="hb">hb</option>
+            <option value="ok">ok交易</option>
+            <option value="hb">火币</option>
+            <option value="bt">比特儿</option>
+            <option value="bs">比特时代</option>
+            <option value="mc">抹茶交易</option>
+            <option value="zb">中币</option>
+            <option value="kb">库币交易</option>
+            <option value="bn">币安交易</option>
         </select>
         </div>
         <div style="width: 100%">
