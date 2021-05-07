@@ -10,9 +10,10 @@ $(document).ready(function(){
     });
     $("#selectbuy").on('change',function (e) {
         buyselect(this.value);
-        
+        sellselect($("#selectsell").val());
     });
     $("#selectsell").on('change',function (e) {
+        buyselect($("#selectbuy").val());
         sellselect(this.value);
     });
 
@@ -123,7 +124,7 @@ function buyselect(buy) {
             $('tr:visible').find(".buykb").parent().hide();
             break;
         case 'all':
-            $(".warning").show();
+            $('.warning').show();
             break;
     }
 }
@@ -214,7 +215,7 @@ function sellselect(sell) {
             $('tr:visible').find(".sellkb").parent().hide();
             break;
         case 'all':
-            $(".warning").show();
+            $('tr:visible').show();
             break;
     }
     
