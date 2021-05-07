@@ -20,7 +20,6 @@ $(document).ready(function(){
     });
 
     $("#bzselect").on('change',function (e) {
-
        // buyselect($("#selectbuy").val());
         //sellselect($("#selectsell").val());
         txtchange(this.value);
@@ -37,85 +36,85 @@ function buyselect(buy) {
     switch (buy)
     {
         case'ok':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
             // $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             //$("tr").find(".buyok").parent().show();
             break;
         case'hb':
             //$('tr:visible').find(".buyhb").parent.hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'bn':
-            $('tr:visible').find(".buyhb").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
             // $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'bt':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
             //$('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'bs':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
             //$('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'kb':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
             //$('tr:visible').find(".buykb").parent().hide();
             break;
         case 'zb':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
-            $('tr:visible').find(".buymc").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
+            $('.warning').find(".buymc").parent().hide();
             //$('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'mc':
-            $('tr:visible').find(".buyhb").parent().hide();
-            $('tr:visible').find(".buybn").parent().hide();
-            $('tr:visible').find(".buybt").parent().hide();
-            $('tr:visible').find(".buyok").parent().hide();
+            $('.warning').find(".buyhb").parent().hide();
+            $('.warning').find(".buybn").parent().hide();
+            $('.warning').find(".buybt").parent().hide();
+            $('.warning').find(".buyok").parent().hide();
             // $('tr:visible').find(".buymc").parent().hide();
-            $('tr:visible').find(".buyzb").parent().hide();
-            $('tr:visible').find(".buybs").parent().hide();
-            $('tr:visible').find(".buykb").parent().hide();
+            $('.warning').find(".buyzb").parent().hide();
+            $('.warning').find(".buybs").parent().hide();
+            $('.warning').find(".buykb").parent().hide();
             break;
         case 'all':
             $('.warning').show();
@@ -217,7 +216,7 @@ function sellselect(sell) {
 function txtchange(txt) {
     if($.trim(txt)!='')
     {
-        $('tr:visible').find(".btn-warning").not("."+this.value)
+        $('tr:visible').find(".btn-warning").not("."+txt)
             .parent().parent().hide();
     }
     else
