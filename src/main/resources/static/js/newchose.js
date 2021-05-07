@@ -11,25 +11,19 @@ $(document).ready(function(){
     $("#selectbuy").on('change',function (e) {
         buyselect(this.value);
         sellselect($("#selectsell").val());
+        txtchange($("#bzselect").val());
     });
     $("#selectsell").on('change',function (e) {
         buyselect($("#selectbuy").val());
         sellselect(this.value);
+        txtchange($("#bzselect").val());
     });
 
-    $("#bz").on('change',function (e) {
-        //alert(1111);
-        if($.trim(this.value)!='')
-        {
-        $('tr :visible').find(".btn-warning").not("."+this.value)
-            .parent().parent().hide();
-        }
-        else
-        {
-            $(".warning").show();
-        }
-        //$('tr:visible').find("."+this.value).parent().show();
-       // $("tr").find(".sellhb").parent().show();
+    $("#bzselect").on('change',function (e) {
+
+       // buyselect($("#selectbuy").val());
+        //sellselect($("#selectsell").val());
+        txtchange(this.value);
     });
 });
 function f1(aa,callback) {
@@ -219,4 +213,15 @@ function sellselect(sell) {
             break;
     }
     
+}
+function txtchange(txt) {
+    if($.trim(txt)!='')
+    {
+        $('tr:visible').find(".btn-warning").not("."+this.value)
+            .parent().parent().hide();
+    }
+    else
+    {
+        $('tr:visible').show();
+    }
 }
