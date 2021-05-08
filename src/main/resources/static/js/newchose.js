@@ -24,6 +24,9 @@ $(document).ready(function(){
         //sellselect($("#selectsell").val());
         txtchange(this.value);
     });
+    $("#cz").on('click',function (e) {
+        alert(111);
+    })
 });
 function f1(aa,callback) {
     // $(aa)[0].attributes[7].textContent='aaaa';
