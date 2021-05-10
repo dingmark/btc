@@ -25,7 +25,14 @@ $(document).ready(function(){
         txtchange(this.value);
     });
     $("#cz").on('click',function (e) {
-        alert(111);
+        //alert(111);
+       // $("#selectbuy option[value='"+'select'+"']").attr("selected", "selected");
+       // $("#selectsell option[value='"+'select'+"']").attr("selected", "selected");
+         $("#selectbuy option[value='"+'select'+"']").prop("selected",true);
+         $("#selectsell option[value='"+'select'+"']").prop("selected",true);
+        $("#bzselect")[0].value='';
+        $(".warning").show();
+
     })
 });
 function f1(aa,callback) {
