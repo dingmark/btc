@@ -68,7 +68,8 @@ public class OnLogin {
             if(createDate.before(nowDate))
             {
                 map.put("code","2");
-                map.put("msg","该账号已经过期请续费");
+                map.put("msg","该账号已经过期联系管理员");
+                map.put("url","/contract.html");
                 JSONObject jsonObj = new JSONObject(map);
                 return jsonObj.toJSONString();
             }
