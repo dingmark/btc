@@ -6,7 +6,7 @@ var kbvar={} ;
 //setInterval('gethbprice("btcusdt")', 1000);
 //setInterval('gethbprice("ethusdt")', 1000);
 if ('WebSocket' in window) {
-    websocketkb = new WebSocket("ws://localhost:8080/test/kb");
+    websocketkb = new WebSocket("ws://"+getContextPath+"/test/kb");
 }
 else
 {

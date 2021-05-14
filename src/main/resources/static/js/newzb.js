@@ -6,7 +6,7 @@ var zbvar={} ;
 //setInterval('gethbprice("btcusdt")', 1000);
 //setInterval('gethbprice("ethusdt")', 1000);
 if ('WebSocket' in window) {
-    websocketzb = new WebSocket("ws://localhost:8080/test/zb");
+    websocketzb = new WebSocket("ws://"+getContextPath+"/test/zb");
 }
 else
 {
