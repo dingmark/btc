@@ -3,7 +3,7 @@
  */
 var bnvar={};
 if ('WebSocket' in window) {
-    websocketbian = new WebSocket("ws://"+getContextPath+"/test/bn");
+    websocketbian = new WebSocket("ws://"+getContextPath()+"/test/bn");
 }
 else
 {

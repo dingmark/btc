@@ -4,7 +4,7 @@
 var hbbtcustd, hbethustd;
 var okvar={} ;
 if ('WebSocket' in window) {
-    websocketok = new WebSocket("ws://"+getContextPath+"/test/ok");
+    websocketok = new WebSocket("ws://"+getContextPath()+"/test/ok");
 }
 else
 {

@@ -14,7 +14,7 @@ var zbbtc,zbeth,zbqc;
 var bsbtc,bscnc;
 var kbbtc,kbeth,kbcnc;
 
-websocketre = new WebSocket("ws://localhost:8080/test/re");
+websocketre = new WebSocket("ws://"+getContextPath()+"/test/re");
 websocketre.onmessage=function(event)
 {
     revar=JSON.parse(event.data);
@@ -855,10 +855,7 @@ function Getrate(buytrade,type) {
 }
 //获取访问地址
 function getContextPath() {
-    var pathName = document.location.pathname;
-    var index = pathName.substr(1).indexOf("/");
-    var result = pathName.substr(0,index+1);
-    return result;
+    return document.location.host;
 }
 
 

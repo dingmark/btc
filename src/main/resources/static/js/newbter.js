@@ -3,7 +3,7 @@
  */
 var btvar={};
 if ('WebSocket' in window) {
-    websocketbter = new WebSocket("ws://"+getContextPath+"/test/bt");
+    websocketbter = new WebSocket("ws://"+getContextPath()+"/test/bt");
 }
 else
 {
