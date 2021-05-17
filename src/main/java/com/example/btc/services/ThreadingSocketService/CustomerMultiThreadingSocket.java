@@ -108,17 +108,17 @@ public class CustomerMultiThreadingSocket {
         btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
         btWssMarketHandle.sub(nor_reqparams,response ->
         {
-            logger.info(response.toString());
+            //logger.info(response.toString());
             btresponse1=response.toString();
         });
         btBtcWssMarketHandle.sub(nor_reqparams,response ->
         {
-            logger.info(response.toString());
+           // logger.info(response.toString());
             btresponse2=response.toString();
         });
         btEthWssMarketHandle.sub(nor_reqparams,response ->
         {
-            logger.info(response.toString());
+            //logger.info(response.toString());
             btresponse3=response.toString();
         });
         Thread.sleep(sockettime);
