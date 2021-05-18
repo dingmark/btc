@@ -40,57 +40,38 @@ import java.util.concurrent.*;
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
-    private  static String sockettime;
-    //private  static BnWssMarketHandle bnWssMarketHandle;
-    private  static HttpKbGetToken httpKbGetToken;
-    private  static  HttpKbGetSymbols httpKbGetSymbols;
-    private  static HttpMcGetSymbols httpMcGetSymbols;
-    private  static HttpZbGetSymbols httpZbGetSymbols;
-    private  static HttpHbGetCurrencys hbcurrencys;
-    private  static HttpHbGetSymbols hbGetSymbols;
+
     private  static  CustomMultiThreadingService customMultiThreadingService;
     private  static  CustomerMultiThreadingSocket customerMultiThreadingSocket;
-    private  static UrlPara urlPara;
-    private  static  OkPrice okPrice;
-    private  static bter mbter;
-    private static mocha mmocha;
+    /*private  static String sockettime;
     private static List<String> reqparams=new ArrayList<>();
     private static List<String> hbreqparams=new ArrayList<>();
     private static List<String> kbreqparams=new ArrayList<>();
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
-    private static String token="";
+    private static String token="";*/
+
+    /*
     @Autowired
     public void setSockettime(SocketTime sockettime){
-
         //OnWebSocket.sockettime=sockettime.sockettime;
     }
     @Autowired
     public void setRepository(HttpHbGetCurrencys hbcurrencys) throws MalformedURLException {
-        OnWebSocket.hbcurrencys=hbcurrencys;
         reqparams=hbcurrencys.gethbCurrencys();
     }
     @Autowired
     public void setZbsymbols(HttpZbGetSymbols httpZbGetSymbols) throws MalformedURLException {
-        OnWebSocket.httpZbGetSymbols=httpZbGetSymbols;
+
         zbreqparams=httpZbGetSymbols.getZbSymbols();
     }
     @Autowired
     public void setHbsymbols(HttpHbGetSymbols hbsymbols) throws MalformedURLException {
-        OnWebSocket.hbGetSymbols=hbsymbols;
         hbreqparams=hbsymbols.gethbSymbols();
     }
+
     @Autowired
-    public void setUrlPara(UrlPara urlPara)  {OnWebSocket.urlPara=urlPara;
-    }
-    @Autowired
-    public  void  setOkPrice(OkPrice okPrice){OnWebSocket.okPrice=okPrice;};
-    @Autowired
-    public  void  setBter(bter mbter){OnWebSocket.mbter=mbter;}
-    @Autowired
-    public void setMocha(mocha mmocha){OnWebSocket.mmocha=mmocha;}
-    @Autowired
-    public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException { OnWebSocket.httpKbGetToken=httpKbGetToken;
+    public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException {
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @SneakyThrows
             @Override
@@ -100,15 +81,14 @@ public class OnWebSocket {
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
     @Autowired
-    public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException { OnWebSocket.httpKbGetSymbols=httpKbGetSymbols;
-        kbreqparams=httpKbGetSymbols.gethbSymbols();
+    public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException {
+        kbreqparams=httpKbGetSymbols.getkbSymbols();
     }
     @Autowired
     public  void setHttpMcGetSymbols(HttpMcGetSymbols httpMcGetSymbols)throws MalformedURLException
     {
-        OnWebSocket.httpMcGetSymbols=httpMcGetSymbols;
         mcreqparams=httpMcGetSymbols.getmcSymbols();
-    }
+    }*/
     //各站点实时价格获取开关
     @Autowired
     public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
@@ -118,58 +98,18 @@ public class OnWebSocket {
     public void setCustomSocket(CustomerMultiThreadingSocket ct) throws URISyntaxException, InterruptedException {
         OnWebSocket.customerMultiThreadingSocket=ct;
     }
-
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
-    String hburl="wss://api.huobiasia.vip/ws";
-    private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
-    private  String bturl="wss://ws.gateio.ws/v3/";//"wss://webws.gateio.live/v3/?v=647320";//wss://ws.gateio.ws/v3/
-    private  String bnurl="wss://stream.yshyqxx.com/stream";
-    private  String mcurl="wss://contract.mxc.la/ws";
-    private  String zburl="wss://api.zb.today/websocket/";
-    private  String bsurl="wss://api.aex.zone/wsv3";
-    //库币前端socket地址
-    //private  String kburl="wss://push-private.kucoin.top/endpoint?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
-    private  String kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
-
-
     private Session session;
-
     /**
      * 标识当前连接客户端的用户名
      */
     public String name;
-
     /**
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
-    private WssMarketHandle wssMarketHandle;
 
-    OkWssMarketHandle okwssMarketHandle;
-    OkBtcWssMarketHandle okBtcwssMarketHandle;
-    OkEthWssMarketHandle okEthwssMarketHandle;
-
-    BtWssMarketHandle btWssMarketHandle;//=new BtWssMarketHandle(bturl,sockettime);
-    BtBtcWssMarketHandle btBtcWssMarketHandle;//=new BtBtcWssMarketHandle(bturl,sockettime);
-    BtEthWssMarketHandle btEthWssMarketHandle;
-
-    BnWssMarketHandle bnWssMarketHandle;//=new BnWssMarketHandle(bnurl,sockettime);
-    BnBtcWssMarketHandle bnBtcWssMarketHandle;//=new BnBtcWssMarketHandle(bnurl,sockettime);
-    BnEthWssMarketHandle bnEthWssMarketHandle;
-
-    BsWssMarketHandle bsWssMarketHandle;//=new BsWssMarketHandle(bsurl,sockettime);
-    BsBtcWssMarketHandle bsBtcWssMarketHandle;///=new BsBtcWssMarketHandle(bsurl,sockettime);
-    BsCncWssMarketHandle bsCncWssMarketHandle;
-
-    KbWssMarketHandle kbWssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
-    KbWssMarketHandle kb2WssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
-    KbWssMarketHandle kb3WssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
-    KbWssMarketHandle kb4WssMarketHandle;//=
-
-    ZbWssMarketHandle zbWssMarketHandle;
-
-    McWssMarketHandle mcWssMarketHandle;
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
         this.session = session;
@@ -189,13 +129,6 @@ public class OnWebSocket {
         try {
             switch (type) {
                 case "hb":
-                    /*wssMarketHandle = new WssMarketHandle(hburl,sockettime);
-                    wssMarketHandle.sub(hbreqparams, response -> {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));*/
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
@@ -205,25 +138,6 @@ public class OnWebSocket {
                     }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "ok":
-                    /* okwssMarketHandle = new OkWssMarketHandle(okurl,sockettime);
-                     okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,sockettime);
-                     okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,sockettime);
-                    okwssMarketHandle.sub(reqparams, response -> {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    okBtcwssMarketHandle.sub(reqparams, response -> {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    okEthwssMarketHandle.sub(reqparams, response -> {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));*/
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
@@ -236,28 +150,6 @@ public class OnWebSocket {
                     }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "bt":
-                    /* btWssMarketHandle=new BtWssMarketHandle(bturl,sockettime);
-                     btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,sockettime);
-                     btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,sockettime);
-                    btWssMarketHandle.sub(reqparams,response ->
-                        {
-                            if(this.session.isOpen()) {
-                                AppointSending(name, response.toString());
-                            }
-                        });
-                    btBtcWssMarketHandle.sub(reqparams,response ->
-                    {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    btEthWssMarketHandle.sub(reqparams,response ->
-                    {
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                        Thread.sleep(Integer.parseInt(sockettime));*/
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
@@ -270,35 +162,18 @@ public class OnWebSocket {
                     }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "bn":
-                    bnWssMarketHandle=new BnWssMarketHandle(bnurl,sockettime);
-                    bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,sockettime);
-                    bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,sockettime);
-                    bnWssMarketHandle.sub(reqparams,response ->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            AppointSending(name, customerMultiThreadingSocket.bnresponse1);
+                            AppointSending(name, customerMultiThreadingSocket.bnresponse2);
+                            AppointSending(name, customerMultiThreadingSocket.bnresponse3);
                         }
-                    });
-                    bnBtcWssMarketHandle.sub(reqparams,response ->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    bnEthWssMarketHandle.sub(reqparams,response ->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));
+
+                    }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "mc":
-                    /* mcWssMarketHandle=new McWssMarketHandle(mcurl,sockettime);
-                    mcWssMarketHandle.sub(mcreqparams,response->{
-                        //logger.info(response.toString());
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));*/
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
@@ -308,71 +183,36 @@ public class OnWebSocket {
                     }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "zb":
-                     zbWssMarketHandle=new ZbWssMarketHandle(zburl,sockettime);
-                   // ZbQcWssMarketHandle zbQcWssMarketHandle=new ZbQcWssMarketHandle(zburl);
-                   // ZbBtcWssMarketHandle zbBtcWssMarketHandle=new ZbBtcWssMarketHandle(zburl);
-                    zbWssMarketHandle.sub(zbreqparams,response->{
-                        //logger.info(response.toString());
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            AppointSending(name, customerMultiThreadingSocket.zbresponse);
                         }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));
+                    }, 0, 50, TimeUnit.MILLISECONDS);
+                     break;
                 case "bs":
-                     bsWssMarketHandle=new BsWssMarketHandle(bsurl,sockettime);
-                     bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,sockettime);
-                     bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,sockettime);
-
-                    bsWssMarketHandle.sub(reqparams,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            AppointSending(name, customerMultiThreadingSocket.bsresponse1);
+                            AppointSending(name, customerMultiThreadingSocket.bsresponse2);
+                            AppointSending(name, customerMultiThreadingSocket.bsresponse3);
                         }
-                    });
-                    bsBtcWssMarketHandle.sub(reqparams,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    bsCncWssMarketHandle.sub(reqparams,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-
-                    Thread.sleep(Integer.parseInt(sockettime));
+                    }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "kb":
-
-                     kbWssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                     kb2WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                     kb3WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                     kb4WssMarketHandle=new KbWssMarketHandle(kburl,sockettime);
-                    List<String> kb1=kbreqparams.subList(0,99);
-
-                    kbWssMarketHandle.sub(kb1,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            AppointSending(name, customerMultiThreadingSocket.kbresponse1);
+                            AppointSending(name, customerMultiThreadingSocket.kbresponse2);
+                            AppointSending(name, customerMultiThreadingSocket.kbresponse3);
+                            AppointSending(name, customerMultiThreadingSocket.kbresponse4);
                         }
-                    });
-                    List<String> kb2=kbreqparams.subList(100,199);
-                    kb2WssMarketHandle.sub(kb2,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    List<String> kb3=kbreqparams.subList(200,299);
-                    kb3WssMarketHandle.sub(kb3,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    List<String> kb4=kbreqparams.subList(300,399);
-                    kb4WssMarketHandle.sub(kb4,response->{
-                        if(this.session.isOpen()) {
-                            AppointSending(name, response.toString());
-                        }
-                    });
-                    Thread.sleep(Integer.parseInt(sockettime));
+                    }, 0, 50, TimeUnit.MILLISECONDS);
                     break;
                 case "re":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -388,18 +228,17 @@ public class OnWebSocket {
                     break;
             }
         }
-        catch (InterruptedException | URISyntaxException  e)
+        catch (Exception   e)
         {
             logger.info("尝试给前端发送消息失败！！！{}",e);
         }
     }
     @OnClose
     public void OnClose() throws InterruptedException, URISyntaxException {
-        this.
-        scheduledExecutorService.shutdownNow();
+        this.scheduledExecutorService.shutdownNow();
         webSocketSet.remove(name);
         log.info("[WebSocket] 退出成功，当前连接人数为：={}",webSocketSet.size());
-        String type=name.substring(0,2);
+        /*String type=name.substring(0,2);
         switch (type)
         {
             case "hb":
@@ -442,7 +281,7 @@ public class OnWebSocket {
                 break;
             default:
                 break;
-        }
+        }*/
     }
 
     @OnMessage

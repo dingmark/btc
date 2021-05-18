@@ -17,7 +17,7 @@ public class ScheduledConfig implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
         scheduledTaskRegistrar.setScheduler(setTaskExecutors());
     }
-
+//19 +8
     @Bean(destroyMethod="shutdown")
     public Executor setTaskExecutors(){
         return Executors.newScheduledThreadPool(19); // 3个线程来处理。

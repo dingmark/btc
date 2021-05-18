@@ -148,7 +148,7 @@ public class KbWssMarketHandle implements Cloneable{
                     logger.error("dealPing出现了异常");
                 }
             }
-        },0,40,TimeUnit.SECONDS);
+        },0,20,TimeUnit.SECONDS);
 
     }
 

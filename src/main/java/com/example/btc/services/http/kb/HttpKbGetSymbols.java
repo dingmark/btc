@@ -25,7 +25,7 @@ public class HttpKbGetSymbols {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Value("${kbsymbols}")
     private String kbsymbols;
-    public List<String> gethbSymbols() throws MalformedURLException {
+    public List<String> getkbSymbols() throws MalformedURLException {
         long startTime=System.currentTimeMillis();
         List <String> symbols=new ArrayList<>();
         //String mcurl=mourl+mckey+"&symbol="+para+"_USDT&limit=10";
