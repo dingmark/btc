@@ -33,12 +33,14 @@ public class KbWssMarketHandle implements Cloneable{
     AtomicLong pong = new AtomicLong(0);
     private Long lastPingTime = System.currentTimeMillis();
     private int trytime=0;
-
+    long startTime;
+    long endtime;
     public KbWssMarketHandle() {
 
     }
     private String sockettime;
     public KbWssMarketHandle(String pushUrl,String sockettime) {
+         startTime=System.currentTimeMillis();
         this.pushUrl = pushUrl;
         this.sockettime=sockettime;
     }
@@ -93,6 +95,8 @@ public class KbWssMarketHandle implements Cloneable{
             @Override
             public void onClose(int i, String s, boolean b)
             {
+                endtime=System.currentTimeMillis();
+                logger.info("kb持续时间{}-------->",endtime-startTime);
                 closechannel();
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
