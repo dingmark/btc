@@ -43,7 +43,7 @@ public class CustomMultiThreadingService {
     @Autowired
     HttpZbNewPrice httpZbNewPrice;
 
-    public JSONObject hbrealjs=new JSONObject();
+    public static JSONObject hbrealjs=new JSONObject();
 
     /**
      * @Description:通过@Async注解表明该方法是一个异步方法，

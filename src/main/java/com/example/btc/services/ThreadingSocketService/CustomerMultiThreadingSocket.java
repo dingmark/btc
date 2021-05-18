@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class CustomerMultiThreadingSocket {
     private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
     int i=0;
-     private static final int sockettime=300000;
+     private static final int sockettime=120000;
     static List<String> hbreqparams=new ArrayList<>();
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
@@ -60,30 +60,30 @@ public class CustomerMultiThreadingSocket {
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
 
-    public String hbresponse;
-    public String mcresponse;
-    public String okresponse1;
-    public String okresponse2;
-    public String okresponse3;
+    public static String  hbresponse;
+    public static String mcresponse;
+    public static String okresponse1;
+    public static String okresponse2;
+    public static String okresponse3;
 
-    public String btresponse1;
-    public String btresponse2;
-    public String btresponse3;
+    public static String btresponse1;
+    public static String btresponse2;
+    public static String btresponse3;
 
-    public String bnresponse1;
-    public String bnresponse2;
-    public String bnresponse3;
+    public static String bnresponse1;
+    public static String bnresponse2;
+    public static String bnresponse3;
 
-    public String zbresponse;
+    public static String zbresponse;
 
-    public String bsresponse1;
-    public String bsresponse2;
-    public String bsresponse3;
+    public static String bsresponse1;
+    public static String bsresponse2;
+    public static String bsresponse3;
 
-    public String kbresponse1;
-    public String kbresponse2;
-    public String kbresponse3;
-    public String kbresponse4;
+    public static String kbresponse1;
+    public static String kbresponse2;
+    public static String kbresponse3;
+    public static String kbresponse4;
 
     OkWssMarketHandle okwssMarketHandle;
     OkBtcWssMarketHandle okBtcwssMarketHandle;
@@ -121,30 +121,31 @@ public class CustomerMultiThreadingSocket {
     public void HbSocket() throws URISyntaxException, InterruptedException {
         String hburl="wss://api.huobiasia.vip/ws";
         WssMarketHandle wssMarketHandle;
-        logger.info("火币启动------"+String.valueOf(i));
+        logger.info("火币启动------");
         wssMarketHandle = new WssMarketHandle(hburl,"300000");
         wssMarketHandle.sub(hbreqparams, response -> {
               //  AppointSending(name, response.toString());
-            //logger.info("火币交易"+response.toString());
+           // logger.info("火币交易"+response.toString());
             hbresponse=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void McSocket() throws URISyntaxException, InterruptedException {
           String mcurl="wss://contract.mxc.la/ws";
-        logger.info("抹茶启动------"+String.valueOf(i));
+        logger.info("抹茶启动------");
         McWssMarketHandle mcWssMarketHandle;
         mcWssMarketHandle=new McWssMarketHandle(mcurl,String.valueOf(sockettime));
         mcWssMarketHandle.sub(mcreqparams,response->{
             mcresponse=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void OkSocket() throws URISyntaxException, InterruptedException {
+        logger.info("OK启动------");
         okwssMarketHandle = new OkWssMarketHandle(okurl,String.valueOf(sockettime));
         okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,String.valueOf(sockettime));
         okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,String.valueOf(sockettime));
@@ -157,11 +158,12 @@ public class CustomerMultiThreadingSocket {
         okEthwssMarketHandle.sub(nor_reqparams, response -> {
             okresponse3=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void BtSocket() throws URISyntaxException, InterruptedException {
+        logger.info("比特儿启动------");
         btWssMarketHandle=new BtWssMarketHandle(bturl,String.valueOf(sockettime));
         btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,String.valueOf(sockettime));
         btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
@@ -180,12 +182,13 @@ public class CustomerMultiThreadingSocket {
             //logger.info(response.toString());
             btresponse3=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
 
     @Async
     @Scheduled(fixedRate = sockettime)
     public void BnSocket() throws URISyntaxException, InterruptedException {
+        logger.info("币安启动------");
         bnWssMarketHandle=new BnWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,String.valueOf(sockettime));
@@ -198,21 +201,23 @@ public class CustomerMultiThreadingSocket {
         bnEthWssMarketHandle.sub(nor_reqparams,response ->{
             bnresponse3=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void ZbSocket() throws URISyntaxException ,InterruptedException{
+        logger.info("中币启动------");
         zbWssMarketHandle=new ZbWssMarketHandle(zburl,String.valueOf(sockettime));
         zbWssMarketHandle.sub(zbreqparams,response->{
             zbresponse=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void BsSocket()throws URISyntaxException ,InterruptedException
     {
+        logger.info("比特时代启动------");
         bsWssMarketHandle=new BsWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,String.valueOf(sockettime));
@@ -226,37 +231,37 @@ public class CustomerMultiThreadingSocket {
         bsCncWssMarketHandle.sub(nor_reqparams,response->{
             bsresponse3=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void KbSocket() throws  URISyntaxException ,InterruptedException
     {
-        logger.info(kburl);
+        logger.info("库币启动------");
         kbWssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb1=kbreqparams.subList(0,99);
         kbWssMarketHandle.sub(kb1,response->{
-            logger.info(response.toString());
+            //logger.info("1"+response.toString());
             kbresponse1=response.toString();
         });
         List<String> kb2=kbreqparams.subList(100,199);
         kb2WssMarketHandle.sub(kb2,response->{
-            logger.info(response.toString());
+            //logger.info("2"+response.toString());
             kbresponse2=response.toString();
         });
         List<String> kb3=kbreqparams.subList(200,299);
         kb3WssMarketHandle.sub(kb3,response->{
-            logger.info(response.toString());
+            //logger.info("3"+response.toString());
             kbresponse3=response.toString();
         });
         List<String> kb4=kbreqparams.subList(300,399);
         kb4WssMarketHandle.sub(kb4,response->{
-            logger.info(response.toString());
+            //logger.info("4"+response.toString());
             kbresponse4=response.toString();
         });
-        Thread.sleep(sockettime);
+        Thread.sleep(sockettime-1000);
     }
 }

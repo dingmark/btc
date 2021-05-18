@@ -52,7 +52,7 @@ public class McNewPrice {
                 charinfo.add(line);
             }
             long endTime = System.currentTimeMillis();
-            logger.info("抹茶"+para+"实时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            //logger.info("抹茶"+para+"实时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js = JSON.parseObject(charinfo.get(0));
             JSONObject jsdata=(JSONObject)((JSONArray)JSONArray.parse(js.get("data").toString())).get(0);
             price=jsdata.getFloat("last");

@@ -101,8 +101,14 @@ public class KbWssMarketHandle implements Cloneable{
                 logger.error("onClose i:{},s:{},b:{}", i, s, b);
             }
 
+            @SneakyThrows
             @Override
             public void onError(Exception e) {
+                while(!webSocketClient.isClosed())
+                {
+                    Boolean reconnectResult = webSocketClient.reconnectBlocking();
+                    logger.error("重连的结果为：{}", reconnectResult);
+                }
                 logger.error("onError:", e);
             }
         };

@@ -46,7 +46,7 @@ public class BterNewPrice {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("比特儿"+para+"实时价格加载完成{}-------->", (endTime - startTime) + "ms");
+            //logger.info("比特儿"+para+"实时价格加载完成{}-------->", (endTime - startTime) + "ms");
            // String tmp = charinfo.toString().substring(1, charinfo.toString().length() - 1);
             JSONObject js = JSONObject.parseObject(charinfo.get(0));
             price = js.getFloatValue("last");

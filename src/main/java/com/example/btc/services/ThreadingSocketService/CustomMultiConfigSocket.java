@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  * @Author: OnlyMate
  * @Date: 2018年9月21日 下午2:50:14
  */
-/*@Configuration
+@Configuration
 @ComponentScan("com.example.btc.services.ThreadingSocketService")
 @EnableAsync//利用@EnableAsync注解开启异步任务支持
 public class CustomMultiConfigSocket implements AsyncConfigurer{
@@ -24,8 +24,8 @@ public class CustomMultiConfigSocket implements AsyncConfigurer{
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-        taskExecutor.setMaxPoolSize(10);
+        taskExecutor.setCorePoolSize(20);
+        taskExecutor.setMaxPoolSize(80);
         taskExecutor.setQueueCapacity(25);
         taskExecutor.initialize();
         return taskExecutor;
@@ -37,4 +37,3 @@ public class CustomMultiConfigSocket implements AsyncConfigurer{
     }
 
 }
-*/

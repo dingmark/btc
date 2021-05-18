@@ -51,7 +51,7 @@ public class OkNewPrice {
 
        // System.out.println(charinfo.toString());
         long endTime=System.currentTimeMillis();
-        logger.info("OK交易所"+para+"即时数据加载完成{}------->",(endTime-startTime)+"ms");
+        //logger.info("OK交易所"+para+"即时数据加载完成{}------->",(endTime-startTime)+"ms");
         //数据转JSON并取最新成交价格
         //JSONObject js= JSON.parseObject(charinfo.toString().substring(1,charinfo.toString().length()-1));
           JSONArray jsonArray=JSONArray.parseArray(charinfo.get(0));

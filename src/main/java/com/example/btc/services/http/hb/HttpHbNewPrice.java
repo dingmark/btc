@@ -51,7 +51,7 @@ public class HttpHbNewPrice {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("火币"+symbol+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            //logger.info("火币"+symbol+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js =JSONObject.parseObject(charinfo.get(0));
            price= ((JSONObject)((JSONArray)((JSONObject)js.get("tick")).get("data")).get(0)).getFloat("price");
 

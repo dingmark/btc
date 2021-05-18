@@ -48,7 +48,7 @@ public class BiAnNewPrice {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("币安"+para+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+            //logger.info("币安"+para+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONArray jsonArray=JSONArray.parseArray( charinfo.get(0));
             price=((JSONObject)jsonArray.get(0)).getFloat("price");
         }

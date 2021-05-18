@@ -50,7 +50,7 @@ public class HttpKbNewPrice {
             }
             //System.out.println(charinfo.toString());
             long endTime = System.currentTimeMillis();
-            logger.info("库币"+symbol+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
+           // logger.info("库币"+symbol+"即时数据加载完成用时{}----------->", (endTime - startTime) + "ms");
             JSONObject js =JSONObject.parseObject(charinfo.get(0));
             price=((JSONObject)js.get("data")).getFloat("price");
 
