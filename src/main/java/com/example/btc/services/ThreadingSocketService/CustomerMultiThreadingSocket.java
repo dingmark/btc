@@ -7,7 +7,6 @@ import com.example.btc.services.http.kb.HttpKbGetSymbols;
 import com.example.btc.services.http.kb.HttpKbGetToken;
 import com.example.btc.services.http.mocha.HttpMcGetSymbols;
 import com.example.btc.services.http.zb.HttpZbGetSymbols;
-import com.example.btc.services.webSocket.OnWebSocket;
 import com.example.btc.services.ws.handler.*;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,10 +26,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class CustomerMultiThreadingSocket {
-    private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
+public class CustomerMultiThreadingSocket implements Serializable {
+    private Logger logger = LoggerFactory.getLogger(CustomerMultiThreadingSocket.class);
     int i=0;
-     private static final int sockettime=120000;
+     private static final int sockettime=300000;
     static List<String> hbreqparams=new ArrayList<>();
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
@@ -122,7 +122,7 @@ public class CustomerMultiThreadingSocket {
         String hburl="wss://api.huobiasia.vip/ws";
         WssMarketHandle wssMarketHandle;
         logger.info("火币启动------");
-        wssMarketHandle = new WssMarketHandle(hburl,"300000");
+        wssMarketHandle = new WssMarketHandle(hburl,String.valueOf(sockettime));
         wssMarketHandle.sub(hbreqparams, response -> {
               //  AppointSending(name, response.toString());
            // logger.info("火币交易"+response.toString());

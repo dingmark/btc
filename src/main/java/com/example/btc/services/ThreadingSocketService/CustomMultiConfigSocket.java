@@ -1,13 +1,17 @@
 package com.example.btc.services.ThreadingSocketService;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
 /**
  * @Description: 配置类实现AsyncConfigurer接口，并重写getAsyncExecutor方法，并返回一个ThreadPoolTaskExecutor，
@@ -19,9 +23,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @ComponentScan("com.example.btc.services.ThreadingSocketService")
 @EnableAsync//利用@EnableAsync注解开启异步任务支持
-public class CustomMultiConfigSocket implements AsyncConfigurer{
+public class CustomMultiConfigSocket implements SchedulingConfigurer { //AsyncConfigurer
 
-    @Override
+  /*  @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         taskExecutor.setCorePoolSize(20);
@@ -34,6 +38,15 @@ public class CustomMultiConfigSocket implements AsyncConfigurer{
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return AsyncConfigurer.super.getAsyncUncaughtExceptionHandler();
+    }*/
+  @Override
+  public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
+      scheduledTaskRegistrar.setScheduler(setTaskExecutorsSocket());
+  }
+    //19 +8
+    @Bean(destroyMethod="shutdown")
+    public Executor setTaskExecutorsSocket(){
+        return Executors.newScheduledThreadPool(20); // 3个线程来处理。
     }
 
 }

@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,6 +16,7 @@ public class DealDepth {
     static List<JSONObject> btlist = new ArrayList<>();
     private  static CustomMultiThreadingService customMultiThreadingService;
     public static JSONObject getBnDetpth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String symbol = jsonObject.getString("stream");
@@ -21,6 +24,7 @@ public class DealDepth {
         JSONObject jsdata = jsonObject.getJSONObject("data");
         JSONArray jsasks = jsdata.getJSONArray("asks");
         JSONArray jsbids = jsdata.getJSONArray("bids");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol.toUpperCase());
         jsre.put("asks", jsasks);
         jsre.put("bids", jsbids);
@@ -28,18 +32,21 @@ public class DealDepth {
     }
 
     public static JSONObject getMcDetpth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONObject jsdata = jsonObject.getJSONObject("data");
         String symbol = jsonObject.getString("symbol");
         JSONArray jsasks = jsdata.getJSONArray("asks");
         JSONArray jsbids = jsdata.getJSONArray("bids");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol);
         jsre.put("asks", jsasks);
         jsre.put("bids", jsbids);
         return jsre;
     }
     public static JSONObject getOkDetpth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONArray jsdata = jsonObject.getJSONArray("data");
@@ -47,6 +54,7 @@ public class DealDepth {
         JSONArray asks = js.getJSONArray("asks");
         JSONArray bids = js.getJSONArray("bids");
         String instrument_id = js.getString("instrument_id");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", instrument_id);
         if(asks !=null&&!asks.isEmpty()) {
             jsre.put("asks", asks);
@@ -58,6 +66,7 @@ public class DealDepth {
     }
 
     public static JSONObject getHbDetpth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String bz = jsonObject.getString("ch");
@@ -65,6 +74,7 @@ public class DealDepth {
         int begin = bz.indexOf(".");
         int end = bz.indexOf(".", begin + 1);
         bz = bz.substring(begin + 1, end);
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", bz.toUpperCase());
         JSONObject jstick = jsonObject.getJSONObject("tick");
         if(jstick!=null) {
@@ -84,10 +94,12 @@ public class DealDepth {
     }
 
     public static JSONObject getBsDepth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONObject jsdepth = jsonObject.getJSONObject("depth");
         String symbol = jsonObject.getString("symbol");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol.toUpperCase());
         if(jsdepth !=null) {
             JSONArray asks = jsdepth.getJSONArray("asks");
@@ -106,11 +118,13 @@ public class DealDepth {
     }
 
     public static JSONObject getZbDepth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String symbol = jsonObject.getString("channel");
         JSONArray asks = jsonObject.getJSONArray("asks");
         JSONArray bids = jsonObject.getJSONArray("bids");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol.toUpperCase());
         if(asks !=null&&!asks.isEmpty()) {
             List<Object> lisasks = asks.subList(asks.size() - 5 >= 0 ? asks.size() - 5 : 0, asks.size());
@@ -125,6 +139,7 @@ public class DealDepth {
     }
 
     public static JSONObject getKbDepth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String symbol = jsonObject.getString("topic");
@@ -133,6 +148,7 @@ public class DealDepth {
         JSONObject jsdata = jsonObject.getJSONObject("data");
         JSONArray asks = jsdata.getJSONArray("asks");
         JSONArray bids = jsdata.getJSONArray("bids");
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol);
         jsre.put("asks", asks);
         jsre.put("bids", bids);
@@ -140,6 +156,7 @@ public class DealDepth {
     }
 
     public static JSONObject getBtDepth(String message) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         JSONObject jsonObject = JSONObject.parseObject(message);
         JSONArray params = jsonObject.getJSONArray("params");
@@ -149,18 +166,21 @@ public class DealDepth {
         JSONArray bids = jsdata.getJSONArray("bids");
         List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
         List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol);
         jsre.put("asks", asksobject);
         jsre.put("bids", bidsobject);
         return jsre;
     }
     public static JSONObject getBtDepth(JSONObject object) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre = new JSONObject();
         String symbol=object.getString("symbol");
         JSONArray asks = object.getJSONArray("asks");
         JSONArray bids = object.getJSONArray("bids");
         List<Object> asksobject = asks.subList(0, asks.size() - 5 >= 0 ? 5 : asks.size());
         List<Object> bidsobject = bids.subList(0, bids.size() - 5 >= 0 ? 5 : bids.size());
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol", symbol);
         jsre.put("asks", asksobject);
         jsre.put("bids", bidsobject);
@@ -168,6 +188,7 @@ public class DealDepth {
     }
     public static JSONObject getBtDepthUpdate(JSONObject jsold,String message)
     {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject jsre=new JSONObject();
         JSONArray asksre=new JSONArray();
         JSONArray bidsre=new JSONArray();
@@ -280,6 +301,7 @@ public class DealDepth {
                 }
             }
         }
+        jsre.put("realtime",df.format(new Date()));
         jsre.put("symbol",jsold.getString("symbol"));
         if(asksre.isEmpty())
         {

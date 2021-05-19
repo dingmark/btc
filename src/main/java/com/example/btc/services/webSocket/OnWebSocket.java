@@ -108,7 +108,7 @@ public class OnWebSocket {
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(9);
 
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
@@ -125,6 +125,7 @@ public class OnWebSocket {
         socketdo(type);
     }
 
+    private static int rate=200;
     void socketdo(String type)  {
         try {
             switch (type) {
@@ -135,7 +136,7 @@ public class OnWebSocket {
                         public void run() {
                             AppointSending(name, customerMultiThreadingSocket.hbresponse);
                         }
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "ok":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -147,7 +148,7 @@ public class OnWebSocket {
                             AppointSending(name, customerMultiThreadingSocket.okresponse3);
                         }
 
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "bt":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -159,7 +160,7 @@ public class OnWebSocket {
                             AppointSending(name, customerMultiThreadingSocket.btresponse3);
                         }
 
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "bn":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -171,7 +172,7 @@ public class OnWebSocket {
                             AppointSending(name, customerMultiThreadingSocket.bnresponse3);
                         }
 
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "mc":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -180,7 +181,7 @@ public class OnWebSocket {
                         public void run() {
                             AppointSending(name, customerMultiThreadingSocket.mcresponse);
                         }
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "zb":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -189,7 +190,7 @@ public class OnWebSocket {
                         public void run() {
                             AppointSending(name, customerMultiThreadingSocket.zbresponse);
                         }
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                      break;
                 case "bs":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -200,7 +201,7 @@ public class OnWebSocket {
                             AppointSending(name, customerMultiThreadingSocket.bsresponse2);
                             AppointSending(name, customerMultiThreadingSocket.bsresponse3);
                         }
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "kb":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -212,7 +213,7 @@ public class OnWebSocket {
                             AppointSending(name, customerMultiThreadingSocket.kbresponse3);
                             AppointSending(name, customerMultiThreadingSocket.kbresponse4);
                         }
-                    }, 0, 50, TimeUnit.MILLISECONDS);
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "re":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
