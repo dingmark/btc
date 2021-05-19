@@ -134,7 +134,7 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.hbresponse);
+                            AppointSending(name, CustomerMultiThreadingSocket.hbresponse);
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
@@ -143,9 +143,9 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.okresponse1);
-                            AppointSending(name, customerMultiThreadingSocket.okresponse2);
-                            AppointSending(name, customerMultiThreadingSocket.okresponse3);
+                            AppointSending(name, CustomerMultiThreadingSocket.okresponse1);
+                            AppointSending(name, CustomerMultiThreadingSocket.okresponse2);
+                            AppointSending(name, CustomerMultiThreadingSocket.okresponse3);
                         }
 
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -155,9 +155,9 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.btresponse1);
-                            AppointSending(name, customerMultiThreadingSocket.btresponse2);
-                            AppointSending(name, customerMultiThreadingSocket.btresponse3);
+                            AppointSending(name, CustomerMultiThreadingSocket.btresponse1);
+                            AppointSending(name, CustomerMultiThreadingSocket.btresponse2);
+                            AppointSending(name, CustomerMultiThreadingSocket.btresponse3);
                         }
 
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -167,9 +167,9 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.bnresponse1);
-                            AppointSending(name, customerMultiThreadingSocket.bnresponse2);
-                            AppointSending(name, customerMultiThreadingSocket.bnresponse3);
+                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse1);
+                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse2);
+                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse3);
                         }
 
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -179,7 +179,7 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.mcresponse);
+                            AppointSending(name, CustomerMultiThreadingSocket.mcresponse);
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
@@ -188,7 +188,7 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.zbresponse);
+                            AppointSending(name, CustomerMultiThreadingSocket.zbresponse);
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                      break;
@@ -197,33 +197,38 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.bsresponse1);
-                            AppointSending(name, customerMultiThreadingSocket.bsresponse2);
-                            AppointSending(name, customerMultiThreadingSocket.bsresponse3);
+                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse1);
+                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse2);
+                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse3);
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "kb":
-                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                    /*scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customerMultiThreadingSocket.kbresponse1);
-                            AppointSending(name, customerMultiThreadingSocket.kbresponse2);
-                            AppointSending(name, customerMultiThreadingSocket.kbresponse3);
-                            AppointSending(name, customerMultiThreadingSocket.kbresponse4);
+
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
+                    */
+                    while(this.session.isOpen())
+                    {
+                        AppointSending(name, CustomerMultiThreadingSocket.kbresponse1);
+                        AppointSending(name, CustomerMultiThreadingSocket.kbresponse2);
+                        AppointSending(name, CustomerMultiThreadingSocket.kbresponse3);
+                        AppointSending(name, CustomerMultiThreadingSocket.kbresponse4);
+                    }
                     break;
+
                 case "re":
                     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customMultiThreadingService.hbrealjs.toString());
+                            AppointSending(name, CustomMultiThreadingService.hbrealjs.toString());
                         }
                     }, 0, 500, TimeUnit.MILLISECONDS);
-
                     break;
                 default:
                     break;
