@@ -108,7 +108,7 @@ public class OnWebSocket {
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(9);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
 
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
