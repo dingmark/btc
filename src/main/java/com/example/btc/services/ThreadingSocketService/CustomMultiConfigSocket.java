@@ -20,17 +20,17 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  * @Author: OnlyMate
  * @Date: 2018年9月21日 下午2:50:14
  */
-/* @Configuration
+ @Configuration
 @ComponentScan("com.example.btc.services.ThreadingSocketService")
 @EnableAsync//利用@EnableAsync注解开启异步任务支持
-public class CustomMultiConfigSocket implements SchedulingConfigurer { //AsyncConfigurer
+public class CustomMultiConfigSocket implements AsyncConfigurer { //AsyncConfigurer
 
    @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(20);
-        taskExecutor.setMaxPoolSize(80);
-        taskExecutor.setQueueCapacity(25);
+        taskExecutor.setCorePoolSize(19);
+        //taskExecutor.setMaxPoolSize(30);
+        taskExecutor.setQueueCapacity(10);
         taskExecutor.initialize();
         return taskExecutor;
     }
@@ -38,7 +38,7 @@ public class CustomMultiConfigSocket implements SchedulingConfigurer { //AsyncCo
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
         return AsyncConfigurer.super.getAsyncUncaughtExceptionHandler();
-    }*/
+    }
   /*@Override
   public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
       scheduledTaskRegistrar.setScheduler(setTaskExecutorsSocket());
@@ -48,6 +48,6 @@ public class CustomMultiConfigSocket implements SchedulingConfigurer { //AsyncCo
     public Executor setTaskExecutorsSocket(){
         return Executors.newScheduledThreadPool(20); // 3个线程来处理。
 
-    }
+    }*/
 
-}*/
+}

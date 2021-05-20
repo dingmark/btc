@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@EnableScheduling
 public class CustomMultiThreadingService {
     private Logger logger = LoggerFactory.getLogger(CustomMultiThreadingService.class);
     @Autowired
