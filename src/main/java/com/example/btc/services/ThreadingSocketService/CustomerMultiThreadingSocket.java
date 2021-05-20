@@ -80,10 +80,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
     public static String bsresponse2;
     public static String bsresponse3;
 
-    public static String kbresponse1;
-    public static String kbresponse2;
-    public static String kbresponse3;
-    public static String kbresponse4;
+    public  static String kbresponse1;
+    public  static String kbresponse2;
+    public  static String kbresponse3;
+    public  static String kbresponse4;
 
     OkWssMarketHandle okwssMarketHandle;
     OkBtcWssMarketHandle okBtcwssMarketHandle;
