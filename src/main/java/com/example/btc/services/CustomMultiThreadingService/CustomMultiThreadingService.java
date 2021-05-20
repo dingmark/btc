@@ -98,7 +98,7 @@ public class CustomMultiThreadingService {
         Thread.sleep(20000);
         bsNewPriceWssMarketHandle.closechannel();
     }
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     @Async
     public void excuteAsyncHbBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float hbbtcprice=httpHbNewPrice.gethbNewPrice("btcusdt");
@@ -108,7 +108,7 @@ public class CustomMultiThreadingService {
         }
 
     }
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     @Async
     public void excuteAsyncHbEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float hbethprice=httpHbNewPrice.gethbNewPrice("ethusdt");
@@ -119,7 +119,7 @@ public class CustomMultiThreadingService {
 
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncOkBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float okbtcprice=okNewPrice.getOKprice("BTC-USDT");
         if(okbtcprice!=0)
@@ -129,7 +129,7 @@ public class CustomMultiThreadingService {
 
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncOkEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float okethprice=okNewPrice.getOKprice("ETH-USDT");
         if(okethprice!=0)
@@ -138,7 +138,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncBterBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float okethprice=bterNewPrice.getbterprice("btc_usdt");
         if(okethprice!=0)
@@ -147,7 +147,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncBterEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float okethprice=bterNewPrice.getbterprice("eth_usdt");
         if(okethprice!=0)
@@ -157,7 +157,7 @@ public class CustomMultiThreadingService {
     }
 
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncMcBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float mcbtcprice=mcNewPrice.getMcPrice("BTC_USDT");
         if(mcbtcprice!=0)
@@ -166,7 +166,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncMcEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float mcethprice=mcNewPrice.getMcPrice("ETH_USDT");
         if(mcethprice!=0)
@@ -175,7 +175,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncBnEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float bnethprice=biAnNewPrice.getBiAnPrice("ETHUSDT");
         if(bnethprice!=0)
@@ -184,7 +184,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncBnBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float bnbtcprice=biAnNewPrice.getBiAnPrice("BTCUSDT");
         if(bnbtcprice!=0)
@@ -193,7 +193,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncKbBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float kbbtcprice=httpKbNewPrice.getKbNewPrice("BTC-USDT");
         if(kbbtcprice!=0)
@@ -202,7 +202,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncKbEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float Kbethprice=httpKbNewPrice.getKbNewPrice("ETH-USDT");
         if(Kbethprice!=0)
@@ -212,7 +212,7 @@ public class CustomMultiThreadingService {
     }
 
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncZbEthprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float Zbethprice=httpZbNewPrice.getZbNewPrice("eth_usdt");
         if(Zbethprice!=0)
@@ -221,7 +221,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncZbBtcprice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float Zbbtcprice=httpZbNewPrice.getZbNewPrice("btc_usdt");
         if(Zbbtcprice!=0)
@@ -230,7 +230,7 @@ public class CustomMultiThreadingService {
         }
     }
     @Async
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 10000)
     public void excuteAsyncZbQcPrice() throws InterruptedException, URISyntaxException, MalformedURLException {
         float ZbQcprice=httpZbNewPrice.getZbNewPrice("usdt_qc");
         if(ZbQcprice!=0)
