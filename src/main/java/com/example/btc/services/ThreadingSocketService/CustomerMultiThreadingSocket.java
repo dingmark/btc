@@ -56,7 +56,6 @@ public class CustomerMultiThreadingSocket implements Serializable {
             public void run() {
                 token=httpKbGetToken.getkbToken();
                 kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
-
             }
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
@@ -325,7 +324,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         });
         Thread.sleep(sockettime-1000);
     }
-    @Async
+    /*@Async
     @Scheduled(fixedRate = sockettime)
     public void Kb4Socket() throws  URISyntaxException ,InterruptedException
     {
@@ -336,5 +335,5 @@ public class CustomerMultiThreadingSocket implements Serializable {
             kbresponse4=response.toString();
         });
         Thread.sleep(sockettime-1000);
-    }
+    }*/
 }
