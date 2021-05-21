@@ -175,7 +175,7 @@ public class McWssMarketHandle implements Cloneable{
                     //每隔60秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime)/1000, 5, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000, 1,TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("close scheduledExecutorService异常", e);
         }

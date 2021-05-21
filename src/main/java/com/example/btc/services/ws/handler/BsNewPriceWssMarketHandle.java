@@ -21,10 +21,10 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BsNewPriceWssMarketHandle implements Cloneable{
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(3);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
     //scheduledExecutorService.setKeepAliveTime(10, TimeUnit.SECONDS);
              //scheduledExecutorService.allowCoreThreadTimeOut(true);
-    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
+    private ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
 
     private WebSocketClient webSocketClient;
     private String pushUrl = "";//合约站行情请求以及订阅地址
@@ -157,7 +157,7 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
         }
     }
 
-    private void doClose() {
+    private void doClose()  {
         try {
             scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                 @SneakyThrows

@@ -20,7 +20,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
  * @Author: OnlyMate
  * @Date: 2018年9月21日 下午2:50:14
  */
- @Configuration
+@Configuration
 @ComponentScan("com.example.btc.services.ThreadingSocketService")
 @EnableAsync//利用@EnableAsync注解开启异步任务支持
 public class CustomMultiConfigSocket implements AsyncConfigurer { //AsyncConfigurer

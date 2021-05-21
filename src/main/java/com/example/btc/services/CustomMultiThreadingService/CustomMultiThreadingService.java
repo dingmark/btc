@@ -42,6 +42,8 @@ public class CustomMultiThreadingService {
     @Autowired
     HttpZbNewPrice httpZbNewPrice;
 
+    BsNewPriceWssMarketHandle bsNewPriceWssMarketHandle;
+
     public static JSONObject hbrealjs=new JSONObject();
 
     /**
@@ -68,7 +70,7 @@ public class CustomMultiThreadingService {
     @Scheduled(fixedRate = 20000)
     public void executeAsynBsNewPrice() throws URISyntaxException, InterruptedException {
         String bsurl="wss://api.aex.zone/wsv3";
-        BsNewPriceWssMarketHandle bsNewPriceWssMarketHandle=new BsNewPriceWssMarketHandle(bsurl);
+        bsNewPriceWssMarketHandle=new BsNewPriceWssMarketHandle(bsurl);
         List<String> para=new ArrayList<>();
         bsNewPriceWssMarketHandle.sub(para,response->{
                //response.toString();
@@ -95,7 +97,7 @@ public class CustomMultiThreadingService {
                }
         });
         Thread.sleep(20000);
-        bsNewPriceWssMarketHandle.closechannel();
+       // bsNewPriceWssMarketHandle.closechannel();
     }
     @Scheduled(fixedRate = 10000)
     @Async

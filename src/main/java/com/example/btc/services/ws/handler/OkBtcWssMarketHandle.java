@@ -147,12 +147,12 @@ public class OkBtcWssMarketHandle implements Cloneable{
 
     private void dealPing() {
         try {
-            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            scheduledExecutorService.schedule(new Runnable() {
                 @Override
                 public void run() {
                     sub("ping");
                 }
-            }, 29, 29, TimeUnit.SECONDS);//ok心跳30秒
+            }, 29, TimeUnit.SECONDS);//ok心跳30秒
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
@@ -193,7 +193,7 @@ public class OkBtcWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(sockettime)/1000, 5, TimeUnit.SECONDS);
+            }, Integer.parseInt(sockettime)/1000,1, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }

@@ -201,7 +201,7 @@ public class OnWebSocket {
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "kb":
-                    /*scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
                         @SneakyThrows
                         @Override
                         public void run() {
@@ -210,13 +210,8 @@ public class OnWebSocket {
                             AppointSending(name, CustomerMultiThreadingSocket.kbresponse3);
                             AppointSending(name, CustomerMultiThreadingSocket.kbresponse4);
                         }
-                    }, 0, rate, TimeUnit.MILLISECONDS);*/
-                    while(this.session.isOpen()){
-                        AppointSending(name, customerMultiThreadingSocket.kbresponse1);
-                        AppointSending(name, customerMultiThreadingSocket.kbresponse2);
-                        AppointSending(name, customerMultiThreadingSocket.kbresponse3);
-                        AppointSending(name, customerMultiThreadingSocket.kbresponse4);
-                    }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+
                     break;
 
                 case "re":

@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class CustomerMultiThreadingSocket implements Serializable {
     private Logger logger = LoggerFactory.getLogger(CustomerMultiThreadingSocket.class);
     int i=0;
-     private static final int sockettime=300000;
+     private static final int sockettime=60000;
     static List<String> hbreqparams=new ArrayList<>();
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
@@ -46,9 +46,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         nor_reqparams=hbcurrencys.gethbCurrencys();
         zbreqparams=httpZbGetSymbols.getZbSymbols();
         kbreqparams=httpKbGetSymbols.getkbSymbols();
+
     }
     @Autowired
-    public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException {
+    public  void   setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException {
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @SneakyThrows
             @Override
@@ -108,6 +109,8 @@ public class CustomerMultiThreadingSocket implements Serializable {
     KbWssMarketHandle kb3WssMarketHandle;//=new KbWssMarketHandle(kburl,sockettime);
     KbWssMarketHandle kb4WssMarketHandle;//=
 
+    WssMarketHandle wssMarketHandle;
+    McWssMarketHandle mcWssMarketHandle;
     private  String okurl="wss://real.coinall.ltd:8443/ws/v3";
     private  String bturl="wss://ws.gateio.ws/v3/";
     private  String bnurl="wss://stream.yshyqxx.com/stream";
@@ -120,7 +123,6 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Scheduled(fixedRate = sockettime)
     public void HbSocket() throws URISyntaxException, InterruptedException {
         String hburl="wss://api.huobiasia.vip/ws";
-        WssMarketHandle wssMarketHandle;
         logger.info("火币启动------");
         wssMarketHandle = new WssMarketHandle(hburl,String.valueOf(sockettime));
         wssMarketHandle.sub(hbreqparams, response -> {
@@ -129,57 +131,84 @@ public class CustomerMultiThreadingSocket implements Serializable {
             hbresponse=response.toString();
         });
         Thread.sleep(sockettime-1000);
+        //wssMarketHandle.closechannel();
     }
     @Async
     @Scheduled(fixedRate = sockettime)
     public void McSocket() throws URISyntaxException, InterruptedException {
           String mcurl="wss://contract.mxc.la/ws";
         logger.info("抹茶启动------");
-        McWssMarketHandle mcWssMarketHandle;
+
         mcWssMarketHandle=new McWssMarketHandle(mcurl,String.valueOf(sockettime));
         mcWssMarketHandle.sub(mcreqparams,response->{
             mcresponse=response.toString();
         });
         Thread.sleep(sockettime-1000);
+      //  mcWssMarketHandle.closechannel();
     }
+
     @Async
     @Scheduled(fixedRate = sockettime)
     public void OkSocket() throws URISyntaxException, InterruptedException {
-        logger.info("OK启动------");
+        logger.info("OK_USDT启动------");
         okwssMarketHandle = new OkWssMarketHandle(okurl,String.valueOf(sockettime));
-        okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,String.valueOf(sockettime));
-        okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,String.valueOf(sockettime));
         okwssMarketHandle.sub(nor_reqparams, response -> {
             okresponse1=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void OkBtcSocket() throws URISyntaxException, InterruptedException {
+        logger.info("OK_BTC启动------");
+        okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,String.valueOf(sockettime));
         okBtcwssMarketHandle.sub(nor_reqparams, response -> {
             okresponse2=response.toString();
-        });
-        okEthwssMarketHandle.sub(nor_reqparams, response -> {
-            okresponse3=response.toString();
         });
         Thread.sleep(sockettime-1000);
     }
     @Async
     @Scheduled(fixedRate = sockettime)
+    public void OkEthSocket() throws URISyntaxException, InterruptedException {
+        logger.info("OK_ETH启动------");
+        okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,String.valueOf(sockettime));
+        okEthwssMarketHandle.sub(nor_reqparams, response -> {
+            okresponse3=response.toString();
+        });
+        Thread.sleep(sockettime-1000);
+    }
+
+    @Async
+    @Scheduled(fixedRate = sockettime)
     public void BtSocket() throws URISyntaxException, InterruptedException {
-        logger.info("比特儿启动------");
+        logger.info("比特儿_USDT启动------");
         btWssMarketHandle=new BtWssMarketHandle(bturl,String.valueOf(sockettime));
-        btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,String.valueOf(sockettime));
-        btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
         btWssMarketHandle.sub(nor_reqparams,response ->
         {
-            //logger.info(response.toString());
             btresponse1=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BtBtcSocket() throws URISyntaxException, InterruptedException {
+        logger.info("比特儿_BTC启动------");
+         btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,String.valueOf(sockettime));
         btBtcWssMarketHandle.sub(nor_reqparams,response ->
         {
-           // logger.info(response.toString());
             btresponse2=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BtEthSocket() throws URISyntaxException, InterruptedException {
+        logger.info("比特儿_ETH启动------");
+        btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
         btEthWssMarketHandle.sub(nor_reqparams,response ->
         {
-            //logger.info(response.toString());
             btresponse3=response.toString();
         });
         Thread.sleep(sockettime-1000);
@@ -188,16 +217,28 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Async
     @Scheduled(fixedRate = sockettime)
     public void BnSocket() throws URISyntaxException, InterruptedException {
-        logger.info("币安启动------");
+        logger.info("币安_USDT启动------");
         bnWssMarketHandle=new BnWssMarketHandle(bnurl,String.valueOf(sockettime));
-        bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
-        bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnWssMarketHandle.sub(nor_reqparams,response ->{
             bnresponse1=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BnBtcSocket() throws URISyntaxException, InterruptedException {
+        logger.info("币安_ETH启动------");
+        bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle.sub(nor_reqparams,response ->{
             bnresponse2=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BnEthSocket() throws URISyntaxException, InterruptedException {
+        logger.info("币安_ETH启动------");
+        bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnEthWssMarketHandle.sub(nor_reqparams,response ->{
             bnresponse3=response.toString();
         });
@@ -217,17 +258,30 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Scheduled(fixedRate = sockettime)
     public void BsSocket()throws URISyntaxException ,InterruptedException
     {
-        logger.info("比特时代启动------");
+        logger.info("比特时代_USDT启动------");
         bsWssMarketHandle=new BsWssMarketHandle(bsurl,String.valueOf(sockettime));
-        bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,String.valueOf(sockettime));
-        bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,String.valueOf(sockettime));
-
         bsWssMarketHandle.sub(nor_reqparams,response->{
             bsresponse1=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BsBtcSocket()throws URISyntaxException ,InterruptedException
+    {
+        logger.info("比特时代_BTC启动------");
+        bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsBtcWssMarketHandle.sub(nor_reqparams,response->{
             bsresponse2=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void BsCncSocket()throws URISyntaxException ,InterruptedException
+    {
+        logger.info("比特时代_BTC启动------");
+        bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsCncWssMarketHandle.sub(nor_reqparams,response->{
             bsresponse3=response.toString();
         });
@@ -237,29 +291,48 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Scheduled(fixedRate = sockettime)
     public void KbSocket() throws  URISyntaxException ,InterruptedException
     {
-        logger.info("库币启动------");
+        logger.info("库币_组1启动------");
         kbWssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
-        kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
-        kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
-        kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb1=kbreqparams.subList(0,99);
         kbWssMarketHandle.sub(kb1,response->{
             //logger.info("1"+response.toString());
             kbresponse1=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void Kb2Socket() throws  URISyntaxException ,InterruptedException
+    {
+        logger.info("库币_组2启动------");
+        kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb2=kbreqparams.subList(100,199);
         kb2WssMarketHandle.sub(kb2,response->{
-            //logger.info("2"+response.toString());
             kbresponse2=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void Kb3Socket() throws  URISyntaxException ,InterruptedException
+    {
+        logger.info("库币_组3启动------");
+        kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb3=kbreqparams.subList(200,299);
         kb3WssMarketHandle.sub(kb3,response->{
-            //logger.info("3"+response.toString());
             kbresponse3=response.toString();
         });
+        Thread.sleep(sockettime-1000);
+    }
+    @Async
+    @Scheduled(fixedRate = sockettime)
+    public void Kb4Socket() throws  URISyntaxException ,InterruptedException
+    {
+        logger.info("库币_组4启动------");
+        kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb4=kbreqparams.subList(300,399);
-        kb4WssMarketHandle.sub(kb4,response->{
-            //logger.info("4"+response.toString());
+        kb3WssMarketHandle.sub(kb4,response->{
             kbresponse4=response.toString();
         });
         Thread.sleep(sockettime-1000);

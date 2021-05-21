@@ -57,8 +57,8 @@ public class BnWssMarketHandle implements Cloneable{
                 logger.debug("onOpen Success");
                 doSub(channels);
                 //禁止火币交易重连3次退出
-                //dealReconnect();
-               // dealPing();
+                dealReconnect();
+                //dealPing();
                 doClose();
             }
             @SneakyThrows
@@ -173,7 +173,7 @@ public class BnWssMarketHandle implements Cloneable{
                     //每隔35秒销毁
                     closechannel();
                 }
-            }, Integer.parseInt(socketTime)/1000, 5, TimeUnit.SECONDS);
+            }, Integer.parseInt(socketTime)/1000,1, TimeUnit.SECONDS);
         } catch (Exception e) {
             logger.error("dealReconnect scheduledExecutorService异常", e);
         }
