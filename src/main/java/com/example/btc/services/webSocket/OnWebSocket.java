@@ -20,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -90,14 +87,14 @@ public class OnWebSocket {
         mcreqparams=httpMcGetSymbols.getmcSymbols();
     }*/
     //各站点实时价格获取开关
-    @Autowired
-    public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
+//    @Autowired
+//    public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
 
     //8个站点socket开关
-    @Autowired
-    public void setCustomSocket(CustomerMultiThreadingSocket ct) throws URISyntaxException, InterruptedException {
-        OnWebSocket.customerMultiThreadingSocket=ct;
-    }
+//    @Autowired
+//    public void setCustomSocket(CustomerMultiThreadingSocket ct) throws URISyntaxException, InterruptedException {
+//        OnWebSocket.customerMultiThreadingSocket=ct;
+//    }
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     private Session session;
     /**
@@ -239,6 +236,15 @@ public class OnWebSocket {
         {
             logger.info("尝试给前端发送消息失败！！！{}",e);
         }
+    }
+    @OnError
+    public void OnError(Throwable throwable)
+    {
+        this.scheduledExecutorService.shutdownNow();
+        webSocketSet.remove(name);
+        throwable.printStackTrace();
+        log.info("{}报错",name);
+        log.info("[WebSocket] 退出成功，当前连接人数为：={}",webSocketSet.size());
     }
     @OnClose
     public void OnClose() throws InterruptedException, URISyntaxException {

@@ -60,7 +60,7 @@ public class OkNewPrice {
         catch (IOException  e)
         {
           //  e.printStackTrace();
-            logger.info("OK获取实时价格超时");
+            logger.info("{}----OK获取实时价格超时",para);
             return price=0;
         }
         finally {
