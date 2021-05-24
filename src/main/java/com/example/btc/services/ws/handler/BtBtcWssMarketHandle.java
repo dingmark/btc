@@ -62,37 +62,34 @@ public class BtBtcWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(String s)  {
-                //webSocketClient.close();
-                fixedThreadPool.execute(() -> {
-                    if (s.indexOf("params") != -1) {
-                        try {
-                            JSONObject jsmess=JSONObject.parseObject(s);
-                            JSONObject jsold;
-                            if(jsmess.getJSONArray("params").getBoolean(0))
-                            {
-                                jsold = DealDepth.getBtDepth(s);
-                                jsall.put(jsold.getString("symbol"),jsold);
-                                callback.onReceive(jsold.toJSONString());
-                            }
-                            else
-                            {
-                                JSONObject  jsupdate=JSONObject.parseObject(s);
-                                String symbol=jsupdate.getJSONArray("params").getString(2);
-                                JSONObject js= jsall.getJSONObject(symbol);
-                                jsupdate= DealDepth.getBtDepthUpdate(js,s);
-                                // callback.onReceive("更新后数据"+jsupdate.toJSONString());
-                                jsupdate=DealDepth.getBtDepth(jsupdate);
-                                if(((List)jsupdate.get("asks")).size()>0&&((List)jsupdate.get("bids")).size()>0)
-                                callback.onReceive(jsupdate.toJSONString());
-                                jsall.put(jsupdate.getString("symbol"),jsupdate);
-                            }
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        if (s.indexOf("params") != -1) {
+                            try {
+                                JSONObject jsmess = JSONObject.parseObject(s);
+                                JSONObject jsold;
+                                if (jsmess.getJSONArray("params").getBoolean(0)) {
+                                    jsold = DealDepth.getBtDepth(s);
+                                    jsall.put(jsold.getString("symbol"), jsold);
+                                    callback.onReceive(jsold.toJSONString());
+                                } else {
+                                    JSONObject jsupdate = JSONObject.parseObject(s);
+                                    String symbol = jsupdate.getJSONArray("params").getString(2);
+                                    JSONObject js = jsall.getJSONObject(symbol);
+                                    jsupdate = DealDepth.getBtDepthUpdate(js, s);
+                                    // callback.onReceive("更新后数据"+jsupdate.toJSONString());
+                                    jsupdate = DealDepth.getBtDepth(jsupdate);
+                                    if (((List) jsupdate.get("asks")).size() > 0 && ((List) jsupdate.get("bids")).size() > 0)
+                                        callback.onReceive(jsupdate.toJSONString());
+                                    jsall.put(jsupdate.getString("symbol"), jsupdate);
+                                }
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-
-                });
+                    });
+                }
             }
             @Override
             public void onMessage(ByteBuffer bytes) {
@@ -120,9 +117,10 @@ public class BtBtcWssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
+
         logger.info("比特儿关闭线程");
     }
 

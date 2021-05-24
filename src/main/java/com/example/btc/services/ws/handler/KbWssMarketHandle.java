@@ -64,25 +64,25 @@ public class KbWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                fixedThreadPool.execute(()->{
-                   try {
-                        if(s.indexOf("42")!=-1&&s.indexOf("pingInterval")==-1)
-                        {
-                            String temp=s.substring(2,s.length()-1).replaceFirst(",","#");
-                            String[]strarr=temp.split("#");
-                            temp=strarr[1].replace("\\\"","\"");
-                            temp=temp.substring(1,temp.length()-1);
-                            if(JSONObject.parseObject(temp).getString("type").equals("message"))
-                            {
-                                JSONObject js= DealDepth.getKbDepth(temp);
-                                if(js.get("asks")!=null&&js.get("bids")!=null)
-                                    callback.onReceive(js.toJSONString());
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        try {
+                            if (s.indexOf("42") != -1 && s.indexOf("pingInterval") == -1) {
+                                String temp = s.substring(2, s.length() - 1).replaceFirst(",", "#");
+                                String[] strarr = temp.split("#");
+                                temp = strarr[1].replace("\\\"", "\"");
+                                temp = temp.substring(1, temp.length() - 1);
+                                if (JSONObject.parseObject(temp).getString("type").equals("message")) {
+                                    JSONObject js = DealDepth.getKbDepth(temp);
+                                    if (js.get("asks") != null && js.get("bids") != null)
+                                        callback.onReceive(js.toJSONString());
+                                }
                             }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                    });
+                }
             }
 
             @SneakyThrows
@@ -104,12 +104,12 @@ public class KbWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onError(Exception e) {
-                while(!webSocketClient.isClosed())
-                {
-                    Boolean reconnectResult = webSocketClient.reconnectBlocking();
-                    logger.error("重连的结果为：{}", reconnectResult);
-                }
-                logger.error("onError:", e);
+//                while(!webSocketClient.isClosed())
+//                {
+//                    Boolean reconnectResult = webSocketClient.reconnectBlocking();
+//                    logger.error("重连的结果为：{}", reconnectResult);
+//                }
+                //logger.error("库币socket报错----{}", );
             }
         };
 
@@ -120,9 +120,9 @@ public class KbWssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
         logger.info("库币关闭线程");
     }
 

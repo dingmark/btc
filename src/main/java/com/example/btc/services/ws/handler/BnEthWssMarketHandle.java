@@ -63,18 +63,19 @@ public class BnEthWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                fixedThreadPool.execute(() -> {
-                    try {
-                        if(JSONObject.parseObject(s).get("stream")!=null)
-                        {
-                            JSONObject js=DealDepth.getBnDetpth(s);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                                callback.onReceive(js.toJSONString());
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        try {
+                            if (JSONObject.parseObject(s).get("stream") != null) {
+                                JSONObject js = DealDepth.getBnDetpth(s);
+                                if (js.get("asks") != null && js.get("bids") != null)
+                                    callback.onReceive(js.toJSONString());
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                    });
+                }
             }
 
             @Override
@@ -102,9 +103,10 @@ public class BnEthWssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
+
         logger.info("币安关闭线程");
     }
 

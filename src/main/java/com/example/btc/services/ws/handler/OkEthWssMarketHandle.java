@@ -75,23 +75,24 @@ public class OkEthWssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        final String s = uncompress(bytes.array());
-                        //logger.info(s);
-                        //回调
-                        if(!s.equals("pong")&&JSONObject.parseObject(s).get("data") !=null)
-                        {
-                            JSONObject js= DealDepth.getOkDetpth(s);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                            callback.onReceive(js.toJSONString());
-                        }
-                    } catch (Throwable e) {
-                        logger.error("OK 接收onMessage异常", e);
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        try {
+                            lastPingTime = System.currentTimeMillis();
+                            final String s = uncompress(bytes.array());
+                            //logger.info(s);
+                            //回调
+                            if (!s.equals("pong") && JSONObject.parseObject(s).get("data") != null) {
+                                JSONObject js = DealDepth.getOkDetpth(s);
+                                if (js.get("asks") != null && js.get("bids") != null)
+                                    callback.onReceive(js.toJSONString());
+                            }
+                        } catch (Throwable e) {
+                            logger.error("OK 接收onMessage异常", e);
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @SneakyThrows
@@ -103,7 +104,7 @@ public class OkEthWssMarketHandle implements Cloneable{
 
             @Override
             public void onError(Exception e) {
-                logger.error("onError:", e);
+               // logger.error("onError:", e);
             }
         };
 
@@ -117,9 +118,9 @@ public class OkEthWssMarketHandle implements Cloneable{
     }
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
         logger.info("OK关闭线程");
 
     }

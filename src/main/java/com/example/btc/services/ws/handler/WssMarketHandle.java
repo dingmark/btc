@@ -75,25 +75,27 @@ public class WssMarketHandle implements Cloneable{
 
             @Override
             public void onMessage(ByteBuffer bytes) {
-                fixedThreadPool.execute(() -> {
-                    try {
-                        lastPingTime = System.currentTimeMillis();
-                        String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
-                        JSONObject JSONMessage = JSONObject.parseObject(message);
-                        Object ch = JSONMessage.get("ch");
-                        Object ping = JSONMessage.get("ping");
-                        if (ch != null) {
-                            JSONObject js= DealDepth.getHbDetpth(message);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                            callback.onReceive(js.toString());
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        try {
+                            lastPingTime = System.currentTimeMillis();
+                            String message = new String(ZipUtil.decompress(bytes.array()), "UTF-8");
+                            JSONObject JSONMessage = JSONObject.parseObject(message);
+                            Object ch = JSONMessage.get("ch");
+                            Object ping = JSONMessage.get("ping");
+                            if (ch != null) {
+                                JSONObject js = DealDepth.getHbDetpth(message);
+                                if (js.get("asks") != null && js.get("bids") != null)
+                                    callback.onReceive(js.toString());
+                            }
+                            if (ping != null) {
+                                dealPing(JSONMessage.getLong("ping"));
+                            }
+                        } catch (Throwable e) {
+                            logger.error("onMessage异常", e);
                         }
-                        if (ping != null) {
-                            dealPing(JSONMessage.getLong("ping"));
-                        }
-                    } catch (Throwable e) {
-                        logger.error("onMessage异常", e);
-                    }
-                });
+                    });
+                }
             }
 
             @SneakyThrows
@@ -115,9 +117,9 @@ public class WssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
         logger.info("火币关闭线程");
     }
 

@@ -62,18 +62,19 @@ public class ZbWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                fixedThreadPool.execute(()->{
-                    try {
-                        if(s.indexOf("channel")!=-1)
-                        {
-                            JSONObject js= DealDepth.getZbDepth(s);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                            callback.onReceive(js.toJSONString());
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        try {
+                            if (s.indexOf("channel") != -1) {
+                                JSONObject js = DealDepth.getZbDepth(s);
+                                if (js.get("asks") != null && js.get("bids") != null)
+                                    callback.onReceive(js.toJSONString());
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+                    });
+                }
             }
 
             @Override
@@ -102,9 +103,10 @@ public class ZbWssMarketHandle implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
+
         logger.info("中币关闭线程");
     }
 

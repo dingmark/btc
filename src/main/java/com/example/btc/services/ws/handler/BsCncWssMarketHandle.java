@@ -60,17 +60,19 @@ public class BsCncWssMarketHandle   implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                fixedThreadPool.execute(() -> {
-                    if(s.indexOf("pong")==-1&&JSONObject.parseObject(s).getInteger("cmd")==3) {
-                        try {
-                            JSONObject js= DealDepth.getBsDepth(s);
-                            if(js.get("asks")!=null&&js.get("bids")!=null)
-                            callback.onReceive(js.toJSONString());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        if (s.indexOf("pong") == -1 && JSONObject.parseObject(s).getInteger("cmd") == 3) {
+                            try {
+                                JSONObject js = DealDepth.getBsDepth(s);
+                                if (js.get("asks") != null && js.get("bids") != null)
+                                    callback.onReceive(js.toJSONString());
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override
@@ -98,9 +100,10 @@ public class BsCncWssMarketHandle   implements Cloneable{
 
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
+
         logger.info("比特时代关闭线程");
     }
 

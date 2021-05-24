@@ -76,6 +76,7 @@ private String sockettime;
 
             @Override
             public void onMessage(ByteBuffer bytes) {
+                if(!fixedThreadPool.isShutdown()) {
                 fixedThreadPool.execute(() -> {
                     try {
                         lastPingTime = System.currentTimeMillis();
@@ -93,6 +94,7 @@ private String sockettime;
 
                     }
                 });
+                }
             }
 
             @SneakyThrows
@@ -118,9 +120,10 @@ private String sockettime;
     }
     public void closechannel() throws InterruptedException {
         //webSocketClient.connect();
+        webSocketClient.close();
         fixedThreadPool.shutdownNow();
         scheduledExecutorService.shutdownNow();
-        webSocketClient.close();
+
         logger.info("OK关闭线程");
     }
 

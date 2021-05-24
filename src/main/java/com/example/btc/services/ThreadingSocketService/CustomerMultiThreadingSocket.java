@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class CustomerMultiThreadingSocket implements Serializable {
     private Logger logger = LoggerFactory.getLogger(CustomerMultiThreadingSocket.class);
     int i=0;
-     private static final int sockettime=60000;
+     private static final int sockettime=120000;
     static List<String> hbreqparams=new ArrayList<>();
     private static List<String> mcreqparams=new ArrayList<>();
     private static List<String> zbreqparams=new ArrayList<>();
@@ -39,13 +39,18 @@ public class CustomerMultiThreadingSocket implements Serializable {
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
     @Autowired
     public void setHbsymbols(HttpHbGetSymbols hbsymbols,HttpMcGetSymbols httpMcGetSymbols,HttpHbGetCurrencys hbcurrencys
-    ,HttpZbGetSymbols httpZbGetSymbols,HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException {
+    ,HttpZbGetSymbols httpZbGetSymbols,HttpKbGetSymbols httpKbGetSymbols,HttpKbGetToken httpKbGetToken) throws MalformedURLException {
+
+        token=httpKbGetToken.getkbToken();
+        kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+
         hbreqparams=hbsymbols.gethbSymbols();
         mcreqparams=httpMcGetSymbols.getmcSymbols();
         //OK的币种用火币代替
         nor_reqparams=hbcurrencys.gethbCurrencys();
         zbreqparams=httpZbGetSymbols.getZbSymbols();
         kbreqparams=httpKbGetSymbols.getkbSymbols();
+
 
     }
     @Autowired
@@ -97,7 +102,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
     BnBtcWssMarketHandle bnBtcWssMarketHandle;//=new BnBtcWssMarketHandle(bnurl,sockettime);
     BnEthWssMarketHandle bnEthWssMarketHandle;
 
-    ZbWssMarketHandle zbWssMarketHandle;
+    private ZbWssMarketHandle zbWssMarketHandle;
 
     BsWssMarketHandle bsWssMarketHandle;//=new BsWssMarketHandle(bsurl,sockettime);
     BsBtcWssMarketHandle bsBtcWssMarketHandle;///=new BsBtcWssMarketHandle(bsurl,sockettime);
@@ -324,7 +329,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         });
         Thread.sleep(sockettime-1000);
     }
-    /*@Async
+    @Async
     @Scheduled(fixedRate = sockettime)
     public void Kb4Socket() throws  URISyntaxException ,InterruptedException
     {
@@ -335,5 +340,5 @@ public class CustomerMultiThreadingSocket implements Serializable {
             kbresponse4=response.toString();
         });
         Thread.sleep(sockettime-1000);
-    }*/
+    }
 }
