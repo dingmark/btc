@@ -93,7 +93,7 @@ public class OnWebSocket {
     //8个站点socket开关
 //    @Autowired
 //    public void setCustomSocket(CustomerMultiThreadingSocket ct) throws URISyntaxException, InterruptedException {
-//        OnWebSocket.customerMultiThreadingSocket=ct;
+//        OnWebSocket.CustomerMultiThreadingSocket=ct;
 //    }
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     private Session session;
@@ -105,7 +105,7 @@ public class OnWebSocket {
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
     private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(20);
 
     @OnOpen
     public void OnOpen(Session session, @PathParam(value = "name") String name) throws InterruptedException, URISyntaxException, MalformedURLException {
@@ -122,7 +122,7 @@ public class OnWebSocket {
         socketdo(type);
     }
 
-    private static int rate=200;
+    private static int rate=500;
     void socketdo(String type)  {
         try {
             switch (type) {
@@ -131,7 +131,14 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.hbresponse);
+                            try {
+                            for(String a:CustomerMultiThreadingSocket.hblqueue)
+                            {
+                                AppointSending(name,a);
+                            }}catch (Throwable t)
+                            {
+                                System.out.println("HBError");
+                            }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
@@ -140,11 +147,46 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.okresponse1);
-                            AppointSending(name, CustomerMultiThreadingSocket.okresponse2);
-                            AppointSending(name, CustomerMultiThreadingSocket.okresponse3);
+                            try {
+                                for (String a : CustomerMultiThreadingSocket.oklqueue1) {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("OK1Error");
+                            }
                         }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for (String a:CustomerMultiThreadingSocket.oklqueue2)
+                                {
+                                    AppointSending(name,a );
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("OK2Error");
+                            }
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for (String a:CustomerMultiThreadingSocket.oklqueue3)
+                                {
+                                    AppointSending(name,a );
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("OK3Error");
+                            }
 
+                        }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "bt":
@@ -152,11 +194,40 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.btresponse1);
-                            AppointSending(name, CustomerMultiThreadingSocket.btresponse2);
-                            AppointSending(name, CustomerMultiThreadingSocket.btresponse3);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.btlqueue1)
+                                {AppointSending(name, a);}
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BT1Error");
+                            }
                         }
-
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.btlqueue2)
+                                {AppointSending(name, a);}
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BT2Error");
+                            }
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.btlqueue3)
+                                {AppointSending(name, a);}
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BT3Error");
+                            }
+                        }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "bn":
@@ -164,11 +235,46 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse1);
-                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse2);
-                            AppointSending(name, CustomerMultiThreadingSocket.bnresponse3);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bnlqueue1)
+                                {
+                                    AppointSending(name,a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BN1Error");
+                            }
                         }
-
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bnlqueue2)
+                                {
+                                    AppointSending(name,a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BN2Error");
+                            }
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bnlqueue3)
+                                {
+                                    AppointSending(name,a);
+                                }
+                            }catch ( Throwable t)
+                            {
+                                System.out.println("BN3Error");
+                            }
+                        }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
                 case "mc":
@@ -176,7 +282,16 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.mcresponse);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.mclqueue)
+                                {
+                                    AppointSending(name,a);
+                                }
+                            }
+                            catch (Throwable t)
+                            {
+                                t.printStackTrace();
+                            }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
@@ -185,7 +300,16 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.zbresponse);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.zblqueue)
+                                {
+                                    AppointSending(name,a );
+                                }
+                            }catch (Throwable throwable)
+                            {
+                                System.out.println("ZBError");
+                            }
+
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                      break;
@@ -194,9 +318,47 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse1);
-                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse2);
-                            AppointSending(name, CustomerMultiThreadingSocket.bsresponse3);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bslqueue1)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BS1Error");
+                            }
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bslqueue2)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BS2Error");
+                            }
+
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.bslqueue3)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("BS3Error");
+                            }
+
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
@@ -205,13 +367,65 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomerMultiThreadingSocket.kbresponse1);
-                            AppointSending(name, CustomerMultiThreadingSocket.kbresponse2);
-                            AppointSending(name, CustomerMultiThreadingSocket.kbresponse3);
-                            AppointSending(name, CustomerMultiThreadingSocket.kbresponse4);
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.kblqueue1)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable throwable)
+                            {
+                                System.out.println("KB1Error");
+                            }
+
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.kblqueue2)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("KB2Error");
+                            }
 
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.kblqueue3)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable throwable)
+                            {
+                                System.out.println("KB3Error");
+                            }
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
+                    scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                        @SneakyThrows
+                        @Override
+                        public void run() {
+                            try {
+                                for(String a:CustomerMultiThreadingSocket.kblqueue4)
+                                {
+                                    AppointSending(name, a);
+                                }
+                            }catch (Throwable t)
+                            {
+                                System.out.println("KB4Error");
+                            }
+
+                        }
+                    }, 0, rate, TimeUnit.MILLISECONDS);
                     break;
 
                 case "re":
@@ -219,7 +433,7 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, CustomMultiThreadingService.hbrealjs.toString());
+                            AppointSending(name, customMultiThreadingService.hbrealjs.toString());
                         }
                     }, 0, 500, TimeUnit.MILLISECONDS);
                     break;

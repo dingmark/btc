@@ -8,6 +8,7 @@ import com.example.btc.services.http.kb.HttpKbGetToken;
 import com.example.btc.services.http.mocha.HttpMcGetSymbols;
 import com.example.btc.services.http.zb.HttpZbGetSymbols;
 import com.example.btc.services.ws.handler.*;
+import com.example.btc.services.ws.util.LimitQueue;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,30 +66,56 @@ public class CustomerMultiThreadingSocket implements Serializable {
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
 
-    public static String  hbresponse;
-    public static String mcresponse;
-    public static String okresponse1;
-    public static String okresponse2;
-    public static String okresponse3;
+    public static final int limit=50;
+    //public static String  hbresponse;
+    public  static LimitQueue<String> hblqueue = new LimitQueue<String>(limit);
 
-    public static String btresponse1;
-    public static String btresponse2;
-    public static String btresponse3;
+    public static LimitQueue<String> mclqueue = new LimitQueue<String>(limit);
 
-    public static String bnresponse1;
-    public static String bnresponse2;
-    public static String bnresponse3;
+    //public static String mcresponse;
+//    public static String okresponse1;
+//    public static String okresponse2;
+//    public static String okresponse3;
+    public static LimitQueue<String> oklqueue1 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> oklqueue2 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> oklqueue3 = new LimitQueue<String>(limit);
 
-    public static String zbresponse;
+//    public static String btresponse1;
+//    public static String btresponse2;
+//    public static String btresponse3;
+    public static LimitQueue<String> btlqueue1 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> btlqueue2 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> btlqueue3 = new LimitQueue<String>(limit);
 
-    public static String bsresponse1;
-    public static String bsresponse2;
-    public static String bsresponse3;
 
-    public  static String kbresponse1;
-    public  static String kbresponse2;
-    public  static String kbresponse3;
-    public  static String kbresponse4;
+//    public static String bnresponse1;
+//    public static String bnresponse2;
+//    public static String bnresponse3;
+    public static LimitQueue<String> bnlqueue1 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> bnlqueue2 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> bnlqueue3 = new LimitQueue<String>(limit);
+
+    //public static String zbresponse;
+    public static LimitQueue<String> zblqueue = new LimitQueue<String>(limit);
+
+
+//    public static String bsresponse1;
+//    public static String bsresponse2;
+//    public static String bsresponse3;
+    public static LimitQueue<String> bslqueue1 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> bslqueue2 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> bslqueue3 = new LimitQueue<String>(limit);
+
+
+
+//    public  static String kbresponse1;
+//    public  static String kbresponse2;
+//    public  static String kbresponse3;
+//    public  static String kbresponse4;
+    public static LimitQueue<String> kblqueue1 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> kblqueue2 = new LimitQueue<String>(limit);
+    public static  LimitQueue<String> kblqueue3 = new LimitQueue<String>(limit);
+    public static LimitQueue<String> kblqueue4 = new LimitQueue<String>(limit);
 
     OkWssMarketHandle okwssMarketHandle;
     OkBtcWssMarketHandle okBtcwssMarketHandle;
@@ -132,7 +159,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         wssMarketHandle.sub(hbreqparams, response -> {
               //  AppointSending(name, response.toString());
            // logger.info("火币交易"+response.toString());
-            hbresponse=response.toString();
+            hblqueue.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
         //wssMarketHandle.closechannel();
@@ -145,7 +172,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
 
         mcWssMarketHandle=new McWssMarketHandle(mcurl,String.valueOf(sockettime));
         mcWssMarketHandle.sub(mcreqparams,response->{
-            mcresponse=response.toString();
+            mclqueue.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
       //  mcWssMarketHandle.closechannel();
@@ -157,7 +184,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("OK_USDT启动------");
         okwssMarketHandle = new OkWssMarketHandle(okurl,String.valueOf(sockettime));
         okwssMarketHandle.sub(nor_reqparams, response -> {
-            okresponse1=response.toString();
+            oklqueue1.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -168,7 +195,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("OK_BTC启动------");
         okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,String.valueOf(sockettime));
         okBtcwssMarketHandle.sub(nor_reqparams, response -> {
-            okresponse2=response.toString();
+            oklqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -178,7 +205,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("OK_ETH启动------");
         okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,String.valueOf(sockettime));
         okEthwssMarketHandle.sub(nor_reqparams, response -> {
-            okresponse3=response.toString();
+            oklqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -190,7 +217,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         btWssMarketHandle=new BtWssMarketHandle(bturl,String.valueOf(sockettime));
         btWssMarketHandle.sub(nor_reqparams,response ->
         {
-            btresponse1=response.toString();
+            btlqueue1.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
 
@@ -202,7 +229,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
          btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,String.valueOf(sockettime));
         btBtcWssMarketHandle.sub(nor_reqparams,response ->
         {
-            btresponse2=response.toString();
+            btlqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -213,7 +240,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
         btEthWssMarketHandle.sub(nor_reqparams,response ->
         {
-            btresponse3=response.toString();
+            btlqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -224,7 +251,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("币安_USDT启动------");
         bnWssMarketHandle=new BnWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnWssMarketHandle.sub(nor_reqparams,response ->{
-            bnresponse1=response.toString();
+            bnlqueue1.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -234,7 +261,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("币安_ETH启动------");
         bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle.sub(nor_reqparams,response ->{
-            bnresponse2=response.toString();
+            bnlqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -244,7 +271,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("币安_ETH启动------");
         bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnEthWssMarketHandle.sub(nor_reqparams,response ->{
-            bnresponse3=response.toString();
+            bnlqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -254,7 +281,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("中币启动------");
         zbWssMarketHandle=new ZbWssMarketHandle(zburl,String.valueOf(sockettime));
         zbWssMarketHandle.sub(zbreqparams,response->{
-            zbresponse=response.toString();
+            zblqueue.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -265,7 +292,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("比特时代_USDT启动------");
         bsWssMarketHandle=new BsWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsWssMarketHandle.sub(nor_reqparams,response->{
-            bsresponse1=response.toString();
+            bslqueue1.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -276,7 +303,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("比特时代_BTC启动------");
         bsBtcWssMarketHandle=new BsBtcWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsBtcWssMarketHandle.sub(nor_reqparams,response->{
-            bsresponse2=response.toString();
+            bslqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -287,7 +314,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("比特时代_BTC启动------");
         bsCncWssMarketHandle=new BsCncWssMarketHandle(bsurl,String.valueOf(sockettime));
         bsCncWssMarketHandle.sub(nor_reqparams,response->{
-            bsresponse3=response.toString();
+            bslqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -300,7 +327,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         List<String> kb1=kbreqparams.subList(0,99);
         kbWssMarketHandle.sub(kb1,response->{
             //logger.info("1"+response.toString());
-            kbresponse1=response.toString();
+            kblqueue1.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -312,7 +339,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb2=kbreqparams.subList(100,199);
         kb2WssMarketHandle.sub(kb2,response->{
-            kbresponse2=response.toString();
+            kblqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -325,7 +352,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb3=kbreqparams.subList(200,299);
         kb3WssMarketHandle.sub(kb3,response->{
-            kbresponse3=response.toString();
+            kblqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
@@ -336,8 +363,8 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("库币_组4启动------");
         kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb4=kbreqparams.subList(300,399);
-        kb3WssMarketHandle.sub(kb4,response->{
-            kbresponse4=response.toString();
+        kb4WssMarketHandle.sub(kb4,response->{
+            kblqueue4.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
     }
