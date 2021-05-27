@@ -15,7 +15,7 @@ public class FixSizeLinkedList<T> extends ArrayList<T> {
     @Override
     public boolean add(T e)
     {
-        if (size() + 1 > capacity) {
+        if (super.size() + 1> capacity) {
             super.remove(0);
         }
         return super.add(e);
