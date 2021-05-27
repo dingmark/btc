@@ -19,9 +19,9 @@ public class LimitQueue<E> implements Queue<E> {
      */
     @Override
     public boolean offer(E e){
-        if(queue.size() >= limit){
+        if(queue.size() >= limit-10){
             //如果超出长度,入队时,先出队
-            Object a=queue.poll();
+            queue.poll();
            // System.out.println("删除队列头"+a.toString());
         }
         return queue.offer(e);

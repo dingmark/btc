@@ -135,9 +135,9 @@ public class OnWebSocket {
                             for(String a:CustomerMultiThreadingSocket.hblqueue)
                             {
                                 AppointSending(name,a);
-                            }}catch (Throwable t)
+                            }} catch (Throwable t)
                             {
-                                System.out.println("HBError");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -151,9 +151,9 @@ public class OnWebSocket {
                                 for (String a : CustomerMultiThreadingSocket.oklqueue1) {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("OK1Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -166,9 +166,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a );
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("OK2Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -181,9 +181,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a );
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("OK3Error");
+                                t.printStackTrace();
                             }
 
                         }
@@ -197,9 +197,9 @@ public class OnWebSocket {
                             try {
                                 for(String a:CustomerMultiThreadingSocket.btlqueue1)
                                 {AppointSending(name, a);}
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BT1Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -210,9 +210,9 @@ public class OnWebSocket {
                             try {
                                 for(String a:CustomerMultiThreadingSocket.btlqueue2)
                                 {AppointSending(name, a);}
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BT2Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -223,9 +223,9 @@ public class OnWebSocket {
                             try {
                                 for(String a:CustomerMultiThreadingSocket.btlqueue3)
                                 {AppointSending(name, a);}
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BT3Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -240,9 +240,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BN1Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -255,9 +255,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BN2Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -270,9 +270,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a);
                                 }
-                            }catch ( Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BN3Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -305,9 +305,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name,a );
                                 }
-                            }catch (Throwable throwable)
+                            } catch (Throwable t)
                             {
-                                System.out.println("ZBError");
+                                t.printStackTrace();
                             }
 
                         }
@@ -323,9 +323,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BS1Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -338,9 +338,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BS2Error");
+                                t.printStackTrace();
                             }
 
                         }
@@ -354,9 +354,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("BS3Error");
+                                t.printStackTrace();
                             }
 
                         }
@@ -372,9 +372,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable throwable)
+                            } catch (Throwable t)
                             {
-                                System.out.println("KB1Error");
+                                t.printStackTrace();
                             }
 
                         }
@@ -388,9 +388,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("KB2Error");
+                                t.printStackTrace();
                             }
 
                         }
@@ -404,9 +404,9 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable throwable)
+                            } catch (Throwable t)
                             {
-                                System.out.println("KB3Error");
+                                t.printStackTrace();
                             }
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
@@ -419,11 +419,10 @@ public class OnWebSocket {
                                 {
                                     AppointSending(name, a);
                                 }
-                            }catch (Throwable t)
+                            } catch (Throwable t)
                             {
-                                System.out.println("KB4Error");
+                                t.printStackTrace();
                             }
-
                         }
                     }, 0, rate, TimeUnit.MILLISECONDS);
                     break;

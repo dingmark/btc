@@ -58,15 +58,17 @@ public class BsNewPriceWssMarketHandle implements Cloneable{
             @SneakyThrows
             @Override
             public void onMessage(String s) {
-                fixedThreadPool.execute(() -> {
-                    if(s.indexOf("pong")==-1) {
-                        try {
-                            callback.onReceive(s);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                if(!fixedThreadPool.isShutdown()) {
+                    fixedThreadPool.execute(() -> {
+                        if (s.indexOf("pong") == -1) {
+                            try {
+                                callback.onReceive(s);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override

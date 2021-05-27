@@ -28,7 +28,7 @@ public class CustomMultiConfigSocket implements AsyncConfigurer { //AsyncConfigu
    @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(19);
+        taskExecutor.setCorePoolSize(1);
         //taskExecutor.setMaxPoolSize(30);
         taskExecutor.setQueueCapacity(10);
         taskExecutor.initialize();
