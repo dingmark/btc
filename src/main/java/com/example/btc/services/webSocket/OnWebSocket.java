@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -368,8 +369,9 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.kblqueue1)
-                                {
+                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue1.iterator();
+                                while (iterator.hasNext()) {
+                                    String a=iterator.next();
                                     AppointSending(name, a);
                                 }
                             } catch (Throwable t)
@@ -384,8 +386,9 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.kblqueue2)
-                                {
+                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue2.iterator();
+                                while (iterator.hasNext()) {
+                                    String a=iterator.next();
                                     AppointSending(name, a);
                                 }
                             } catch (Throwable t)
@@ -400,8 +403,9 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.kblqueue3)
-                                {
+                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue3.iterator();
+                                while (iterator.hasNext()) {
+                                    String a=iterator.next();
                                     AppointSending(name, a);
                                 }
                             } catch (Throwable t)
@@ -415,8 +419,9 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.kblqueue4)
-                                {
+                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue4.iterator();
+                                while (iterator.hasNext()) {
+                                    String a=iterator.next();
                                     AppointSending(name, a);
                                 }
                             } catch (Throwable t)

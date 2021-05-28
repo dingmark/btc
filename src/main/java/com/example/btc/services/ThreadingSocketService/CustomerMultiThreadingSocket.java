@@ -67,7 +67,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
 
-    public static final int limit=30;
+    public static final int limit=300;
     //public static String  hbresponse;
     public  static FixSizeLinkedList<String> hblqueue = new FixSizeLinkedList<String>(limit);
 

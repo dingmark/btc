@@ -165,28 +165,31 @@ public class KbWssMarketHandle implements Cloneable{
 
     private void dealReconnect() {
         try {
-            scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if ((webSocketClient.isClosed() && !webSocketClient.isClosing()) ) {
-                            logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
-                            Boolean reconnectResult = webSocketClient.reconnectBlocking();
-                            logger.error("重连的结果为：{}", reconnectResult);
-                            if (!reconnectResult) {
-                                webSocketClient.closeBlocking();
-                                logger.error("closeBlocking");
+            if (!scheduledExecutorService.isShutdown()) {
+                scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if ((webSocketClient.isClosed() && !webSocketClient.isClosing())) {
+                                logger.error("isClosed:{},isClosing:{}，准备重连", webSocketClient.isClosed(), webSocketClient.isClosing());
+                                Boolean reconnectResult = webSocketClient.reconnectBlocking();
+                                logger.error("重连的结果为：{}", reconnectResult);
+                                if (!reconnectResult) {
+                                    webSocketClient.closeBlocking();
+                                    logger.error("closeBlocking");
+                                }
                             }
+                        } catch (Throwable e) {
+                            logger.error("dealReconnect异常", e);
                         }
-                    } catch (Throwable e) {
-                        logger.error("dealReconnect异常", e);
-                    }
 
-                }
-            }, 30, 10, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            logger.error("dealReconnect scheduledExecutorService异常", e);
-        }
+                    }
+                }, 30, 10, TimeUnit.SECONDS);
+            }
+        }catch(Exception e){
+                logger.error("dealReconnect scheduledExecutorService异常", e);
+            }
+
 
     }
 

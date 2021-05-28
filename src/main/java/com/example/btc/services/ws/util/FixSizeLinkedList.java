@@ -3,6 +3,7 @@ package com.example.btc.services.ws.util;
 import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class FixSizeLinkedList<T> extends ArrayList<T> {
@@ -16,7 +17,12 @@ public class FixSizeLinkedList<T> extends ArrayList<T> {
     public boolean add(T e)
     {
         if (super.size() + 1> capacity) {
-            super.remove(0);
+            Iterator<T> it_b=super.iterator();
+            while(it_b.hasNext()){
+               super.remove(0);
+                //it_b.remove();
+                break;
+            }
         }
         return super.add(e);
     }
