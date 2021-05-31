@@ -528,7 +528,13 @@ public class OnWebSocket {
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
     }
     private void AppiontSendList(LimitQueue queue) throws InterruptedException {
-        ArrayList<String> list = new ArrayList(queue);
+        ArrayList<String> list = new ArrayList();
+        Iterator<String> it=queue.iterator();
+        while (it.hasNext())
+        {
+            String a=it.next();
+            list.add(a);
+        }
         for(String a:list)
         {
             if(a !=null)

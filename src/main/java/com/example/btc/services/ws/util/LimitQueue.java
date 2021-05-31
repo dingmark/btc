@@ -1,11 +1,14 @@
 package com.example.btc.services.ws.util;
 
+import com.alibaba.fastjson.JSON;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class LimitQueue<E> implements Queue<E> {
+public class LimitQueue<E> extends ConcurrentLinkedQueue<E> { //Queue
     private int limit;
     Queue<E> queue = new LinkedList<E>();
 
@@ -131,4 +134,15 @@ public class LimitQueue<E> implements Queue<E> {
     public <T> T[] toArray(T[] a) {
         return queue.toArray(a);
     }
+    public static void main(String[] args) {
+        LimitQueue<String> list = new LimitQueue<String>(3);
+        list.offer("1234");
+        list.offer("234");
+        list.offer("34");
+        list.offer("4");
+        list.offer("5");
+        list.offer("6");
+        System.out.println(JSON.toJSONString(list));
+    }
+
 }
