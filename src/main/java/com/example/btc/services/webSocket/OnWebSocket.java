@@ -123,7 +123,7 @@ public class OnWebSocket {
         socketdo(type);
     }
 
-    private static int rate=500;
+    private static int rate=5000;
     void socketdo(String type)  {
         try {
             switch (type) {

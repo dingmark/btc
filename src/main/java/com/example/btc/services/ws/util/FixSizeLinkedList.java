@@ -16,11 +16,11 @@ public class FixSizeLinkedList<T> extends ArrayList<T> {
     @Override
     public boolean add(T e)
     {
-        if (super.size() + 1> capacity) {
-            Iterator<T> it_b=super.iterator();
+        if (this.size() + 1> capacity) {
+            Iterator<T> it_b=this.iterator();
             while(it_b.hasNext()){
-               super.remove(0);
-                //it_b.remove();
+               this.remove(0);
+               //it_b.remove();
                 break;
             }
         }

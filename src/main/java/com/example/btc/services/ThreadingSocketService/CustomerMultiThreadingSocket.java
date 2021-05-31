@@ -67,7 +67,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
 
-    public static final int limit=300;
+    public static final int limit=30;
     //public static String  hbresponse;
     public  static FixSizeLinkedList<String> hblqueue = new FixSizeLinkedList<String>(limit);
 
@@ -252,6 +252,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("币安_USDT启动------");
         bnWssMarketHandle=new BnWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnWssMarketHandle.sub(nor_reqparams,response ->{
+
             bnlqueue1.add(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -262,6 +263,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("币安_ETH启动------");
         bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle.sub(nor_reqparams,response ->{
+            Thread.sleep(1000);
             bnlqueue2.add(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -340,6 +342,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb2=kbreqparams.subList(100,199);
         kb2WssMarketHandle.sub(kb2,response->{
+            Thread.sleep(1000);
             kblqueue2.add(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -353,6 +356,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb3=kbreqparams.subList(200,299);
         kb3WssMarketHandle.sub(kb3,response->{
+            Thread.sleep(1000);
             kblqueue3.add(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -365,6 +369,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb4=kbreqparams.subList(300,399);
         kb4WssMarketHandle.sub(kb4,response->{
+            Thread.sleep(1000);
             kblqueue4.add(response.toString());
         });
         Thread.sleep(sockettime-1000);
