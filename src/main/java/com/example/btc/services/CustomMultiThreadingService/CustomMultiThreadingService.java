@@ -239,4 +239,10 @@ public class CustomMultiThreadingService {
             hbrealjs.put("zbusdtqc",ZbQcprice);
         }
     }
+
+
+    /**
+     * 8个站点获取信息
+     */
+
 }

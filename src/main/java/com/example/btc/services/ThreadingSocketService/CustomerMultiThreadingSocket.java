@@ -38,7 +38,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
     private static List<String> kbreqparams=new ArrayList<>();
     private static List<String> nor_reqparams=new ArrayList<>();
     private static String token="";
-    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
     @Autowired
     public void setHbsymbols(HttpHbGetSymbols hbsymbols,HttpMcGetSymbols httpMcGetSymbols,HttpHbGetCurrencys hbcurrencys
     ,HttpZbGetSymbols httpZbGetSymbols,HttpKbGetSymbols httpKbGetSymbols,HttpKbGetToken httpKbGetToken) throws MalformedURLException {
@@ -165,6 +165,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
         Thread.sleep(sockettime-1000);
         //wssMarketHandle.closechannel();
     }
+
     @Async
     @Scheduled(fixedRate = sockettime)
     public void McSocket() throws URISyntaxException, InterruptedException {
@@ -179,7 +180,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
       //  mcWssMarketHandle.closechannel();
     }
 
-    @Async
+    /*@Async
     @Scheduled(fixedRate = sockettime)
     public void OkSocket() throws URISyntaxException, InterruptedException {
         logger.info("OK_USDT启动------");
@@ -260,10 +261,9 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Async
     @Scheduled(fixedRate = sockettime)
     public void BnBtcSocket() throws URISyntaxException, InterruptedException {
-        logger.info("币安_ETH启动------");
+        logger.info("币安_BTC启动------");
         bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle.sub(nor_reqparams,response ->{
-            Thread.sleep(1000);
             bnlqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -342,7 +342,6 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb2WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb2=kbreqparams.subList(100,199);
         kb2WssMarketHandle.sub(kb2,response->{
-            Thread.sleep(1000);
             kblqueue2.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -356,7 +355,6 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb3WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb3=kbreqparams.subList(200,299);
         kb3WssMarketHandle.sub(kb3,response->{
-            Thread.sleep(1000);
             kblqueue3.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
@@ -369,9 +367,8 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb4WssMarketHandle=new KbWssMarketHandle(kburl,String.valueOf(sockettime));
         List<String> kb4=kbreqparams.subList(300,399);
         kb4WssMarketHandle.sub(kb4,response->{
-            Thread.sleep(1000);
             kblqueue4.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
-    }
+    }*/
 }
