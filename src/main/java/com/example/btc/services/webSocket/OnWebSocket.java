@@ -1,25 +1,12 @@
 package com.example.btc.services.webSocket;
-
 import com.alibaba.fastjson.JSONObject;
-import com.example.btc.baseDao.UrlPara;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 import com.example.btc.services.ThreadingSocketService.CustomerMultiThreadingSocket;
-import com.example.btc.services.http.bter.bter;
-import com.example.btc.services.http.hb.HttpHbGetCurrencys;
-import com.example.btc.services.http.hb.HttpHbGetSymbols;
-import com.example.btc.services.http.kb.HttpKbGetSymbols;
-import com.example.btc.services.http.kb.HttpKbGetToken;
-import com.example.btc.services.http.mocha.HttpMcGetSymbols;
-import com.example.btc.services.http.mocha.mocha;
-import com.example.btc.services.http.ok.OkPrice;
-import com.example.btc.services.http.zb.HttpZbGetSymbols;
-import com.example.btc.services.ws.handler.*;
 import com.example.btc.services.ws.util.LimitQueue;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.websocket.*;
@@ -30,75 +17,14 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.*;
 
 
-@SuppressWarnings({"SpringJavaInjectionPointsAutowiringInspection", "SpringJavaAutowiringInspection"})
 @Slf4j
 @Service
 @ServerEndpoint("/test/{name}")//("/websocket/{name}")
 public class OnWebSocket {
-
-    private  static  CustomMultiThreadingService customMultiThreadingService;
-    private  static  CustomerMultiThreadingSocket customerMultiThreadingSocket;
-    /*private  static String sockettime;
-    private static List<String> reqparams=new ArrayList<>();
-    private static List<String> hbreqparams=new ArrayList<>();
-    private static List<String> kbreqparams=new ArrayList<>();
-    private static List<String> mcreqparams=new ArrayList<>();
-    private static List<String> zbreqparams=new ArrayList<>();
-    private static String token="";*/
-
-    /*
-    @Autowired
-    public void setSockettime(SocketTime sockettime){
-        //OnWebSocket.sockettime=sockettime.sockettime;
-    }
-    @Autowired
-    public void setRepository(HttpHbGetCurrencys hbcurrencys) throws MalformedURLException {
-        reqparams=hbcurrencys.gethbCurrencys();
-    }
-    @Autowired
-    public void setZbsymbols(HttpZbGetSymbols httpZbGetSymbols) throws MalformedURLException {
-
-        zbreqparams=httpZbGetSymbols.getZbSymbols();
-    }
-    @Autowired
-    public void setHbsymbols(HttpHbGetSymbols hbsymbols) throws MalformedURLException {
-        hbreqparams=hbsymbols.gethbSymbols();
-    }
-
-    @Autowired
-    public  void  setkbtoken(HttpKbGetToken httpKbGetToken) throws MalformedURLException {
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
-            @SneakyThrows
-            @Override
-            public void run() {
-                token=httpKbGetToken.getkbToken();
-            }
-        }, 0, 120000, TimeUnit.MILLISECONDS);
-    }
-    @Autowired
-    public  void setkbsymbols(HttpKbGetSymbols httpKbGetSymbols) throws MalformedURLException {
-        kbreqparams=httpKbGetSymbols.getkbSymbols();
-    }
-    @Autowired
-    public  void setHttpMcGetSymbols(HttpMcGetSymbols httpMcGetSymbols)throws MalformedURLException
-    {
-        mcreqparams=httpMcGetSymbols.getmcSymbols();
-    }*/
-    //各站点实时价格获取开关
-//    @Autowired
-//    public  void  setCustomMultiThreadingService(CustomMultiThreadingService customMultiThreadingService){OnWebSocket.customMultiThreadingService=customMultiThreadingService;}
-
-    //8个站点socket开关
-//    @Autowired
-//    public void setCustomSocket(CustomerMultiThreadingSocket ct) throws URISyntaxException, InterruptedException {
-//        OnWebSocket.CustomerMultiThreadingSocket=ct;
-//    }
     private Logger logger = LoggerFactory.getLogger(OnWebSocket.class);
     private Session session;
     /**
@@ -108,7 +34,7 @@ public class OnWebSocket {
     /**
      *  用于存所有的连接服务的客户端，这个对象存储是安全的
      */
-    private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, OnWebSocket> webSocketSet = new ConcurrentHashMap<String, OnWebSocket>();
     private ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(20);
 
     @OnOpen
@@ -392,7 +318,7 @@ public class OnWebSocket {
                         @SneakyThrows
                         @Override
                         public void run() {
-                            AppointSending(name, customMultiThreadingService.hbrealjs.toString());
+                            AppointSending(name, CustomMultiThreadingService.hbrealjs.toString());
                         }
                     }, 0, 500, TimeUnit.MILLISECONDS);
                     break;
@@ -531,18 +457,14 @@ public class OnWebSocket {
     }
     private void AppiontSendList(LimitQueue queue) throws InterruptedException {
         ArrayList<String> list = new ArrayList(queue);
-       /* Iterator<String> it=queue.iterator();
-        while (it.hasNext())
-        {
-            String a=it.next();
-            list.add(a);
-        }*/
+        long nowdate=System.currentTimeMillis();
         for(String a:list)
         {
             Timestamp gettime= JSONObject.parseObject(a).getTimestamp("realtime");
-
-            if(a !=null )
+            long c=nowdate-gettime.getTime();
+            if(a !=null&&c<30000 ) {
                 AppointSending(name,a);
+            }
         }
     }
 }
