@@ -13,6 +13,7 @@ import com.example.btc.services.http.mocha.mocha;
 import com.example.btc.services.http.ok.OkPrice;
 import com.example.btc.services.http.zb.HttpZbGetSymbols;
 import com.example.btc.services.ws.handler.*;
+import com.example.btc.services.ws.util.LimitQueue;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -133,10 +134,8 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                            for(String a:CustomerMultiThreadingSocket.hblqueue)
-                            {
-                                AppointSending(name,a);
-                            }} catch (Throwable t)
+                                AppiontSendList(CustomerMultiThreadingSocket.hblqueue);
+                            } catch (Throwable t)
                             {
                                 t.printStackTrace();
                             }
@@ -149,9 +148,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for (String a : CustomerMultiThreadingSocket.oklqueue1) {
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.oklqueue1);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -163,10 +160,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for (String a:CustomerMultiThreadingSocket.oklqueue2)
-                                {
-                                    AppointSending(name,a );
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.oklqueue2);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -178,10 +172,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for (String a:CustomerMultiThreadingSocket.oklqueue3)
-                                {
-                                    AppointSending(name,a );
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.oklqueue3);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -196,8 +187,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.btlqueue1)
-                                {AppointSending(name, a);}
+                                AppiontSendList(CustomerMultiThreadingSocket.btlqueue1);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -209,8 +199,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.btlqueue2)
-                                {AppointSending(name, a);}
+                                    AppiontSendList(CustomerMultiThreadingSocket.btlqueue2);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -222,8 +211,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.btlqueue3)
-                                {AppointSending(name, a);}
+                                AppiontSendList(CustomerMultiThreadingSocket.btlqueue3);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -237,10 +225,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bnlqueue1)
-                                {
-                                    AppointSending(name,a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bnlqueue1);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -252,10 +237,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bnlqueue2)
-                                {
-                                    AppointSending(name,a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bnlqueue2);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -267,10 +249,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bnlqueue3)
-                                {
-                                    AppointSending(name,a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bnlqueue3);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -284,10 +263,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.mclqueue)
-                                {
-                                    AppointSending(name,a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.mclqueue);
                             }
                             catch (Throwable t)
                             {
@@ -302,10 +278,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.zblqueue)
-                                {
-                                    AppointSending(name,a );
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.zblqueue);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -320,10 +293,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bslqueue1)
-                                {
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bslqueue1);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -335,10 +305,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bslqueue2)
-                                {
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bslqueue2);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -351,10 +318,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                for(String a:CustomerMultiThreadingSocket.bslqueue3)
-                                {
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.bslqueue3);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -369,11 +333,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue1.iterator();
-                                while (iterator.hasNext()) {
-                                    String a=iterator.next();
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.kblqueue1);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -386,11 +346,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue2.iterator();
-                                while (iterator.hasNext()) {
-                                    String a=iterator.next();
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.kblqueue2);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -403,11 +359,7 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue3.iterator();
-                                while (iterator.hasNext()) {
-                                    String a=iterator.next();
-                                    AppointSending(name, a);
-                                }
+                                AppiontSendList(CustomerMultiThreadingSocket.kblqueue3);
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -419,11 +371,12 @@ public class OnWebSocket {
                         @Override
                         public void run() {
                             try {
-                                Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue4.iterator();
-                                while (iterator.hasNext()) {
+                                AppiontSendList(CustomerMultiThreadingSocket.kblqueue4);
+                                //Iterator<String> iterator=  CustomerMultiThreadingSocket.kblqueue4.iterator();
+                                /*while (iterator.hasNext()) {
                                     String a=iterator.next();
                                     AppointSending(name, a);
-                                }
+                                }*/
                             } catch (Throwable t)
                             {
                                 t.printStackTrace();
@@ -573,5 +526,13 @@ public class OnWebSocket {
             }
         }
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
+    }
+    private void AppiontSendList(LimitQueue queue) throws InterruptedException {
+        ArrayList<String> list = new ArrayList(queue);
+        for(String a:list)
+        {
+            if(a !=null)
+                AppointSending(name,a);
+        }
     }
 }
