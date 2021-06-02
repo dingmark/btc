@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class LimitQueue<E> extends ConcurrentLinkedQueue<E> { //Queue
+public class LimitQueue<E> implements Queue <E> { //Queue
     private int limit;
-    Queue<E> queue = new LinkedList<E>();
+    Queue<E> queue = new ConcurrentLinkedQueue<E>();
 
     public LimitQueue(int limit){
         this.limit = limit;

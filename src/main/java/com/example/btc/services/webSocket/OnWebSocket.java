@@ -124,7 +124,7 @@ public class OnWebSocket {
         socketdo(type);
     }
 
-    private static int rate=5000;
+    private static int rate=2000;
     void socketdo(String type)  {
         try {
             switch (type) {
@@ -528,13 +528,13 @@ public class OnWebSocket {
         // webSocketSet.get(name).session.getAsyncRemote().sendText(message);
     }
     private void AppiontSendList(LimitQueue queue) throws InterruptedException {
-        ArrayList<String> list = new ArrayList();
-        Iterator<String> it=queue.iterator();
+        ArrayList<String> list = new ArrayList(queue);
+       /* Iterator<String> it=queue.iterator();
         while (it.hasNext())
         {
             String a=it.next();
             list.add(a);
-        }
+        }*/
         for(String a:list)
         {
             if(a !=null)

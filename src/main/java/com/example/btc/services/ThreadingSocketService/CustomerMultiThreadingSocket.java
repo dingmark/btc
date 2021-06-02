@@ -158,12 +158,9 @@ public class CustomerMultiThreadingSocket implements Serializable {
         logger.info("火币启动------");
         wssMarketHandle = new WssMarketHandle(hburl,String.valueOf(sockettime));
         wssMarketHandle.sub(hbreqparams, response -> {
-              //  AppointSending(name, response.toString());
-           // logger.info("火币交易"+response.toString());
             hblqueue.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
-        //wssMarketHandle.closechannel();
     }
 
     @Async
@@ -177,10 +174,9 @@ public class CustomerMultiThreadingSocket implements Serializable {
             mclqueue.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
-      //  mcWssMarketHandle.closechannel();
     }
 
-    /*@Async
+    @Async
     @Scheduled(fixedRate = sockettime)
     public void OkSocket() throws URISyntaxException, InterruptedException {
         logger.info("OK_USDT启动------");
@@ -370,5 +366,5 @@ public class CustomerMultiThreadingSocket implements Serializable {
             kblqueue4.offer(response.toString());
         });
         Thread.sleep(sockettime-1000);
-    }*/
+    }
 }
