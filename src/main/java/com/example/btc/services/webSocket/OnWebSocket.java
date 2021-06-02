@@ -1,5 +1,6 @@
 package com.example.btc.services.webSocket;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.btc.baseDao.UrlPara;
 import com.example.btc.services.CustomMultiThreadingService.CustomMultiThreadingService;
 import com.example.btc.services.ThreadingSocketService.CustomerMultiThreadingSocket;
@@ -27,6 +28,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -537,7 +539,9 @@ public class OnWebSocket {
         }*/
         for(String a:list)
         {
-            if(a !=null)
+            Timestamp gettime= JSONObject.parseObject(a).getTimestamp("realtime");
+
+            if(a !=null )
                 AppointSending(name,a);
         }
     }
