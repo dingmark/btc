@@ -151,7 +151,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
     private  String kburl="";
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*1,fixedRate = sockettime)
     public void HbSocket() throws URISyntaxException, InterruptedException {
         String hburl="wss://api.huobiasia.vip/ws";
         logger.info("火币启动------");
@@ -159,11 +159,11 @@ public class CustomerMultiThreadingSocket implements Serializable {
         wssMarketHandle.sub(hbreqparams, response -> {
             hblqueue.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*2,fixedRate = sockettime)
     public void McSocket() throws URISyntaxException, InterruptedException {
           String mcurl="wss://contract.mxc.la/ws";
         logger.info("抹茶启动------");
@@ -172,43 +172,43 @@ public class CustomerMultiThreadingSocket implements Serializable {
         mcWssMarketHandle.sub(mcreqparams,response->{
             mclqueue.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*4,fixedRate = sockettime)
     public void OkSocket() throws URISyntaxException, InterruptedException {
         logger.info("OK_USDT启动------");
         okwssMarketHandle = new OkWssMarketHandle(okurl,String.valueOf(sockettime));
         okwssMarketHandle.sub(nor_reqparams, response -> {
             oklqueue1.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*6,fixedRate = sockettime)
     public void OkBtcSocket() throws URISyntaxException, InterruptedException {
         logger.info("OK_BTC启动------");
         okBtcwssMarketHandle = new OkBtcWssMarketHandle(okurl,String.valueOf(sockettime));
         okBtcwssMarketHandle.sub(nor_reqparams, response -> {
             oklqueue2.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*8,fixedRate = sockettime)
     public void OkEthSocket() throws URISyntaxException, InterruptedException {
         logger.info("OK_ETH启动------");
         okEthwssMarketHandle = new OkEthWssMarketHandle(okurl,String.valueOf(sockettime));
         okEthwssMarketHandle.sub(nor_reqparams, response -> {
             oklqueue3.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*10,fixedRate = sockettime)
     public void BtSocket() throws URISyntaxException, InterruptedException {
         logger.info("比特儿_USDT启动------");
         btWssMarketHandle=new BtWssMarketHandle(bturl,String.valueOf(sockettime));
@@ -216,11 +216,11 @@ public class CustomerMultiThreadingSocket implements Serializable {
         {
             btlqueue1.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
 
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*12,fixedRate = sockettime)
     public void BtBtcSocket() throws URISyntaxException, InterruptedException {
         logger.info("比特儿_BTC启动------");
          btBtcWssMarketHandle=new BtBtcWssMarketHandle(bturl,String.valueOf(sockettime));
@@ -228,10 +228,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         {
             btlqueue2.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*14,fixedRate = sockettime)
     public void BtEthSocket() throws URISyntaxException, InterruptedException {
         logger.info("比特儿_ETH启动------");
         btEthWssMarketHandle=new BtEthWssMarketHandle(bturl,String.valueOf(sockettime));
@@ -239,11 +239,11 @@ public class CustomerMultiThreadingSocket implements Serializable {
         {
             btlqueue3.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*16,fixedRate = sockettime)
     public void BnSocket() throws URISyntaxException, InterruptedException {
         logger.info("币安_USDT启动------");
         bnWssMarketHandle=new BnWssMarketHandle(bnurl,String.valueOf(sockettime));
@@ -251,40 +251,40 @@ public class CustomerMultiThreadingSocket implements Serializable {
 
             bnlqueue1.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*18,fixedRate = sockettime)
     public void BnBtcSocket() throws URISyntaxException, InterruptedException {
         logger.info("币安_BTC启动------");
         bnBtcWssMarketHandle=new BnBtcWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnBtcWssMarketHandle.sub(nor_reqparams,response ->{
             bnlqueue2.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*20,fixedRate = sockettime)
     public void BnEthSocket() throws URISyntaxException, InterruptedException {
         logger.info("币安_ETH启动------");
         bnEthWssMarketHandle=new BnEthWssMarketHandle(bnurl,String.valueOf(sockettime));
         bnEthWssMarketHandle.sub(nor_reqparams,response ->{
             bnlqueue3.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*22,fixedRate = sockettime)
     public void ZbSocket() throws URISyntaxException ,InterruptedException{
         logger.info("中币启动------");
         zbWssMarketHandle=new ZbWssMarketHandle(zburl,String.valueOf(sockettime));
         zbWssMarketHandle.sub(zbreqparams,response->{
             zblqueue.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*24,fixedRate = sockettime)
     public void BsSocket()throws URISyntaxException ,InterruptedException
     {
         logger.info("比特时代_USDT启动------");
@@ -292,10 +292,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         bsWssMarketHandle.sub(nor_reqparams,response->{
             bslqueue1.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*26,fixedRate = sockettime)
     public void BsBtcSocket()throws URISyntaxException ,InterruptedException
     {
         logger.info("比特时代_BTC启动------");
@@ -303,10 +303,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         bsBtcWssMarketHandle.sub(nor_reqparams,response->{
             bslqueue2.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*28,fixedRate = sockettime)
     public void BsCncSocket()throws URISyntaxException ,InterruptedException
     {
         logger.info("比特时代_BTC启动------");
@@ -314,10 +314,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         bsCncWssMarketHandle.sub(nor_reqparams,response->{
             bslqueue3.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*30,fixedRate = sockettime)
     public void KbSocket() throws  URISyntaxException ,InterruptedException
     {
         logger.info("库币_组1启动------");
@@ -327,10 +327,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
             //logger.info("1"+response.toString());
             kblqueue1.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*32,fixedRate = sockettime)
     public void Kb2Socket() throws  URISyntaxException ,InterruptedException
     {
         logger.info("库币_组2启动------");
@@ -339,11 +339,11 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb2WssMarketHandle.sub(kb2,response->{
             kblqueue2.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*34,fixedRate = sockettime)
     public void Kb3Socket() throws  URISyntaxException ,InterruptedException
     {
         logger.info("库币_组3启动------");
@@ -352,10 +352,10 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb3WssMarketHandle.sub(kb3,response->{
             kblqueue3.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
     @Async
-    @Scheduled(fixedRate = sockettime)
+    @Scheduled(initialDelay=1000*36,fixedRate = sockettime)
     public void Kb4Socket() throws  URISyntaxException ,InterruptedException
     {
         logger.info("库币_组4启动------");
@@ -364,6 +364,6 @@ public class CustomerMultiThreadingSocket implements Serializable {
         kb4WssMarketHandle.sub(kb4,response->{
             kblqueue4.offer(response.toString());
         });
-        Thread.sleep(sockettime-1000);
+        Thread.sleep(sockettime);
     }
 }
