@@ -153,7 +153,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
     @Async
     @Scheduled(initialDelay=1000*1,fixedRate = sockettime)
     public void HbSocket() throws URISyntaxException, InterruptedException {
-        String hburl="wss://api.huobiasia.vip/ws";
+        String hburl="wss://www.huobi.ge/-/s/pro/ws";//"wss://api.huobiasia.vip/ws";
         logger.info("火币启动------");
         wssMarketHandle = new WssMarketHandle(hburl,String.valueOf(sockettime));
         wssMarketHandle.sub(hbreqparams, response -> {
