@@ -43,7 +43,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
     ,HttpZbGetSymbols httpZbGetSymbols,HttpKbGetSymbols httpKbGetSymbols,HttpKbGetToken httpKbGetToken) throws MalformedURLException {
 
         token=httpKbGetToken.getkbToken();
-        kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+        kburl="wss://ws-web.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
 
         hbreqparams=hbsymbols.gethbSymbols();
         mcreqparams=httpMcGetSymbols.getmcSymbols();
@@ -61,7 +61,7 @@ public class CustomerMultiThreadingSocket implements Serializable {
             @Override
             public void run() {
                 token=httpKbGetToken.getkbToken();
-                kburl="wss://push-socketio.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
+                kburl="wss://ws-web.kucoin.top:6443/socket.io/?token="+token+"&format=json&acceptUserMessage=false&connectId=connect_welcome&EIO=3&transport=websocket";
             }
         }, 0, 120000, TimeUnit.MILLISECONDS);
     }
