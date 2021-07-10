@@ -40,8 +40,8 @@ public class HttpHbNewPrice {
             urlConnection.setConnectTimeout(5000);
             urlConnection.setReadTimeout(5000);
             InputStream in = urlConnection.getInputStream();
-            GZIPInputStream gZipS = new GZIPInputStream(in);
-            InputStreamReader res = new InputStreamReader(gZipS, "GBK");
+            //GZIPInputStream gZipS = new GZIPInputStream(in);
+            InputStreamReader res = new InputStreamReader(in, "GBK");
             BufferedReader reader = new BufferedReader(res);
             String line;
             List<String> charinfo = new ArrayList<String>();

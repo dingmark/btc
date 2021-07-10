@@ -121,8 +121,9 @@ public class McWssMarketHandle implements Cloneable{
                  params.put("limit",5);
                  sub.put("param",params);
                  sub.put("method", "sub.depth.full");
-                 webSocketClient.send(sub.toString());
-            });
+                 //webSocketClient.send("42[\"get.depth\","+params.toString()+"]");
+                webSocketClient.send(sub.toString());
+         });
 
     }
 
